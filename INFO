@@ -1,0 +1,18 @@
+Project: Template Distribution Service (Domino)
+Project Creation Date: March 22, 2016
+Project Category: Requirements
+Lifecycle State: Incubation
+Primary Contact: Ulas C. Kozat
+Project Lead: Ulas C. Kozat 
+Jira Project Name: Template Distribution
+Jira Project Prefix: DOMINO
+Mailing list tag: [domino]
+IRC: Server:freenode.net Channel:#opnfv-domino
+Repository: domino
+
+Committers:
+Ulas C. Kozat (Huawei, ulas.kozat@huawei.com)
+Prakash Ramchandran (Huawei, prakash.ramchandran@huawei.com)
+Shiv Charan (HPE, shiv-charan.m-s@hpe.com)
+
+Link to TSC approval of the project: http://ircbot.wl.linuxfoundation.org/meetings/opnfv-meeting/2016/opnfv-meeting.2016-03-22-14.00.html
