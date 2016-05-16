@@ -1,0 +1,46 @@
+tosca_definitions_version: tosca_simple_profile_for_nfv_1_0_0
+
+description: Template for deploying a single server with predefined properties.
+
+metadata:
+  template_name: TOSCA NFV Sample Template
+
+policy_types:
+  tosca.policies.Placement.Geolocation:
+    description: Geolocation policy
+    derived_from: tosca.policies.Placement
+
+topology_template:
+  node_templates:
+    VNF1:
+      type: tosca.nodes.nfv.VNF
+      properties:
+        id: vnf1
+        vendor: acmetelco
+        version: 1.0
+
+    VNF2:
+      type: tosca.nodes.nfv.VNF
+      properties:
+        id: vnf2
+        vendor: ericsson
+        version: 1.0
+
+    VNF3:
+      type: tosca.nodes.nfv.VNF
+      properties:
+        id: vnf3
+        vendor: huawei
+        version: 1.0
+
+  policies:
+    - rule1:
+        type: tosca.policies.Placement.Geolocation
+        targets: [ VNF1 ]
+        properties:
+          region: [ us-west-1 ]
+    - rule2:
+        type: tosca.policies.Placement.Geolocation
+        targets: [ VNF2, VNF3 ]
+        properties:
+          region: [ us-west-1 , us-west-2 ]
