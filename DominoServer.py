@@ -1,11 +1,19 @@
 #!/usr/bin/env python
 
-#
-# Licence statement goes here
-#
-
+#Copyright 2015 Open Platform for NFV Project, Inc. and its contributors
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#       http://www.apache.org/licenses/LICENSE-2.0
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
 
 import sys, os, glob, random, errno
+import getopt, socket
+import logging, json
 #sys.path.append('gen-py')
 #sys.path.insert(0, glob.glob('./lib/py/build/lib.*')[0])
 sys.path.insert(0, glob.glob('./lib')[0])
@@ -29,11 +37,9 @@ from mapper import *
 from partitioner import *
 from util import miscutil
 
-SERVER_UDID = 0
-DOMINO_CLIENT_IP = 'localhost'
-DOMINO_CLIENT_PORT = 9091
-TOSCADIR = './toscafiles/'
-TOSCA_DEFAULT_FNAME = 'template1.yaml'
+#Load configuration parameters
+from domino_conf import *
+
 
 class CommunicationHandler:
   def __init__(self):
@@ -48,6 +54,7 @@ class CommunicationHandler:
     try:
       # Make socket
       transport = TSocket.TSocket(ipaddr, tcpport)
+      transport.setTimeout(THRIFT_RPC_TIMEOUT_MS)
       # Add buffering to compensate for slow raw sockets
       self.transport = TTransport.TBufferedTransport(transport)
       # Wrap in a protocol
@@ -56,24 +63,30 @@ class CommunicationHandler:
       self.sender = Communication.Client(self.protocol)
       self.transport.open()
     except Thrift.TException, tx:
-      print '%s' % (tx.message) 
+      logging.error('%s' , tx.message) 
+
 
 
   def closeconnection(self):
     self.transport.close()
 
   def push_template(self,template,ipaddr,tcpport):
-    global SERVER_UDID
     self.openconnection(ipaddr,tcpport)
     pushm = PushMessage()
     pushm.domino_udid = SERVER_UDID 
     pushm.seq_no = self.seqno
     pushm.template_type = 'tosca-nfv-v1.0'
     pushm.template = template
+    try:
+      push_r = self.sender.d_push(pushm)  
+      logging.info('Push Response received from %d' , push_r.domino_udid)
+    except (Thrift.TException, TSocket.TTransportException) as tx:
+      logging.error('%s' , tx.message)
+    except (socket.timeout) as tx:
+      self.dominoServer.handle_RPC_timeout(pushm)
+    except:       
+      logging.error('Unexpected error: %s', sys.exc_info()[0])
 
-    push_r = self.sender.d_push(pushm)  
-
-    print 'Push Response received from %d' % push_r.domino_udid 
     self.seqno = self.seqno + 1
 
     self.closeconnection()
@@ -84,7 +97,7 @@ class CommunicationHandler:
 
   def d_heartbeat(self, hb_msg):
     global SERVER_UDID
-    print 'heart beat received from %d' % hb_msg.domino_udid
+    logging.info('heartbeat received from %d' , hb_msg.domino_udid)
 
     hb_r = HeartBeatMessage()
     hb_r.domino_udid = SERVER_UDID
@@ -103,7 +116,7 @@ class CommunicationHandler:
 
     #Prepare and send Registration Response
     reg_r = RegisterResponseMessage()
-    print 'Registration Request received for UDID %d from IP: %s port: %d ' % (reg_msg.domino_udid_desired, reg_msg.ipaddr, reg_msg.tcpport)
+    logging.info('Registration Request received for UDID %d from IP: %s port: %d', reg_msg.domino_udid_desired, reg_msg.ipaddr, reg_msg.tcpport)
 
    
     reg_r.domino_udid_assigned = self.dominoServer.assign_udid(reg_msg.domino_udid_desired)
@@ -122,6 +135,12 @@ class CommunicationHandler:
     # Store the Domino Client info
     # TBD: check the sequence number to ensure the most recent record is saved
     self.dominoServer.registration_record[reg_r.domino_udid_assigned] = reg_msg 
+    data = {}
+    data[reg_r.domino_udid_assigned] = [reg_msg.ipaddr, reg_msg.tcpport, reg_msg.supported_templates, reg_msg.seq_no]
+    with open(SERVER_DBFILE, 'a') as f:
+      json.dump(data, f)
+      f.close()
+
     return reg_r
 
 
@@ -131,7 +150,7 @@ class CommunicationHandler:
   #       - Respond Back with Subscription Response
   def d_subscribe(self, sub_msg):
     global SERVER_UDID, SERVER_SEQNO
-    print 'Subscribe Request received from %d' % sub_msg.domino_udid
+    logging.info('Subscribe Request received from %d' , sub_msg.domino_udid)
 
     if sub_msg.template_op == APPEND:
       if self.dominoServer.subscribed_templateformats.has_key(sub_msg.domino_udid):
@@ -154,8 +173,8 @@ class CommunicationHandler:
       elif sub_msg.label_op == DELETE:
         self.dominoServer.subscribed_labels[sub_msg.domino_udid].difference_update(set(sub_msg.labels))
 
-    print 'Supported Template: %s' % self.dominoServer.subscribed_templateformats[sub_msg.domino_udid]
-    print 'Supported Labels: %s' % self.dominoServer.subscribed_labels[sub_msg.domino_udid] 
+    logging.debug('Supported Template: %s Supported Labels: %s' , self.dominoServer.subscribed_templateformats[sub_msg.domino_udid] , self.dominoServer.subscribed_labels[sub_msg.domino_udid])
+ 
     #Fill in the details
     sub_r = SubscribeResponseMessage()
     sub_r.domino_udid = SERVER_UDID
@@ -172,17 +191,17 @@ class CommunicationHandler:
   #       - Respond Back with Publication Response
   def d_publish(self, pub_msg):
     global SERVER_UDID, SERVER_SEQNO, TOSCADIR, TOSCA_DEFAULT_FNAME
-    print 'Publish Request received from %d' % pub_msg.domino_udid
-    print pub_msg.template
+    logging.info('Publish Request received from %d' , pub_msg.domino_udid)
+    logging.debug(pub_msg.template)
 
     # Save as file
     try:
       os.makedirs(TOSCADIR)
     except OSError as exception:
       if exception.errno == errno.EEXIST:
-        print TOSCADIR, ' exists. Creating: ' , TOSCADIR+TOSCA_DEFAULT_FNAME
+        logging.debug('ERRNO %d; %s exists. Creating: %s', exception.errno, TOSCADIR,  TOSCADIR+TOSCA_DEFAULT_FNAME)
       else:
-        print 'Error occurred in creating the directory. Err no: ', exception.errno
+        logging.error('Error occurred in creating %s. Err no: %d', exception.errno)
 
     #Risking a race condition if another process is attempting to write to same file
     f = open(TOSCADIR+TOSCA_DEFAULT_FNAME, 'w')  
@@ -195,15 +214,15 @@ class CommunicationHandler:
     
     # Extract Labels
     node_labels = label.extract_labels( tosca )
-    print '\nNode Labels: \n', node_labels
+    logging.debug('Node Labels: %s', node_labels)
 
     # Map nodes in the template to resource domains
     site_map = label.map_nodes( self.dominoServer.subscribed_labels , node_labels )
-    print '\nSite Maps: \n' , site_map
+    logging.debug('Site Maps: %s' , site_map)
 
     # Select a site for each VNF
     node_site = label.select_site( site_map ) 
-    print '\nSelected Sites:\n' , node_site , '\n'
+    logging.debug('Selected Sites: %s', node_site)
 
     # Create per-domain Tosca files
     file_paths = partitioner.partition_tosca('./toscafiles/template1.yaml',node_site,tosca.tpl)
@@ -219,7 +238,6 @@ class CommunicationHandler:
       domino_client_ip = self.dominoServer.registration_record[site].ipaddr
       domino_client_port = self.dominoServer.registration_record[site].tcpport
       self.push_template(miscutil.read_templatefile(file_paths[site]), domino_client_ip, domino_client_port)
-   #   self.push_template(pub_msg.template, DOMINO_CLIENT_IP, DOMINO_CLIENT_PORT)
 
     #Fill in the details
     pub_r = PublishResponseMessage()
@@ -242,7 +260,6 @@ class CommunicationHandler:
 
 class DominoServer:
    def __init__(self):
-     self.log = {}
      self.assignedUUIDs = list()
      self.subscribed_labels = dict()
      self.subscribed_templateformats = dict()
@@ -256,6 +273,7 @@ class DominoServer:
      #self.communicationServer = TServer.TThreadedServer(self.processor, self.transport, self.tfactory, self.pfactory)
      self.communicationServer = TServer.TThreadPoolServer(self.processor, self.transport, self.tfactory, self.pfactory)
 
+
    def start_communicationService(self):
      self.communicationServer.serve()
 
@@ -266,20 +284,49 @@ class DominoServer:
    #If assigned, offer a new random id
    def assign_udid(self, udid_desired):
      if udid_desired in self.assignedUUIDs:
-       new_udid = random.getrandbits(64)
+       new_udid = random.getrandbits(63)
        while new_udid in self.assignedUUIDs:
-         new_udid = random.getrandbits(64)
+         new_udid = random.getrandbits(63)
  
        self.assignedUUIDs.append(new_udid)
        return new_udid
      else:
        self.assignedUUIDs.append(udid_desired)
        return udid_desired
-   
+     
+   def handle_RPC_timeout(self, RPCmessage):
+     if RPCmessage.messageType == PUSH:
+      logging.debug('RPC Timeout for message type: PUSH')
+      # TBD: handle each RPC timeout separately
 
 def main(argv):
   server = DominoServer()
-  print 'Starting the server...'
+
+  #process input arguments
+  try:
+      opts, args = getopt.getopt(argv,"hc:l:",["conf=","log="])
+  except getopt.GetoptError:
+      print 'DominoServer.py -c/--conf <configfile> -l/--log <loglevel>'
+      sys.exit(2)
+  for opt, arg in opts:
+      if opt == '-h':
+         print 'DominoClient.py -c/--conf <configfile> -p/--port <socketport> -i/--ipaddr <IPaddr> -l/--log <loglevel>'
+         sys.exit()
+      elif opt in ("-c", "--conf"):
+         configfile = arg
+      elif opt in ("--log"):
+         loglevel= arg
+  #Set logging level
+  numeric_level = getattr(logging, loglevel.upper(), None)
+  try:
+    if not isinstance(numeric_level, int):
+      raise ValueError('Invalid log level: %s' % loglevel)
+    logging.basicConfig(filename=logfile,level=numeric_level, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+  except ValueError, ex:
+    print ex.message
+    sys.exit(2)
+
+  logging.debug('Domino Server Starting...')
   server.start_communicationService()
   print 'done.'
 

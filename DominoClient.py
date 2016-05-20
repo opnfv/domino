@@ -1,11 +1,20 @@
 #!/usr/bin/env python
 
-#
-# Licence statement goes here
-#
+#Copyright 2015 Open Platform for NFV Project, Inc. and its contributors
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#       http://www.apache.org/licenses/LICENSE-2.0
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+
 
 import sys, glob, threading
-import getopt
+import getopt, socket
+import logging
 
 #sys.path.append('gen-py')
 #sys.path.insert(0, glob.glob('./lib/py/build/lib.*')[0])
@@ -23,16 +32,8 @@ from thrift.server import TServer
 
 from util import *
 
-CLIENT_UDID = 1
-CLIENT_SEQNO = 0
-
-DOMINO_SERVER_IP = 'localhost'
-DOMINO_SERVER_PORT = 9090
-
-UDID_DESIRED = 12467
-LIST_SUPPORTED_TEMPLATES = ['tosca-nfv-v1.0']
-#DEFAULT_TOSCA_PUBFILE = './tosca-templates/tosca_simpleVNF.yaml'
-DEFAULT_TOSCA_PUBFILE = './tosca-templates/tosca_helloworld_nfv.yaml'
+#Load configuration parameters
+from domino_conf import *
 
 class CommunicationHandler:
   def __init__(self):
@@ -45,6 +46,7 @@ class CommunicationHandler:
     try:
       # Make socket
       transport = TSocket.TSocket(DOMINO_SERVER_IP, DOMINO_SERVER_PORT)
+      transport.setTimeout(THRIFT_RPC_TIMEOUT_MS)
       # Add buffering to compensate for slow raw sockets
       self.transport = TTransport.TBufferedTransport(transport)
       # Wrap in a protocol
@@ -52,14 +54,14 @@ class CommunicationHandler:
       # Create a client to use the protocol encoder
       self.sender = Communication.Client(self.protocol)
     except Thrift.TException, tx: 
-      print '%s' % (tx.message)
+      logging.error('%s' , tx.message)
 
   # Template Push from Domino Server is received
   # Actions:
   #       - Depending on Controller Domain, call API
   #       - Respond Back with Push Response
   def d_push(self, push_msg):
-    print 'Received Template File'
+    logging.info('%d Received Template File', self.dominoClient.UDID)
     # Retrieve the template file
 
     ## End of retrieval
@@ -123,12 +125,19 @@ class DominoClientCLIService(threading.Thread):
        try:
          sys.stdout.write('>>')
          if args[0] == 'heartbeat':
-           print '\nSending heatbeat'
+           logging.info('%d Sending heatbeat', self.dominoclient.UDID)
            hbm = HeartBeatMessage()
            hbm.domino_udid = self.dominoclient.UDID
            hbm.seq_no = self.dominoclient.seqno
-           hbm_r = self.communicationhandler.sender.d_heartbeat(hbm)
-           print 'heart beat received from: %d ,sequence number: %d' % (hbm_r.domino_udid, hbm_r.seq_no)
+           try:
+             hbm_r = self.communicationhandler.sender.d_heartbeat(hbm)
+             logging.info('heart beat received from: %d ,sequence number: %d' , hbm_r.domino_udid, hbm_r.seq_no)
+           except (Thrift.TException, TSocket.TTransportException) as tx:
+             logging.error('%s' , tx.message)
+           except (socket.timeout) as tx:
+             self.dominoclient.handle_RPC_timeout(hbm)
+           except:
+             logging.error('Unexpected error: %s', sys.exc_info()[0])
            self.dominoclient.seqno = self.dominoclient.seqno + 1
          
          elif args[0] == 'publish':
@@ -149,11 +158,17 @@ class DominoClientCLIService(threading.Thread):
            try:
              pub_msg.template = read_templatefile(toscafile)
            except IOError as e:
-             print "I/O error({0}): {1}".format(e.errno, e.strerror)
+             logging.error('I/O error(%d): %s' , e.errno, e.strerror)
              continue
-           print '\nPublishing the template file: ' + toscafile
-           pub_msg_r = self.communicationhandler.sender.d_publish(pub_msg)
-           print 'Publish Response is received from: %d ,sequence number: %d' % (pub_msg_r.domino_udid, pub_msg_r.seq_no)
+           logging.info('Publishing the template file: ' + toscafile)
+           try:
+             pub_msg_r = self.communicationhandler.sender.d_publish(pub_msg)
+             logging.info('Publish Response is received from: %d ,sequence number: %d', pub_msg_r.domino_udid, pub_msg_r.seq_no)
+           except (Thrift.TException, TSocket.TTransportException) as tx:
+             print '%s' % (tx.message)
+           except (socket.timeout) as tx:
+             self.dominoclient.handle_RPC_timeout(pub_msg)
+
            self.dominoclient.seqno = self.dominoclient.seqno + 1
        
          elif args[0] == 'subscribe':         
@@ -163,7 +178,10 @@ class DominoClientCLIService(threading.Thread):
                  labels = labels + arg.split(',')
               elif opt in ('-t', '--ttype'):
                  templateTypes = templateTypes + arg.split(',')
- 
+         
+         elif args[0] == 'register':
+           self.dominoclient.start()
+  
        except getopt.GetoptError:
          print 'Command is misentered or not supported!'
 
@@ -178,14 +196,19 @@ class DominoClientCLIService(threading.Thread):
          sub_msg.supported_template_types = templateTypes
          sub_msg.label_op = APPEND
          sub_msg.labels = labels
-         print 'subscribing labels %s and templates %s' % (labels,templateTypes)
-         sub_msg_r = self.communicationhandler.sender.d_subscribe(sub_msg) 
-         print 'Subscribe Response is received from: %d ,sequence number: %d' % (sub_msg_r.domino_udid,sub_msg_r.seq_no)
+         logging.info('subscribing labels %s and templates %s', labels, templateTypes)
+         try:
+           sub_msg_r = self.communicationhandler.sender.d_subscribe(sub_msg) 
+           logging.info('Subscribe Response is received from: %d ,sequence number: %d', sub_msg_r.domino_udid,sub_msg_r.seq_no)
+         except (Thrift.TException, TSocket.TTransportException) as tx:
+           logging.error('%s' , tx.message)
+         except (socket.timeout) as tx:
+           self.dominoclient.handle_RPC_timeout(sub_msg)
+
          self.dominoclient.seqno = self.dominoclient.seqno + 1
 
 class DominoClient:
   def __init__(self):
-    self.log = {}
     self.communicationHandler = CommunicationHandler(self)
     self.processor = None
     self.transport = None
@@ -218,9 +241,11 @@ class DominoClient:
   def start(self):
     try:
       self.communicationHandler.openconnection()
+      self.register()
     except Thrift.TException, tx:
       print '%s' % (tx.message)
-    
+   
+  def register(self):  
     if self.state == 'UNREGISTERED':
       #prepare registration message
       reg_msg = RegisterMessage()
@@ -230,59 +255,72 @@ class DominoClient:
       reg_msg.tcpport = self.serviceport
       reg_msg.supported_templates = LIST_SUPPORTED_TEMPLATES
 
-      reg_msg_r = self.sender().d_register(reg_msg)
-      print 'Registration Response:\n'
-      print 'Response Code: %d'  % (reg_msg_r.responseCode)
-      print 'Response Comments:'
-      if reg_msg_r.comments:
-        print reg_msg_r.comments
+      try:
+        reg_msg_r = self.sender().d_register(reg_msg)
+        logging.info('Registration Response: Response Code: %d'  , reg_msg_r.responseCode)
+        if reg_msg_r.comments:
+          logging.debug('Response Comments: %s' ,  reg_msg_r.comments)
 
-      if reg_msg_r.responseCode == SUCCESS:
-        self.state = 'REGISTERED'
-        self.UDID = reg_msg_r.domino_udid_assigned
-      else:
-        #Handle registration failure here (possibly based on reponse comments)   
-        pass
-
+        if reg_msg_r.responseCode == SUCCESS:
+          self.state = 'REGISTERED'
+          self.UDID = reg_msg_r.domino_udid_assigned
+        else:
+          #Handle registration failure here (possibly based on reponse comments)
+          pass
+      except (Thrift.TException, TSocket.TTransportException) as tx:
+        logging.error('%s' , tx.message)
+      except (socket.timeout) as tx:
+        self.dominoclient.handle_RPC_timeout(pub_msg)
+      except (socket.error) as tx:
+        logging.error('%s' , tx.message)
       self.seqno = self.seqno + 1
 
   def stop(self):
     try:
       self.communicationHandler.closeconnection()
     except Thrift.TException, tx:
-      print '%s' % (tx.message)
+      logging.error('%s' , tx.message)
     
   def sender(self):
     return self.communicationHandler.sender
 
   def startCLI(self):
-    print 'CLI Service is starting'
+    logging.info('CLI Service is starting')
     self.CLIservice.start()
     #to wait until CLI service is finished
     #self.CLIservice.join()
 
   def set_serviceport(self, port):
     self.serviceport = port
-    print 'port: '
-    print self.serviceport
 
   def set_dominoserver_ipaddr(self, ipaddr):
     self.dominoserver_IP = ipaddr
-    print 'ip addr: '
-    print self.dominoserver_IP
+
+  def handle_RPC_timeout(self, RPCmessage):
+    # TBD: handle each RPC timeout separately
+    if RPCmessage.messageType == HEART_BEAT:
+      logging.debug('RPC Timeout for message type: HEART_BEAT') 
+    elif RPCmessage.messageType == PUBLISH:
+      logging.debug('RPC Timeout for message type: PUBLISH')
+    elif RPCmessage.messageType == SUBSCRIBE:
+      logging.debug('RPC Timeout for message type: SUBSCRIBE')
+    elif RPCmessage.messageType == REGISTER:
+      logging.debug('RPC Timeout for message type: REGISTER')
+    elif RPCmessage.messageType == QUERY:
+      logging.debug('RPC Timeout for message type: QUERY') 
 
 def main(argv):
   client = DominoClient()
-
+  loglevel = 'WARNING'
   #process input arguments
   try:
-      opts, args = getopt.getopt(argv,"hc:p:i:",["conf=","port=","ipaddr="])
+      opts, args = getopt.getopt(argv,"hc:p:i:l:",["conf=","port=","ipaddr=","log="])
   except getopt.GetoptError:
-      print 'DominoClient.py -c/--conf <configfile> -p/--port <socketport> -i/--ipaddr <IPaddr>'
+      print 'DominoClient.py -c/--conf <configfile> -p/--port <socketport> -i/--ipaddr <IPaddr> -l/--log <loglevel>'
       sys.exit(2)
   for opt, arg in opts:
       if opt == '-h':
-         print 'DominoClient.py -c/--conf <configfile> -p/--port <socketport> -i/--ipaddr <IPaddr>'
+         print 'DominoClient.py -c/--conf <configfile> -p/--port <socketport> -i/--ipaddr <IPaddr> -l/--log <loglevel>'
          sys.exit()
       elif opt in ("-c", "--conf"):
          configfile = arg
@@ -290,9 +328,21 @@ def main(argv):
          client.set_serviceport(int(arg))
       elif opt in ("-i", "--ipaddr"):
          client.set_dominoserver_ipaddr(arg)
+      elif opt in ("--log"):
+         loglevel = arg
 
+  #Set logging level
+  numeric_level = getattr(logging, loglevel.upper(), None)
+  try:
+    if not isinstance(numeric_level, int):
+      raise ValueError('Invalid log level: %s' % loglevel)
+    logging.basicConfig(filename=logfile,level=numeric_level, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+  except ValueError, ex:
+    print ex.message
+    exit()
+ 
   #The client is starting
-  print 'Starting the client...'
+  logging.debug('Domino Client Starting...')
   client.start()
   client.startCLI()
   client.start_communicationService()
