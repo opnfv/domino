@@ -266,7 +266,7 @@ class DominoServer:
      self.registration_record = dict() 
      self.communicationHandler = CommunicationHandler(self)
      self.processor = Communication.Processor(self.communicationHandler)
-     self.transport = TSocket.TServerSocket(port=9090)
+     self.transport = TSocket.TServerSocket(port=DOMINO_SERVER_PORT)
      self.tfactory = TTransport.TBufferedTransportFactory()
      self.pfactory = TBinaryProtocol.TBinaryProtocolFactory()
      #Use TThreadedServer or TThreadPoolServer for a multithreaded server
@@ -301,7 +301,7 @@ class DominoServer:
 
 def main(argv):
   server = DominoServer()
-
+  loglevel = 'WARNING'
   #process input arguments
   try:
       opts, args = getopt.getopt(argv,"hc:l:",["conf=","log="])

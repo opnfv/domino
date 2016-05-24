@@ -8,10 +8,10 @@ Tested on Ubuntu 14.04 and OS X El Capitan
     sudo pip install tosca-parser
 
 ###Start Domino Server:
-    ./DominoServer.py
+    ./DominoServer.py --log=DEBUG
 
 ###Start the first Domino Client:
-    ./DominoClient.py -p 9091
+    ./DominoClient.py -p 9091 --log=DEBUG
 
 ###Start the second Domino Client:
     ./DominoClient.py -p 9092
