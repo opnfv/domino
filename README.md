@@ -13,8 +13,10 @@ Tested on Ubuntu 14.04 and OS X El Capitan
 ###Start the first Domino Client:
     ./DominoClient.py -p 9091 --log=DEBUG
 
+Note: if --log option is ommitted, the default logging level is Warning messages
+
 ###Start the second Domino Client:
-    ./DominoClient.py -p 9092
+    ./DominoClient.py -p 9092 --log=DEBUG
 
 ##CLI at the Domino Client:
 
