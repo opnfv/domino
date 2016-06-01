@@ -23,6 +23,8 @@ Message fields:
    3: i64 seq_no  
   }
 
+Command line:
+
 .. code-block:: bash
 
   ./domino-cli.py heartbeat
