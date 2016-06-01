@@ -7,8 +7,8 @@
   :alt: OPNFV
   :align: left
 
-Example Documentation table of contents
-=======================================
+DOMINO API DOCUMENTATION
+========================
 
 Contents:
 
