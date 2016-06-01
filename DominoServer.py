@@ -314,7 +314,7 @@ def main(argv):
          sys.exit()
       elif opt in ("-c", "--conf"):
          configfile = arg
-      elif opt in ("--log"):
+      elif opt in ("-l", "--log"):
          loglevel= arg
   #Set logging level
   numeric_level = getattr(logging, loglevel.upper(), None)
