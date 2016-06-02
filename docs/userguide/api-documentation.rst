@@ -58,11 +58,17 @@ This message has the following fields that are automatically filled in.
 
 Note that -l can be substituted by --label and -t can be substituted by --ttype.
 
-To subscribe more than one label or template type, one can repeat the options -l and -t, e.g.:
+More than one label or template type can be subscribed within the same command line as comma separated labels or template types
 
 .. code-block:: bash
 
-  ./domino-cli.py subscribe -l <label1> -l <label2> ... -l <labeln> -t <ttype1> -t <ttype2> ... -t <ttypen>
+  ./domino-cli.py subscribe -l <label1>,<label2>,<labeln> -t <ttype1>,<ttype2>,<ttypen>
+
+To subscribe more than one label or template type, one can also repeat the options -l and -t, e.g.:
+
+.. code-block:: bash
+
+  ./domino-cli.py subscribe -l <label1> -l <label2> -l <labeln> -t <ttype1> -t <ttype2> -t <ttypen>
 
 It is safe to call subscribe command multiple times with duplicate labels.
 
