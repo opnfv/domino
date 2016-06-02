@@ -13,7 +13,7 @@ Using domino-cli Client
 =======================
 Make sure that domino-cli.py is in +x mode.
 
-Change directory to where domino-cli.py is located or include file path in the PATH environment variable
+Change directory to where domino-cli.py is located or include file path in the PATH environment variable.
 
 * Registration Command
 

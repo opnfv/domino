@@ -132,7 +132,6 @@ class DominoClientCLIService(threading.Thread):
     self.interactive = interactive
 
   def process_input(self, args):
-        
     try:
       if args[0] == 'heartbeat':
         self.dominoclient.heartbeat()
@@ -152,16 +151,30 @@ class DominoClientCLIService(threading.Thread):
       elif args[0] == 'subscribe':
         labels = []    
         templateTypes = []
-        opts, args = getopt.getopt(args[1:],"l:t:",["labels=","ttype="])
+        labelop = APPEND
+        templateop = APPEND
+        opts, args = getopt.getopt(args[1:],"l:t:",["labels=","ttype=","lop=","top="])
         for opt, arg in opts:
 	  if opt in ('-l', '--labels'):
 	    labels = labels + arg.split(',')
 	  elif opt in ('-t', '--ttype'):
-	    templateTypes = templateTypes + arg.split(',')    
-
+	    templateTypes = templateTypes + arg.split(',')
+          elif opt in ('--lop'):
+            try:
+              labelop = str2enum[arg.upper()]
+            except KeyError as ex:
+              print '\nInvalid label option, pick one of: APPEND, OVERWRITE, DELETE'
+              return 
+          elif opt in ('--top'):
+            try:
+              templateop = str2enum[arg.upper()]
+            except KeyError as ex:
+              print '\nInvalid label option, pick one of: APPEND, OVERWRITE, DELETE'
+              return
+        
         #check if labels or supported templates are nonempty
         if labels != [] or templateTypes != []:
-          self.dominoclient.subscribe(labels, templateTypes)
+          self.dominoclient.subscribe(labels, templateTypes, labelop, templateop)
 
       elif args[0] == 'register':
         self.dominoclient.start()
@@ -316,7 +329,7 @@ class DominoClient:
 
     self.seqno = self.seqno + 1
 
-  def subscribe(self, labels, templateTypes):
+  def subscribe(self, labels, templateTypes, label_op, template_op):
      if self.state == 'UNREGISTERED':
        self.start()
 
@@ -325,9 +338,9 @@ class DominoClient:
      sub_msg = SubscribeMessage()
      sub_msg.domino_udid = self.UDID
      sub_msg.seq_no = self.seqno
-     sub_msg.template_op = APPEND
+     sub_msg.template_op = template_op
      sub_msg.supported_template_types = templateTypes
-     sub_msg.label_op = APPEND
+     sub_msg.label_op = label_op
      sub_msg.labels = labels
      try:
        sub_msg_r = self.sender().d_subscribe(sub_msg)
