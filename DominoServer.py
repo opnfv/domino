@@ -198,6 +198,17 @@ class CommunicationHandler:
       logging.error('Could not add the new labels to %s for Domino Client %d', SERVER_DBFILE, sub_msg.domino_udid)
       logging.error('Unexpected error: %s', sys.exc_info()[0])
 
+    newttypeset = self.dominoServer.subscribed_templateformats[sub_msg.domino_udid]
+    try:
+      c.execute("REPLACE INTO ttypes (udid, ttype_list) VALUES ({udid}, '{newvalue}')".\
+               format(udid=sub_msg.domino_udid, newvalue=','.join(list(newttypeset)) ))
+    except sqlite3.OperationalError as ex1:
+      logging.error('Could not add the new labels to %s for Domino Client %d :  %s', SERVER_DBFILE, sub_msg.domino_udid, ex1.message)
+    except:
+      logging.error('Could not add the new labels to %s for Domino Client %d', SERVER_DBFILE, sub_msg.domino_udid)
+      logging.error('Unexpected error: %s', sys.exc_info()[0])
+
+
     dbconn.commit()
     dbconn.close()
 
@@ -358,6 +369,11 @@ def main(argv):
   c = dbconn.cursor()
   try:
     c.execute('''CREATE TABLE labels (udid INTEGER PRIMARY KEY, label_list TEXT)''')
+  except sqlite3.OperationalError as ex:
+    logging.debug('In database file %s, no table is created as %s', SERVER_DBFILE, ex.message)
+
+  try:
+    c.execute('''CREATE TABLE ttypes (udid INTEGER PRIMARY KEY, ttype_list TEXT)''')
   except sqlite3.OperationalError as ex:
     logging.debug('In database file %s, no table is created as %s', SERVER_DBFILE, ex.message)
 
