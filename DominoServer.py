@@ -14,6 +14,7 @@
 import sys, os, glob, random, errno
 import getopt, socket
 import logging, json
+import sqlite3
 #sys.path.append('gen-py')
 #sys.path.insert(0, glob.glob('./lib/py/build/lib.*')[0])
 sys.path.insert(0, glob.glob('./lib')[0])
@@ -131,15 +132,21 @@ class CommunicationHandler:
     #Logic for a new UDID assignment
  
     self.seqno = self.seqno + 1
-
-    # Store the Domino Client info
-    # TBD: check the sequence number to ensure the most recent record is saved
-    self.dominoServer.registration_record[reg_r.domino_udid_assigned] = reg_msg 
-    data = {}
-    data[reg_r.domino_udid_assigned] = [reg_msg.ipaddr, reg_msg.tcpport, reg_msg.supported_templates, reg_msg.seq_no]
-    with open(SERVER_DBFILE, 'a') as f:
-      json.dump(data, f)
-      f.close()
+    
+    #commit to the database
+    dbconn = sqlite3.connect(SERVER_DBFILE)
+    c = dbconn.cursor()
+    try:
+      newrow = [(reg_r.domino_udid_assigned, reg_msg.ipaddr, reg_msg.tcpport, ','.join(reg_msg.supported_templates), reg_msg.seq_no),]
+      c.executemany('INSERT INTO clients VALUES (?,?,?,?,?)',newrow)
+    except sqlite3.OperationalError as ex:
+      logging.error('Could not add the new registration record into %s for Domino Client %d :  %s', SERVER_DBFILE, reg_r.domino_udid_assigned, ex.message)
+    except:
+      logging.error('Could not add the new registration record into %s for Domino Client %d', SERVER_DBFILE, reg_r.domino_udid_assigned)
+      logging.error('Unexpected error: %s', sys.exc_info()[0])
+ 
+    dbconn.commit()
+    dbconn.close()
 
     return reg_r
 
@@ -177,6 +184,23 @@ class CommunicationHandler:
         self.dominoServer.subscribed_labels[sub_msg.domino_udid].difference_update(set(sub_msg.labels))
 
     logging.debug('Supported Template: %s Supported Labels: %s' , self.dominoServer.subscribed_templateformats[sub_msg.domino_udid] , self.dominoServer.subscribed_labels[sub_msg.domino_udid])
+
+    #commit to the database
+    dbconn = sqlite3.connect(SERVER_DBFILE)
+    c = dbconn.cursor()
+    newlabelset = self.dominoServer.subscribed_labels[sub_msg.domino_udid]
+    try:
+      c.execute("REPLACE INTO labels (udid, label_list) VALUES ({udid}, '{newvalue}')".\
+               format(udid=sub_msg.domino_udid, newvalue=','.join(list(newlabelset)) ))
+    except sqlite3.OperationalError as ex1:
+      logging.error('Could not add the new labels to %s for Domino Client %d :  %s', SERVER_DBFILE, sub_msg.domino_udid, ex1.message)
+    except:
+      logging.error('Could not add the new labels to %s for Domino Client %d', SERVER_DBFILE, sub_msg.domino_udid)
+      logging.error('Unexpected error: %s', sys.exc_info()[0])
+
+    dbconn.commit()
+    dbconn.close()
+
  
     #Fill in the details
     sub_r = SubscribeResponseMessage()
@@ -328,6 +352,22 @@ def main(argv):
   except ValueError, ex:
     print ex.message
     sys.exit(2)
+
+  #start the database with schemas
+  dbconn = sqlite3.connect(SERVER_DBFILE)
+  c = dbconn.cursor()
+  try:
+    c.execute('''CREATE TABLE labels (udid INTEGER PRIMARY KEY, label_list TEXT)''')
+  except sqlite3.OperationalError as ex:
+    logging.debug('In database file %s, no table is created as %s', SERVER_DBFILE, ex.message)
+
+  try:
+    c.execute('''CREATE TABLE clients (udid INTEGER PRIMARY KEY, ipaddr TEXT, tcpport INTEGER, templatetypes TEXT, seqno INTEGER)''')
+  except sqlite3.OperationalError as ex:
+    logging.debug('In database file %s, no table is created as %s', SERVER_DBFILE, ex.message)
+
+  dbconn.commit()
+  dbconn.close()
 
   logging.debug('Domino Server Starting...')
   server.start_communicationService()

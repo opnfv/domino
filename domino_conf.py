@@ -16,4 +16,4 @@ DEFAULT_TOSCA_PUBFILE = './tosca-templates/tosca_helloworld_nfv.yaml'
 SERVER_UDID = 0
 TOSCADIR = './toscafiles/'
 TOSCA_DEFAULT_FNAME = 'template1.yaml'
-SERVER_DBFILE = 'dominoserver.json'
+SERVER_DBFILE = 'dominoserver.db'
