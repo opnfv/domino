@@ -169,19 +169,19 @@ class CommunicationHandler:
     elif sub_msg.template_op == DELETE:
       self.dominoServer.subscribed_templateformats[sub_msg.domino_udid].difference_update(set(sub_msg.supported_template_types))
 
-    if sub_msg.labels != []:
-      if sub_msg.label_op == APPEND:
-        logging.debug('APPENDING Labels...')
-        if self.dominoServer.subscribed_labels.has_key(sub_msg.domino_udid):
-          self.dominoServer.subscribed_labels[sub_msg.domino_udid].update(set(sub_msg.labels))
-        else:
-          self.dominoServer.subscribed_labels[sub_msg.domino_udid] = set(sub_msg.labels)
-      elif sub_msg.label_op == OVERWRITE:
-        logging.debug('OVERWRITING Labels...')
-        self.dominoServer.subscribed_labels[sub_msg.domino_udid] = set(sub_msg.labels)
-      elif sub_msg.label_op == DELETE:
-        logging.debug('DELETING Labels...')
-        self.dominoServer.subscribed_labels[sub_msg.domino_udid].difference_update(set(sub_msg.labels))
+#    if sub_msg.labels != []:
+    if sub_msg.label_op == APPEND:
+      logging.debug('APPENDING Labels...')
+      if self.dominoServer.subscribed_labels.has_key(sub_msg.domino_udid):
+	self.dominoServer.subscribed_labels[sub_msg.domino_udid].update(set(sub_msg.labels))
+      else:
+	self.dominoServer.subscribed_labels[sub_msg.domino_udid] = set(sub_msg.labels)
+    elif sub_msg.label_op == OVERWRITE:
+      logging.debug('OVERWRITING Labels...')
+      self.dominoServer.subscribed_labels[sub_msg.domino_udid] = set(sub_msg.labels)
+    elif sub_msg.label_op == DELETE:
+      logging.debug('DELETING Labels...')
+      self.dominoServer.subscribed_labels[sub_msg.domino_udid].difference_update(set(sub_msg.labels))
 
     logging.debug('Supported Template: %s Supported Labels: %s' , self.dominoServer.subscribed_templateformats[sub_msg.domino_udid] , self.dominoServer.subscribed_labels[sub_msg.domino_udid])
 
