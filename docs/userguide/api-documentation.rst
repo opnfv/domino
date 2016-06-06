@@ -11,9 +11,26 @@
 |
 Using domino-cli Client
 =======================
-Make sure that domino-cli.py is in +x mode.
+Prerequisites:
 
-Change directory to where domino-cli.py is located or include file path in the PATH environment variable.
+1. Make sure that domino-cli.py is in +x mode.
+
+2. Change directory to where domino-cli.py, DominoClient.py and DominoServer.py are located or include file path in the PATH environment variable.
+
+3. Start the Domino Server:
+
+.. code-block:: bash
+
+  ./DominoServer.py --log=debug
+
+4. Start the Domino Client:
+
+.. code-block:: bash
+
+  ./DominoClient.py -p <portnumber> --log=debug
+
+Note1: The default log level is WARNING and omitting --log option will lead to minimal/no logging on the console
+Note2: domino_conf.py file includes most of the default values
 
 * Registration Command
 
@@ -84,6 +101,14 @@ This message has the following fields that are automatically filled in.
 
 The following fields are filled in based on arguments passed on via -l/--label and -t/--ttype flags
 
+Subscribe RPC also supports options for label using
+  --lop=APPEND/DELETE/OVERWRITE
+and for supported template types using
+  --top=APPEND/DELETE/OVERWRITE.
+When unspecified, the default is APPEND.
+DELETE deletes existing labels (template types) specified in the current call via key -l/--label (-t/--ttype).
+OVERWRITE removes the current set of labels (template types) and sets it to the new set of values passed in the same RPC call.
+
 .. code-block:: bash
 
   Supported Template Types
@@ -109,10 +134,26 @@ This message has the following fields that are automatically filled in.
   Template Type (= TOSCA)
   Template File
 
+Note: Current version of the code has a hardcoded CLI port number, so no two Domino Clients can be run in the same port name space.
+
 Interactive CLI mode
 ====================
+To enter this mode, start Domino Client with interactive console option set as true, i.e., --iac=true:
 
+.. code-block:: bash
 
+  ./DominoClient -p <portnumber> --iax=true --log=DEBUG
+
+The rest of the API calls are the same as in the case of using domino-cli.py except that at the prompt there is no need to write domino-cli.py, e.g.,:
+
+.. code-block:: bash
+
+  >>register
+  >>heartbeat
+  >>subscribe -l <label1> -t <ttype1>
+  >>publish -t <toscafile>
+
+The interactive CLI mode is preferred for manual, single host testing (i.e., all domino clients and servers run in the same machine).
 
 Revision: _sha1_
 

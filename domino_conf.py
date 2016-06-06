@@ -1,6 +1,9 @@
 logfile = None
+LOGLEVEL = 'DEBUG' #'WARNING' #ERROR, DEBUG, INFO
 
 #Client Parameters
+INTERACTIVE = 'FALSE'
+
 CLIENT_UDID = 1
 CLIENT_SEQNO = 0
 
