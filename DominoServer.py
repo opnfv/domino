@@ -339,7 +339,7 @@ class DominoServer:
 
 def main(argv):
   server = DominoServer()
-  loglevel = 'WARNING'
+  loglevel = LOGLEVEL
   #process input arguments
   try:
       opts, args = getopt.getopt(argv,"hc:l:",["conf=","log="])

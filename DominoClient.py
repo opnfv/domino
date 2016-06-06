@@ -392,8 +392,8 @@ class DominoClient:
 
 def main(argv):
   client = DominoClient()
-  loglevel = 'WARNING'
-  interactive = "FALSE"
+  loglevel = LOGLEVEL
+  interactive = INTERACTIVE
   #process input arguments
   try:
       opts, args = getopt.getopt(argv,"hc:p:i:l:",["conf=","port=","ipaddr=","log=","iac=","cliport="])
