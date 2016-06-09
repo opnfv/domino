@@ -49,7 +49,7 @@ class CommunicationHandler:
   def __init__(self, dominoserver):
     self.log = {}
     self.dominoServer = dominoserver
-    self.seqno = 0;
+    self.seqno = SERVER_SEQNO;
    
   def openconnection(self, ipaddr, tcpport):
     try:
@@ -97,7 +97,6 @@ class CommunicationHandler:
   #	- Respond Back with a heartbeat
 
   def d_heartbeat(self, hb_msg):
-    global SERVER_UDID
     logging.info('heartbeat received from %d' , hb_msg.domino_udid)
 
     hb_r = HeartBeatMessage()
@@ -113,7 +112,6 @@ class CommunicationHandler:
   #
   #       - Respond Back with Registration Response
   def d_register(self, reg_msg):
-    global SERVER_UDID
 
     #Prepare and send Registration Response
     reg_r = RegisterResponseMessage()
@@ -132,7 +130,9 @@ class CommunicationHandler:
     #Logic for a new UDID assignment
  
     self.seqno = self.seqno + 1
-    
+
+    self.dominoServer.registration_record[reg_r.domino_udid_assigned] = reg_msg    
+
     #commit to the database
     dbconn = sqlite3.connect(SERVER_DBFILE)
     c = dbconn.cursor()
@@ -156,7 +156,6 @@ class CommunicationHandler:
   #       - Save the templates  & labels
   #       - Respond Back with Subscription Response
   def d_subscribe(self, sub_msg):
-    global SERVER_UDID, SERVER_SEQNO
     logging.info('Subscribe Request received from %d' , sub_msg.domino_udid)
 
     if sub_msg.template_op == APPEND:
@@ -228,7 +227,6 @@ class CommunicationHandler:
   #       - Launch Push service
   #       - Respond Back with Publication Response
   def d_publish(self, pub_msg):
-    global SERVER_UDID, SERVER_SEQNO, TOSCADIR, TOSCA_DEFAULT_FNAME
     logging.info('Publish Request received from %d' , pub_msg.domino_udid)
     logging.debug(pub_msg.template)
 
@@ -242,10 +240,21 @@ class CommunicationHandler:
         logging.error('Error occurred in creating %s. Err no: %d', exception.errno)
 
     #Risking a race condition if another process is attempting to write to same file
-    f = open(TOSCADIR+TOSCA_DEFAULT_FNAME, 'w')  
-    for item in pub_msg.template:
-      print>>f, item
-    f.close()
+#    f = open(TOSCADIR+TOSCA_DEFAULT_FNAME, 'w')  
+#    for item in pub_msg.template:
+#      print>>f, item
+#    f.close()
+    try:
+      miscutil.write_templatefile(TOSCADIR+TOSCA_DEFAULT_FNAME , pub_msg.template)
+    except:
+      #Some sort of race condition should have occured that prevented the write operation
+      #treat as failure
+      pub_r = PublishResponseMessage()
+      pub_r.domino_udid = SERVER_UDID
+      pub_r.seq_no = self.seqno
+      pub_r.responseCode = FAILURE
+      self.seqno = self.seqno + 1
+      return pub_r
 
     # Load tosca object from file into memory
     tosca = ToscaTemplate( TOSCADIR+TOSCA_DEFAULT_FNAME )
@@ -264,7 +273,8 @@ class CommunicationHandler:
 
     # Create per-domain Tosca files
     file_paths = partitioner.partition_tosca('./toscafiles/template1.yaml',node_site,tosca.tpl)
-    
+    logging.debug('Per domain file paths: %s', file_paths)
+ 
     # Create list of translated template files
 
     # Create work-flow
@@ -275,7 +285,11 @@ class CommunicationHandler:
     for site in file_paths:
       domino_client_ip = self.dominoServer.registration_record[site].ipaddr
       domino_client_port = self.dominoServer.registration_record[site].tcpport
-      self.push_template(miscutil.read_templatefile(file_paths[site]), domino_client_ip, domino_client_port)
+      try:
+        template_lines = miscutil.read_templatefile(file_paths[site]) 
+        self.push_template(template_lines, domino_client_ip, domino_client_port)
+      except IOError as e:
+        logging.error('I/O error(%d): %s' , e.errno, e.strerror)
 
     #Fill in the details
     pub_r = PublishResponseMessage()

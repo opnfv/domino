@@ -20,3 +20,4 @@ SERVER_UDID = 0
 TOSCADIR = './toscafiles/'
 TOSCA_DEFAULT_FNAME = 'template1.yaml'
 SERVER_DBFILE = 'dominoserver.db'
+SERVER_SEQNO = 0
