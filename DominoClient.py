@@ -12,9 +12,9 @@
 #   limitations under the License.
 
 
-import sys, glob, threading
+import sys, os, glob, threading
 import getopt, socket
-import logging
+import logging, errno
 
 #sys.path.append('gen-py')
 #sys.path.insert(0, glob.glob('./lib/py/build/lib.*')[0])
@@ -66,10 +66,25 @@ class CommunicationHandler:
   def d_push(self, push_msg):
     logging.info('%d Received Template File', self.dominoClient.UDID)
     # Retrieve the template file
+    try:
+      os.makedirs(TOSCA_RX_DIR+str(self.dominoClient.UDID))
+    except OSError as exception:
+      if exception.errno == errno.EEXIST:
+        logging.debug('IGNORING error: ERRNO %d; %s exists.', exception.errno, TOSCA_RX_DIR+str(self.dominoClient.UDID))
+      else:
+        logging.error('IGNORING error in creating %s. Err no: %d', exception.errno)
 
-    ## End of retrieval
- 
-    # Any inspection code goes here
+    try:  
+      miscutil.write_templatefile(TOSCA_RX_DIR+str(self.dominoClient.UDID)+'/'+str(push_msg.seq_no)+'.yaml' , push_msg.template)
+    except:    
+      logging.error('FAILED to write the pushed file: %s', sys.exc_info()[0])
+      push_r = PushResponseMessage()
+      # Fill response message fields
+      push_r.domino_udid = self.dominoClient.UDID
+      push_r.seq_no = self.dominoClient.seqno
+      push_r.responseCode = FAILED
+      self.dominoClient.seqno = self.dominoClient.seqno + 1
+      return push_r# Any inspection code goes here
 
     ## End of inspection
 

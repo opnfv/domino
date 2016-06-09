@@ -237,28 +237,35 @@ class CommunicationHandler:
       if exception.errno == errno.EEXIST:
         logging.debug('ERRNO %d; %s exists. Creating: %s', exception.errno, TOSCADIR,  TOSCADIR+TOSCA_DEFAULT_FNAME)
       else:
-        logging.error('Error occurred in creating %s. Err no: %d', exception.errno)
+        logging.error('IGNORING error occurred in creating %s. Err no: %d', exception.errno)
 
     #Risking a race condition if another process is attempting to write to same file
-#    f = open(TOSCADIR+TOSCA_DEFAULT_FNAME, 'w')  
-#    for item in pub_msg.template:
-#      print>>f, item
-#    f.close()
     try:
       miscutil.write_templatefile(TOSCADIR+TOSCA_DEFAULT_FNAME , pub_msg.template)
     except:
       #Some sort of race condition should have occured that prevented the write operation
       #treat as failure
+      logging.error('FAILED to write the published file: %s', sys.exc_info()[0])
       pub_r = PublishResponseMessage()
       pub_r.domino_udid = SERVER_UDID
       pub_r.seq_no = self.seqno
-      pub_r.responseCode = FAILURE
+      pub_r.responseCode = FAILED
       self.seqno = self.seqno + 1
       return pub_r
 
     # Load tosca object from file into memory
-    tosca = ToscaTemplate( TOSCADIR+TOSCA_DEFAULT_FNAME )
-    
+    try:
+      tosca = ToscaTemplate( TOSCADIR+TOSCA_DEFAULT_FNAME )
+    except:
+      logging.error('Tosca Parser error: %s', sys.exc_info()[0])
+      #tosca file could not be read
+      pub_r = PublishResponseMessage()
+      pub_r.domino_udid = SERVER_UDID
+      pub_r.seq_no = self.seqno
+      pub_r.responseCode = FAILED
+      self.seqno = self.seqno + 1 
+      return pub_r 
+
     # Extract Labels
     node_labels = label.extract_labels( tosca )
     logging.debug('Node Labels: %s', node_labels)

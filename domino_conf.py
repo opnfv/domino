@@ -14,6 +14,7 @@ DOMINO_CLI_PORT = 9100
 UDID_DESIRED = 12467
 LIST_SUPPORTED_TEMPLATES = ['tosca-nfv-v1.0']
 DEFAULT_TOSCA_PUBFILE = './tosca-templates/tosca_helloworld_nfv.yaml'
+TOSCA_RX_DIR = './toscafiles/'
 
 #Server Parameters
 SERVER_UDID = 0
