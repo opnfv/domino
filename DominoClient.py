@@ -118,11 +118,6 @@ class CLIHandler:
     CLIrespmsg.CLI_response = "Testing..."
     return CLIrespmsg
  
-def read_templatefile(temp_filename): 
-  f = open(temp_filename, 'r')
-  lines = f.read().splitlines()
-
-  return lines
 
 class DominoClientCLIService(threading.Thread):
   def __init__(self, dominoclient, communicationhandler, interactive):
@@ -315,7 +310,7 @@ class DominoClient:
     pub_msg.template_type = 'tosca-nfv-v1.0'
 
     try:
-      pub_msg.template = read_templatefile(toscafile)
+      pub_msg.template = miscutil.read_templatefile(toscafile)
     except IOError as e:
       logging.error('I/O error(%d): %s' , e.errno, e.strerror)
       return

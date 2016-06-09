@@ -7,6 +7,6 @@
 def read_templatefile(temp_filename): 
   f = open(temp_filename, 'r')
   lines = f.read().splitlines()
-
+  f.close()
   return lines
 
