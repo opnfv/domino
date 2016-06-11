@@ -45,8 +45,8 @@ def partition_tosca(filepath, nodesite, tpl):
   for site in sitenodes:
     tpl_l = tpl_local[site]
     print tpl_l , '\n'
-    file_paths[site] = filepath + '_part' + str(site)
-    fout = open(filepath + '_part' + str(site),'w')
+    file_paths[site] = filepath + '_part' + str(site) + '.yaml'
+    fout = open(file_paths[site],'w')
  
     if tpl_l.has_key('tosca_definitions_version'):
       fout.write('tosca_definitions_version: ')

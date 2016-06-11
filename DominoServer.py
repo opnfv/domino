@@ -33,6 +33,8 @@ from thrift.server import TServer
 from toscaparser.tosca_template import ToscaTemplate
 #from toscaparser.utils.gettextutils import _
 #import toscaparser.utils.urlutils
+from translator.hot.tosca_translator import TOSCATranslator
+
 
 from mapper import *
 from partitioner import *
@@ -279,12 +281,12 @@ class CommunicationHandler:
     logging.debug('Selected Sites: %s', node_site)
 
     # Create per-domain Tosca files
-    file_paths = partitioner.partition_tosca('./toscafiles/template1.yaml',node_site,tosca.tpl)
+    file_paths = partitioner.partition_tosca('./toscafiles/template',node_site,tosca.tpl)
     logging.debug('Per domain file paths: %s', file_paths)
  
-    # Create list of translated template files
-
     # Create work-flow
+
+
 
     # Send domain templates to each domain agent/client 
     # FOR NOW: send untranslated but partitioned tosca files to scheduled sites
@@ -293,10 +295,19 @@ class CommunicationHandler:
       domino_client_ip = self.dominoServer.registration_record[site].ipaddr
       domino_client_port = self.dominoServer.registration_record[site].tcpport
       try:
-        template_lines = miscutil.read_templatefile(file_paths[site]) 
+        if 'hot' in self.dominoServer.subscribed_templateformats[site]:
+          tosca = ToscaTemplate(file_paths[site])
+          translator = TOSCATranslator(tosca, {}, False)
+          output = translator.translate()
+          logging.debug('HOT translation: \n %s', output)
+          template_lines = [ output ]
+        else: 
+          template_lines = miscutil.read_templatefile(file_paths[site]) 
         self.push_template(template_lines, domino_client_ip, domino_client_port)
       except IOError as e:
         logging.error('I/O error(%d): %s' , e.errno, e.strerror)
+      except:
+        logging.error('Error: %s', sys.exc_info()[0])
 
     #Fill in the details
     pub_r = PublishResponseMessage()
