@@ -12,6 +12,7 @@
 #   limitations under the License.
 
 import sys, glob, getopt
+import getopt
 
 sys.path.insert(0, glob.glob('./lib')[0])
 
@@ -27,18 +28,13 @@ from thrift.protocol import TBinaryProtocol
 #Load configuration parameters
 from domino_conf import *
 
-def main(argv):
-#  try:
-#    if argv[0] == 'heartbeat':
-#      print 'Heartbeat input'
-#  except IndexError as ex:
-#    print 'Insufficient number of arguments entered'
-#  except:
-#    print('Error: %s', sys.exc_info()[0])
+def main(argv, cli_port):
+  #cli_port = DOMINO_CLI_PORT
 
   try:
     # Make socket
-    transport = TSocket.TSocket('localhost', DOMINO_CLI_PORT)
+    # NOTE that domino-cli.py and DominoClient.py are assumed to be run in the same machine
+    transport = TSocket.TSocket('localhost', cli_port)
     # Buffering is critical. Raw sockets are very slow
     transport = TTransport.TBufferedTransport(transport)
     # Wrap in a protocol
@@ -58,4 +54,8 @@ def main(argv):
     print '%s' % (tx.message)
 
 if __name__ == "__main__":
-   main(sys.argv[1:])
+   if len(sys.argv) >= 2:
+     main(sys.argv[2:], sys.argv[1])
+   else:
+     print 'domino-cli.py <cliport> ...'
+     sys.exit(2)

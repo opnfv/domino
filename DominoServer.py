@@ -380,7 +380,7 @@ def main(argv):
       sys.exit(2)
   for opt, arg in opts:
       if opt == '-h':
-         print 'DominoClient.py -c/--conf <configfile> -p/--port <socketport> -i/--ipaddr <IPaddr> -l/--log <loglevel>'
+         print 'DominoServer.py -c/--conf <configfile> -l/--log <loglevel>'
          sys.exit()
       elif opt in ("-c", "--conf"):
          configfile = arg

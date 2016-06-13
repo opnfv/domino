@@ -142,6 +142,10 @@ class DominoClientCLIService(threading.Thread):
     self.interactive = interactive
 
   def process_input(self, args):
+    if len(args) == 0:
+      print 'Empty API body'
+      return
+
     try:
       if args[0] == 'heartbeat':
         self.dominoclient.heartbeat()
@@ -408,11 +412,11 @@ def main(argv):
   try:
       opts, args = getopt.getopt(argv,"hc:p:i:l:",["conf=","port=","ipaddr=","log=","iac=","cliport="])
   except getopt.GetoptError:
-      print 'DominoClient.py -c/--conf <configfile> -p/--port <socketport> -i/--ipaddr <IPaddr> -l/--log <loglevel> --iac=true/false'
+      print 'DominoClient.py -c/--conf <configfile> -p/--port <socketport> -i/--ipaddr <IPaddr> -l/--log <loglevel> --iac=true/false --cliport <cliport>'
       sys.exit(2)
   for opt, arg in opts:
       if opt == '-h':
-         print 'DominoClient.py -c/--conf <configfile> -p/--port <socketport> -i/--ipaddr <IPaddr> -l/--log <loglevel> --iac=true/false'
+         print 'DominoClient.py -c/--conf <configfile> -p/--port <socketport> -i/--ipaddr <IPaddr> -l/--log <loglevel> --iac=true/false --cliport <cliport>'
          sys.exit()
       elif opt in ("-c", "--conf"):
          configfile = arg
