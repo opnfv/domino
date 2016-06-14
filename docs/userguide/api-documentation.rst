@@ -30,6 +30,7 @@ Prerequisites:
   ./DominoClient.py -p <portnumber> --cliport <cli-portnumber> --log=debug
 
 Note1: The default log level is WARNING and omitting --log option will lead to minimal/no logging on the console
+
 Note2: domino_conf.py file includes most of the default values
 
 * Registration Command
@@ -134,7 +135,6 @@ This message has the following fields that are automatically filled in.
   Template Type (= TOSCA)
   Template File
 
-Note: Current version of the code has a hardcoded CLI port number, so no two Domino Clients can be run in the same port name space.
 
 Interactive CLI mode
 ====================

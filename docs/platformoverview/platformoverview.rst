@@ -25,9 +25,11 @@ Components
 Domino platform, as of Colorado release, consists of the following
 components:
 
-* Domino Server
-* Domino Client
-* One or more OpenStack sites
+* One Domino Server
+* One or more Domino Clients
+* domino-cli.py application as command line interface
+* One or more OpenStack Sites with Heat
+
 
 .. note::
     Tosca Template files are sample for reference, does not correspond to any actual service or VNF.
