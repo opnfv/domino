@@ -27,7 +27,7 @@ Prerequisites:
 
 .. code-block:: bash
 
-  ./DominoClient.py -p <portnumber> --log=debug
+  ./DominoClient.py -p <portnumber> --cliport <cli-portnumber> --log=debug
 
 Note1: The default log level is WARNING and omitting --log option will lead to minimal/no logging on the console
 Note2: domino_conf.py file includes most of the default values
@@ -38,7 +38,7 @@ Command line input:
 
 .. code-block:: bash
 
-  ./domino-cli.py register
+  ./domino-cli.py <cli-portnumber> register
 
 This message has the following fields that are automatically filled in.
 
@@ -57,7 +57,7 @@ Command line input:
 
 .. code-block:: bash
 
-  ./domino-cli.py heartbeat
+  ./domino-cli.py <cli-portnumber> heartbeat
 
 This message has the following fields that are automatically filled in.
 
@@ -71,7 +71,7 @@ This message has the following fields that are automatically filled in.
 
 .. code-block:: bash
 
-  ./domino-cli.py subscribe -l <labelname> -t <templatetype>
+  ./domino-cli.py <cli-portnumber> subscribe -l <labelname> -t <templatetype>
 
 Note that -l can be substituted by --label and -t can be substituted by --ttype.
 
@@ -79,13 +79,13 @@ More than one label or template type can be subscribed within the same command l
 
 .. code-block:: bash
 
-  ./domino-cli.py subscribe -l <label1>,<label2>,<labeln> -t <ttype1>,<ttype2>,<ttypen>
+  ./domino-cli.py <cli-portnumber> subscribe -l <label1>,<label2>,<labeln> -t <ttype1>,<ttype2>,<ttypen>
 
 To subscribe more than one label or template type, one can also repeat the options -l and -t, e.g.:
 
 .. code-block:: bash
 
-  ./domino-cli.py subscribe -l <label1> -l <label2> -l <labeln> -t <ttype1> -t <ttype2> -t <ttypen>
+  ./domino-cli.py <cli-portnumber> subscribe -l <label1> -l <label2> -l <labeln> -t <ttype1> -t <ttype2> -t <ttypen>
 
 It is safe to call subscribe command multiple times with duplicate labels.
 
@@ -118,7 +118,7 @@ OVERWRITE removes the current set of labels (template types) and sets it to the 
 
 .. code-block:: bash
 
-  ./domino-cli.py publish -t <toscafile>
+  ./domino-cli.py <cli-portnumber> publish -t <toscafile>
 
 Note that -t can be substituted by --tosca-file.
 
@@ -144,7 +144,7 @@ To enter this mode, start Domino Client with interactive console option set as t
 
   ./DominoClient -p <portnumber> --iax=true --log=DEBUG
 
-The rest of the API calls are the same as in the case of using domino-cli.py except that at the prompt there is no need to write domino-cli.py, e.g.,:
+The rest of the API calls are the same as in the case of using domino-cli.py except that at the prompt there is no need to write "domino-cli.py <cli-portnumber>, e.g.,:
 
 .. code-block:: bash
 
@@ -153,7 +153,7 @@ The rest of the API calls are the same as in the case of using domino-cli.py exc
   >>subscribe -l <label1> -t <ttype1>
   >>publish -t <toscafile>
 
-The interactive CLI mode is preferred for manual, single host testing (i.e., all domino clients and servers run in the same machine).
+The interactive CLI mode is mainly supported for manual testing.
 
 Revision: _sha1_
 
