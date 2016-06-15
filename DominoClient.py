@@ -46,18 +46,9 @@ class CommunicationHandler:
   def __init__(self, dominoclient):
     self.log = {}
     self.dominoClient = dominoclient
-    try:
-      # Make socket
-      transport = TSocket.TSocket(DOMINO_SERVER_IP, DOMINO_SERVER_PORT)
-      transport.setTimeout(THRIFT_RPC_TIMEOUT_MS)
-      # Add buffering to compensate for slow raw sockets
-      self.transport = TTransport.TBufferedTransport(transport)
-      # Wrap in a protocol
-      self.protocol = TBinaryProtocol.TBinaryProtocol(self.transport)
-      # Create a client to use the protocol encoder
-      self.sender = Communication.Client(self.protocol)
-    except Thrift.TException, tx: 
-      logging.error('%s' , tx.message)
+    self.transport = None
+    self.protocol = None
+    self.sender = None
 
   # Template Push from Domino Server is received
   # Actions:
@@ -110,7 +101,19 @@ class CommunicationHandler:
 
   
   def openconnection(self):
-    self.transport.open()
+    try:
+      # Make socket
+      transport = TSocket.TSocket(self.dominoClient.dominoserver_IP, DOMINO_SERVER_PORT)
+      transport.setTimeout(THRIFT_RPC_TIMEOUT_MS)
+      # Add buffering to compensate for slow raw sockets
+      self.transport = TTransport.TBufferedTransport(transport)
+      # Wrap in a protocol
+      self.protocol = TBinaryProtocol.TBinaryProtocol(self.transport)
+      # Create a client to use the protocol encoder
+      self.sender = Communication.Client(self.protocol)
+      self.transport.open()
+    except Thrift.TException, tx:
+      logging.error('%s' , tx.message)
 
   def closeconnection():
     self.transport.close()
@@ -228,6 +231,8 @@ class DominoClientCLIService(threading.Thread):
 
 class DominoClient:
   def __init__(self):
+
+
     self.communicationHandler = CommunicationHandler(self)
     self.processor = None
     self.transport = None
@@ -238,8 +243,7 @@ class DominoClient:
     self.CLIservice = None
 
     self.serviceport = 9091
-    self.dominoserver_IP = 'localhost'
-
+    self.dominoserver_IP = DOMINO_SERVER_IP
     self.CLIport = DOMINO_CLI_PORT 
 
     #Start from UNREGISTERED STATE
@@ -292,7 +296,7 @@ class DominoClient:
       except (Thrift.TException, TSocket.TTransportException) as tx:
         logging.error('%s' , tx.message)
       except (socket.timeout) as tx:
-        self.dominoclient.handle_RPC_timeout(pub_msg)
+        self.handle_RPC_timeout(reg_msg)
       except (socket.error) as tx:
         logging.error('%s' , tx.message)
       self.seqno = self.seqno + 1
