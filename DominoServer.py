@@ -286,7 +286,13 @@ class CommunicationHandler:
  
     # Create work-flow
 
-
+    # Create response with response code as SUCCESS by default
+    # Response code will be overwrittent if partial or full failure occurs
+    pub_r = PublishResponseMessage()
+    pub_r.domino_udid = SERVER_UDID
+    pub_r.seq_no = self.seqno
+    pub_r.responseCode = SUCCESS
+    self.seqno = self.seqno + 1
 
     # Send domain templates to each domain agent/client 
     # FOR NOW: send untranslated but partitioned tosca files to scheduled sites
@@ -306,15 +312,11 @@ class CommunicationHandler:
         self.push_template(template_lines, domino_client_ip, domino_client_port)
       except IOError as e:
         logging.error('I/O error(%d): %s' , e.errno, e.strerror)
+        pub_r.responseCode = FAILED
       except:
         logging.error('Error: %s', sys.exc_info()[0])
+        pub_r.responseCode = FAILED
 
-    #Fill in the details
-    pub_r = PublishResponseMessage()
-    pub_r.domino_udid = SERVER_UDID
-    pub_r.seq_no = self.seqno
-    pub_r.responseCode = SUCCESS
-    self.seqno = self.seqno + 1 
     return pub_r
     
   #Query from Domino Client is received
