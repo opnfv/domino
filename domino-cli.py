@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#Copyright 2015 Open Platform for NFV Project, Inc. and its contributors
+#Copyright 2016 Open Platform for NFV Project, Inc. and its contributors
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
 #   You may obtain a copy of the License at
@@ -34,7 +34,7 @@ def main(argv, cli_port):
   try:
     # Make socket
     # NOTE that domino-cli.py and DominoClient.py are assumed to be run in the same machine
-    transport = TSocket.TSocket('localhost', cli_port)
+    transport = TSocket.TSocket('localhost', int(cli_port))
     # Buffering is critical. Raw sockets are very slow
     transport = TTransport.TBufferedTransport(transport)
     # Wrap in a protocol

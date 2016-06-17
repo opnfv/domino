@@ -95,7 +95,7 @@ This message has the following fields that are automatically filled in.
 .. code-block:: bash
 
   Message Type (= SUBSCRIBE)
-  UDID (= Unique Domino IDassigned during registration)
+  UDID (= Unique Domino ID assigned during registration)
   Sequence Number (=incremented after each RPC call)
   Template Operation (= APPEND)
   Label Operation (= APPEND)
@@ -130,7 +130,7 @@ This message has the following fields that are automatically filled in.
 .. code-block:: bash
 
   Message Type (= SUBSCRIBE)
-  UDID (= Unique Domino IDassigned during registration)
+  UDID (= Unique Domino ID assigned during registration)
   Sequence Number (=incremented after each RPC call)
   Template Type (= TOSCA)
   Template File
