@@ -1,0 +1,29 @@
+Domino Client Starting...
+1 Sending Registration
+Registration Response: Response Code: 1
+CLI Service is starting
+RPC service for CLI is starting...
+Received CLI ['heartbeat']
+12467 Sending heartbeat
+heart beat received from: 0 ,sequence number: 1
+Received CLI ['subscribe', '-t', 'hot', '-l', 'tosca.policies.Placement:properties:region:nova-1']
+subscribing labels ['tosca.policies.Placement:properties:region:nova-1'] and templates ['hot']
+Subscribe Response is received from: 0 ,sequence number: 2
+Received CLI ['subscribe', '-t', 'dummy1,dummy2', '--top', 'OVERWRITE']
+subscribing labels [] and templates ['dummy1', 'dummy2']
+Subscribe Response is received from: 0 ,sequence number: 3
+Received CLI ['subscribe', '-t', 'dummy1,dummy2', '--top', 'DELETE']
+subscribing labels [] and templates ['dummy1', 'dummy2']
+Subscribe Response is received from: 0 ,sequence number: 4
+Received CLI ['subscribe', '-l', 'tosca.policies.Placement:properties:region:nova-2', 'sleep', '1']
+subscribing labels ['tosca.policies.Placement:properties:region:nova-2'] and templates []
+Subscribe Response is received from: 0 ,sequence number: 5
+Received CLI ['subscribe', '-l', 'tosca.policies.Placement:properties:region:nova-3', '--lop', 'OVERWRITE']
+subscribing labels ['tosca.policies.Placement:properties:region:nova-3'] and templates []
+Subscribe Response is received from: 0 ,sequence number: 6
+Received CLI ['subscribe', '-l', 'tosca.policies.Placement:properties:region:nova-3', '--lop', 'DELETE']
+subscribing labels ['tosca.policies.Placement:properties:region:nova-3'] and templates []
+Subscribe Response is received from: 0 ,sequence number: 7
+Received CLI ['publish', '-t', './tosca-templates/tosca_helloworld_nfv.yaml']
+Publishing the template file: ./tosca-templates/tosca_helloworld_nfv.yaml
+Publish Response is received from: 0 ,sequence number: 8 Op. Status: 1

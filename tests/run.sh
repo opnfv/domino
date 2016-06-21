@@ -18,10 +18,13 @@ CLIENT2_CLIPORT=9200
 LOGLEVEL=DEBUG
 
 toscafile_test1=./tosca-templates/tosca_helloworld_nfv.yaml
+test1_reffile=./tests/refdata/test1.ref
+client1_log=./tests/logdata/client1.log
+server_log=./tests/logdata/server.log
 
 start_server() {
   pgrep -f "python DominoServer.py" && return 0  
-  python DominoServer.py --log "$LOGLEVEL" > server.log 2>&1 &
+  python DominoServer.py --log "$LOGLEVEL" > "$server_log" 2>&1 &
 }
 
 stop_server() {
@@ -33,7 +36,7 @@ stop_server() {
 start_client1() {
   pgrep -f "python DominoClient.py" && return 0
   python DominoClient.py -p $CLIENT1_PORT --cliport $CLIENT1_CLIPORT \
-	--log "$LOGLEVEL" > client1.log 2>&1 &
+	--log "$LOGLEVEL" > "$client1_log" 2>&1 &
 }
 
 stop_client1() {
@@ -48,7 +51,7 @@ clean_directories() {
   fi
 
   if [ -d toscafiles ]; then
-    rm rf toscafiles
+    rm -rf toscafiles
   fi
 }
 
@@ -100,14 +103,15 @@ stop_client1
 echo "Stopping Domino Server..."
 stop_server
 
+cut -d " " -f 4- "$client1_log" > file1
 #will use the form below to declare success or failure
-#diff -q file1 file2 1>/dev/null
-#if [[ $? == "0" ]]
-#then
-#  echo "The same"
-#else
-#  echo "Not the same"
-#fi
+diff -q file1 "$test1_reffile" 1>/dev/null
+if [[ $? == "0" ]]
+then
+  echo "SUCCESS"
+else
+  echo "FAILURE"
+fi
 
 
 echo "done"
