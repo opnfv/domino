@@ -55,7 +55,20 @@ clean_directories() {
   fi
 }
 
+cleanup() {
+  set +e
+  echo "cleanup..."
+  
+  echo "Stopping Domino Client 1..."
+  stop_client1
+
+  echo "Stopping Domino Server..."
+  stop_server
+}
+
 echo "domino/tests/run.sh has been executed."
+
+trap cleanup EXIT
 
 echo "Cleaning residue files and folders from previous runs..."
 clean_directories
@@ -97,11 +110,11 @@ python domino-cli.py $CLIENT1_CLIPORT publish -t "$toscafile_test1"
 
 sleep 5
 
-echo "Stopping Domino Client 1..."
-stop_client1
+#echo "Stopping Domino Client 1..."
+#stop_client1
 
-echo "Stopping Domino Server..."
-stop_server
+#echo "Stopping Domino Server..."
+#stop_server
 
 cut -d " " -f 4- "$client1_log" > file1
 #will use the form below to declare success or failure
