@@ -64,6 +64,10 @@ cleanup() {
 
   echo "Stopping Domino Server..."
   stop_server
+
+  if [ -f file1 ]; then
+    rm file1
+  fi
 }
 
 echo "domino/tests/run.sh has been executed."

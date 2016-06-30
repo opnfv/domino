@@ -9,19 +9,15 @@ import copy
 
 def partition_tosca(filepath, nodesite, tpl):
   file_paths = {} #holds the list of partitioned files
-  flag = {} #True when key exists
   sitenodes = {} #holds nodes in each site
   
   #identify the number of partitions
   for node in nodesite:
     if nodesite[node] != []:
-     flag[nodesite[node]] = True
      if sitenodes.has_key(nodesite[node]):
        sitenodes[nodesite[node]].append(node)
      else:
        sitenodes[nodesite[node]] = [node]
-
-  n_parts = len(flag)
 
   #prepare the nodes
   tpl_local = {}
@@ -32,13 +28,14 @@ def partition_tosca(filepath, nodesite, tpl):
    for site in sitenodes:
      if node not in sitenodes[site]:
        del tpl_local[site]['topology_template']['node_templates'][node] 
+       rm_dependents(tpl_local[site]['topology_template']['node_templates'] , node)
        #remove from policy targets 
        if tpl_local[site]['topology_template'].has_key('policies'):
          for rule in tpl_local[site]['topology_template']['policies']:
            for key in rule: #there should be only one key
              if node in rule[key]['targets']:
                rule[key]['targets'].remove(node)
-             # remove the rule is there is no target left!
+             # remove the rule if there is no target left!
              if len(rule[key]['targets']) is 0:
                tpl_local[site]['topology_template']['policies'].remove(rule)
 
@@ -110,3 +107,21 @@ def write_obj(f, curr, prev, prepad):
     f.write('\n') 
     for item in curr:
       write_obj(f, item, curr, prepad )
+
+def rm_dependents(node_template , node):
+  del_list = []
+  #find the dependents
+  for nd in node_template:
+    if node_template[nd].has_key('requirements'):
+      for i in range(len(node_template[nd]['requirements'])):
+        if node_template[nd]['requirements'][i].has_key('virtualLink') and \
+          node_template[nd]['requirements'][i]['virtualLink'].has_key('node') and \
+          node_template[nd]['requirements'][i]['virtualLink']['node'] == node:
+          del_list.append(nd)
+        if node_template[nd]['requirements'][i].has_key('virtualBinding') and \
+          node_template[nd]['requirements'][i]['virtualBinding'].has_key('node') and \
+          node_template[nd]['requirements'][i]['virtualBinding']['node'] == node:
+          del_list.append(nd)
+  #remove the dependents
+  for i in range(len(del_list)):
+     del node_template[del_list[i]]
