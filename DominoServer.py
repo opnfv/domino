@@ -317,6 +317,12 @@ class CommunicationHandler:
         logging.error('Error: %s', sys.exc_info()[0])
         pub_r.responseCode = FAILED
 
+    # Check if any file is generated for distribution, if not
+    # return FAILED as responseCode, we should also send description for
+    # reason
+    if len(file_paths) == 0:
+      pub_r.responseCode = FAILED
+
     return pub_r
     
   #Query from Domino Client is received

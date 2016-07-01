@@ -112,7 +112,7 @@ sleep 1
 echo "Test Publish API"
 python domino-cli.py $CLIENT1_CLIPORT publish -t "$toscafile_test1" 
 
-sleep 5
+sleep 1
 
 #echo "Stopping Domino Client 1..."
 #stop_client1
@@ -122,6 +122,7 @@ sleep 5
 
 cut -d " " -f 4- "$client1_log" > file1
 #will use the form below to declare success or failure
+set +e
 diff -q file1 "$test1_reffile" 1>/dev/null
 if [[ $? == "0" ]]
 then
@@ -129,6 +130,7 @@ then
 else
   echo "FAILURE"
 fi
-
+set -e
 
 echo "done"
+

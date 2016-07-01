@@ -26,4 +26,4 @@ subscribing labels ['tosca.policies.Placement:properties:region:nova-3'] and tem
 Subscribe Response is received from: 0 ,sequence number: 7
 Received CLI ['publish', '-t', './tosca-templates/tosca_helloworld_nfv.yaml']
 Publishing the template file: ./tosca-templates/tosca_helloworld_nfv.yaml
-Publish Response is received from: 0 ,sequence number: 8 Op. Status: 1
+Publish Response is received from: 0 ,sequence number: 8 Op. Status: 2
