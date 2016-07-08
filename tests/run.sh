@@ -18,9 +18,11 @@ CLIENT2_CLIPORT=9200
 LOGLEVEL=DEBUG
 
 toscafile_test1=./tosca-templates/tosca_helloworld_nfv.yaml
-test1_reffile=./tests/refdata/test1.ref
+test1_reffile1=./tests/refdata/test1_client1.ref
+test1_reffile2=./tests/refdata/test1_client2.ref
+test1_reffile3=./tests/refdata/test1_server.ref
 client1_log=./tests/logdata/client1.log
-server_log=./tests/logdata/server.log
+client2_log=./tests/logdata/client2.log
 
 start_server() {
   pgrep -f "python DominoServer.py" && return 0  
@@ -34,12 +36,18 @@ stop_server() {
 }
 
 start_client1() {
-  pgrep -f "python DominoClient.py" && return 0
+  #pgrep -f "python DominoClient.py -p $CLIENT1_PORT" && return 0
   python DominoClient.py -p $CLIENT1_PORT --cliport $CLIENT1_CLIPORT \
 	--log "$LOGLEVEL" > "$client1_log" 2>&1 &
 }
 
-stop_client1() {
+start_client2() {
+  #pgrep -f "python DominoClient.py -p $CLIENT2_PORT" && return 0
+  python DominoClient.py -p $CLIENT2_PORT --cliport $CLIENT2_CLIPORT \
+        --log "$LOGLEVEL" > "$client2_log" 2>&1 &
+}
+
+stop_clients() {
   pgrep -f "python DominoClient.py" || return 0
   kill $(pgrep -f "python DominoClient.py")
   #cat client1.log
@@ -59,23 +67,35 @@ cleanup() {
   set +e
   echo "cleanup..."
   
-  echo "Stopping Domino Client 1..."
-  stop_client1
+  echo "Stopping Domino Clients..."
+  stop_clients
 
   echo "Stopping Domino Server..."
   stop_server
 
-  if [ -f file1 ]; then
-    rm file1
-  fi
+#  if [ -f file1 ]; then
+#    rm file1
+#  fi
+
+#  if [ -f file2 ]; then
+#    rm file2
+#  fi
 }
 
 echo "domino/tests/run.sh has been executed."
 
 trap cleanup EXIT
 
+echo "Terminating any running Domino Clients..."
+stop_clients
+
+echo "Terminating any running Domino Servers..."
+stop_server
+sleep 1
+
 echo "Cleaning residue files and folders from previous runs..."
 clean_directories
+sleep 1
 
 echo "Launching Domino Server..."
 start_server
@@ -83,6 +103,10 @@ sleep 1
 
 echo "Launching Domino Client 1..."
 start_client1
+sleep 1
+
+echo "Launching Domino Client 2..."
+start_client2
 sleep 1
 
 echo "Test Heartbeat"
@@ -98,7 +122,7 @@ sleep 1
 python domino-cli.py $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top DELETE
 sleep 1
 python domino-cli.py $CLIENT1_CLIPORT subscribe \
-        -l tosca.policies.Placement:properties:region:nova-2 \
+        -l tosca.policies.Placement:properties:region:nova-2
 sleep 1
 python domino-cli.py $CLIENT1_CLIPORT subscribe \
 	-l tosca.policies.Placement:properties:region:nova-3 \
@@ -113,6 +137,10 @@ echo "Test Publish API"
 python domino-cli.py $CLIENT1_CLIPORT publish -t "$toscafile_test1" 
 
 sleep 1
+python domino-cli.py $CLIENT1_CLIPORT subscribe \
+        -l tosca.policies.Placement.Geolocation:properties:region:us-west-1
+sleep 1
+python domino-cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1"
 
 #echo "Stopping Domino Client 1..."
 #stop_client1
@@ -121,15 +149,26 @@ sleep 1
 #stop_server
 
 cut -d " " -f 4- "$client1_log" > file1
+cut -d " " -f 4- "$client2_log" > file2
 #will use the form below to declare success or failure
 set +e
-diff -q file1 "$test1_reffile" 1>/dev/null
+
+diff -q file1 "$test1_reffile1" 1>/dev/null
 if [[ $? == "0" ]]
 then
-  echo "SUCCESS"
+  echo "Log1 PASS"
 else
-  echo "FAILURE"
+  echo "Log1 FAIL"
 fi
+
+diff -q file2 "$test1_reffile2" 1>/dev/null
+if [[ $? == "0" ]]
+then
+  echo "Log2 PASS"
+else
+  echo "Log2 FAIL"
+fi
+
 set -e
 
 echo "done"

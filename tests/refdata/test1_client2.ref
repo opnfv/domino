@@ -1,0 +1,8 @@
+Domino Client Starting...
+1 Sending Registration
+Registration Response: Response Code: 1
+CLI Service is starting
+RPC service for CLI is starting...
+Received CLI ['publish', '-t', './tosca-templates/tosca_helloworld_nfv.yaml']
+Publishing the template file: ./tosca-templates/tosca_helloworld_nfv.yaml
+Publish Response is received from: 0 ,sequence number: 11 Op. Status: 1
