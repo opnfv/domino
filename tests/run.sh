@@ -20,9 +20,9 @@ LOGLEVEL=DEBUG
 toscafile_test1=./tosca-templates/tosca_helloworld_nfv.yaml
 test1_reffile1=./tests/refdata/test1_client1.ref
 test1_reffile2=./tests/refdata/test1_client2.ref
-test1_reffile3=./tests/refdata/test1_server.ref
 client1_log=./tests/logdata/client1.log
 client2_log=./tests/logdata/client2.log
+server_log=./tests/logdata/server.log
 
 start_server() {
   pgrep -f "python DominoServer.py" && return 0  
@@ -73,13 +73,13 @@ cleanup() {
   echo "Stopping Domino Server..."
   stop_server
 
-#  if [ -f file1 ]; then
-#    rm file1
-#  fi
+  if [ -f file1 ]; then
+    rm file1
+  fi
 
-#  if [ -f file2 ]; then
-#    rm file2
-#  fi
+  if [ -f file2 ]; then
+    rm file2
+  fi
 }
 
 echo "domino/tests/run.sh has been executed."
