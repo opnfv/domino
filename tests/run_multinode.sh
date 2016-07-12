@@ -84,6 +84,7 @@ stop_client2() {
 }
 
 cleanup() {
+  chmod 600 "$SSH_KEY_PATH"
   set +e
   echo "cleanup..."
   
