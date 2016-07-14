@@ -12,8 +12,10 @@
 #   limitations under the License.
 
 USERNAME=ubuntu
-SSH_KEY_PATH=/home/opnfv/repos/domino/tests/testkeys/id_rsa
-DOMINO_CODE_PATH=/home/opnfv/repos/domino
+#SSH_KEY_PATH=/home/opnfv/repos/domino/tests/testkeys/id_rsa
+#DOMINO_CODE_PATH=/home/opnfv/repos/domino
+SSH_KEY_PATH=./tests/testkeys/id_rsa
+DOMINO_CODE_PATH=../domino
 CONTROLLER_NODE_1=192.168.2.165
 CONTROLLER_NODE_2=192.168.2.180
 CONTROLLER_NODE_3=192.168.2.181
