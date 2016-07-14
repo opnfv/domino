@@ -6,9 +6,10 @@
   :width: 200
   :alt: OPNFV
   :align: left
-
-DOMINO API DOCUMENTATION
-========================
+|
+|
+Domino User Guide
+=================
 
 Contents:
 
@@ -16,6 +17,7 @@ Contents:
    :numbered:
    :maxdepth: 4
 
+   overview.rst
    api-documentation.rst
 
 Indices and tables
