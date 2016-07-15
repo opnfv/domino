@@ -25,4 +25,25 @@ Manager (VIM) that is capable of performing an affinity based VNF or VDU
 placement at host machine granularity can specify a label in the form "tosca.policies.Placement.affinity:properties:granularity:hostlevel". When the VIM registers
 with Domino Service and subscribed for that label, Domino views this VIM as a
 candidate location that can host a VNF or VDU requesting affinity based placement
-policy at host machine granularity.
+policy at host machine granularity. Another use case is the announcement of
+lifecycle management capabilities for VNFs and VNF Forwarding Graphs (VNFFG) by
+different SDN Controllers (SDN-Cs), VNF Managers (VNFMs), or VIMs. For instance
+"tosca.policies.Scaling.VNFFG:properties:session_continuity:true" can be used as
+a label to indicate that when a scaling operation on a VNFFG (e.g., add more VNFs
+into the graph) is requested, existing session can still be enforced to go
+through the same chain of VNF instances. To utilize this capability, a network
+service request then must include a policy type definition "tosca.policies.Scaling.VNFFG"
+with a property field "session_continuity" as well as a policy rule that sets
+this field to boolean value "true" and specify a list of VNFFGs as the targets.
+
+Labels in Domino
+================
+Domino's pub/sub architecture is based on labels (see Fig. 1 below). Each Template Producer
+and Template Consumer is expected to run a local Domino Client to publish templates and
+subscribe for labels.
+
+.. image:: ../etc/domino_pubsub_system.jpeg
+  :height: 40
+  :width: 200
+  :alt: OPNFV
+  :align: left
