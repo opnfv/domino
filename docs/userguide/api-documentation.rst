@@ -9,8 +9,12 @@
 .. these two pipes are to seperate the logo from the first title
 |
 |
+Domino API and Usage
+====================
+
 Using domino-cli Client
-=======================
+-----------------------
+
 Prerequisites:
 
 1. Make sure that domino-cli.py is in +x mode.
@@ -137,7 +141,8 @@ This message has the following fields that are automatically filled in.
 
 
 Interactive CLI mode
-====================
+--------------------
+
 To enter this mode, start Domino Client with interactive console option set as true, i.e., --iac=true:
 
 .. code-block:: bash

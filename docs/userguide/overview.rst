@@ -11,18 +11,186 @@
 |
 Domino Overview
 ===============
-Domino provides a distribution service for Network Service (NS) and Virtual
-Network Function (VNF) descriptors. It is targeted towards supporting many
-network controllers, service orchestrators, VNF managers, Operation and
-Business Support Systems. Producers of Network Service Descriptors (NSDs)
-and VNF Descriptors (VNFD) use Domino Service as an entry point to publish
-these descriptors. Currently Domino only supports Tosca Simple Profile for
-Network Functions Virtualization (http://docs.oasis-open.org/tosca/tosca-nfv/v1.0/tosca-nfv-v1.0.html) as the data model for NSDs and VNFDs.
+
+Domino provides a distribution service for Network Service Descriptors (NSDs) and
+Virtual Network Function Descriptors (VNFDs) that are composed using Tosca Simple
+Profile for 20 Network Functions Virtualization
+(http://docs.oasis-open.org/tosca/tosca-nfv/v1.0/tosca-nfv-v1.0.html).
+Domino service is targeted towards supporting many SDN controllers, service orchestrators,
+VNF Managers (VNFMs), Virtual Infastructure Managers (VIMs), Operation and Business Support
+Systems that produce and/or consume NSDs and VNFDs.
+
+Producers of NSDs and VNFDs use Domino Service as an entry point to publish these
+descriptors. Consumers of NSDs and VNFDs subscribe with the Domino Service and declare
+their resource capabilities to onboard and perform Life Cycle Management (LCM) for Network
+Services (NSs) and Virtual Network Functions (VNFs). Thus, Domino acts as a broker for
+NSs and VNFs described in a Tosca template.
+
+Labels in Domino
+----------------
+
+Domino's pub/sub architecture is based on labels (see :numref:`fig-label` below).
+Each Template Producer and Template Consumer is expected to run a local Domino Client
+to publish templates and subscribe for labels.
+
+.. _fig-label:
+
+.. figure:: ../etc/domino_pubsub_system.jpeg
+    :width: 350px
+    :align: center
+    :height: 300px
+    :alt: alternate text
+    :figclass: align-center
+
+    Domino provides a pub/sub server for NSDs and VNFDs
+
+Domino Service does not interpret what the labels mean. Domino derives labels directly from
+the normative definitions in TOSCA Simple YAML Profile for NFV. Domino parses the policy
+rules included in the NSD/VNFD, form "policy" labels, and determine which resources are
+associated with which set of labels. Domino identifies which Domino Clients can host
+which resource based on the label subscriptions by these clients. Once mapping of resources
+to the clients are done, new NSDs/VNFDs are created based on the mapping. These new
+NSDs/VNFDs are translated and delivered to the clients.
+
+Label Format and Examples
+-------------------------
+
+Domino supports policy labels in the following form:
+
+.. code-block:: bash
+
+  <policytype>:properties:<key:value>
 
 Orchestrators, controllers, and managers use Domino service to announce their
-capabilities in the form of policy labels. For instance a Virtual Infrastructure
-Manager (VIM) that is capable of performing an affinity based VNF or VDU
-placement at host machine granularity can specify a label in the form "tosca.policies.Placement.affinity:properties:granularity:hostlevel". When the VIM registers
-with Domino Service and subscribed for that label, Domino views this VIM as a
-candidate location that can host a VNF or VDU requesting affinity based placement
-policy at host machine granularity.
+capabilities by defining labels in this form and subscribing for these labels with
+the Domino Server.
+
+For instance a particular VIM that is capable of performing an
+affinity based VNF or VDU placement at host machine granularity can specify a label
+in the form:
+
+.. code-block:: bash
+
+  tosca.policies.Placement.affinity:properties:granularity:hostlevel
+
+When the VIM registers with the Domino Service and subscribed for that label, Domino views
+this VIM as a candidate location that can host a VNF or VDU requesting affinity based
+placement policy at host machine granularity.
+
+Another use case is the announcement of lifecycle management capabilities for VNFs and
+VNF Forwarding Graphs (VNFFG) by different SDN Controllers (SDN-Cs), VNFMs, or VIMs.
+For instance
+
+.. code-block:: bash
+
+  tosca.policies.Scaling.VNFFG:properties:session_continuity:true
+
+can be used as a label to indicate that when a scaling operation on a VNFFG (e.g., add
+more VNFs into the graph) is requested, existing session can still be enforced to go
+through the same chain of VNF instances.
+
+To utilize Domino's domain mapping services for virtual network resources (e.g., VNF, VDU,
+VNFFG, CP, VL, etc.), a network service or network function request must include
+policy rules that are composed of policy types and property values that match to the
+label announcements of these domains. For instance, a TOSCA template that include a
+policy rule with type "tosca.policies.Scaling.VNFFG" and property field
+"session_continuity" set as "true" targeting one or more VNFFGs, this serves as the hint
+for the Domino Server to identify all the Domain Clients that subscribed the label
+"tosca.policies.Scaling.VNFFG:properties:session_continuity:true".
+
+Template Example for Label Extraction
+-------------------------------------
+
+Consider the following NSD TOSCA template:
+
+.. code-block:: bash
+
+  tosca_definitions_version: tosca_simple_profile_for_nfv_1_0_0
+  description: Template for deploying a single server with predefined properties.
+  metadata:
+    template_name: TOSCA NFV Sample Template
+  policy_types:
+    tosca.policies.Placement.Geolocation:
+      description: Geolocation policy
+      derived_from: tosca.policies.Placement
+  topology_template:
+    node_templates:
+      VNF1:
+        type: tosca.nodes.nfv.VNF
+        properties:
+          id: vnf1
+          vendor: acmetelco
+          version: 1.0
+      VNF2:
+        type: tosca.nodes.nfv.VNF
+        properties:
+          id: vnf2
+          vendor: ericsson
+          version: 1.0
+      VNF3:
+        type: tosca.nodes.nfv.VNF
+        properties:
+          id: vnf3
+          vendor: huawei
+          version: 1.0
+    policies:
+      - rule1:
+          type: tosca.policies.Placement.Geolocation
+          targets: [ VNF1 ]
+          properties:
+            region: [ us-west-1 ]
+      - rule2:
+          type: tosca.policies.Placement.Geolocation
+          targets: [ VNF2, VNF3 ]
+          properties:
+            region: [ us-west-1 , us-west-2 ]
+
+Domino Server extracts all possible policy labels by exhaustively concatenating key-value
+pairs under the properties section of the policy rules to the policy type of these rules:
+
+.. code-block:: bash
+
+  tosca.policies.Placement.Geolocation:properties:region:us-west-1
+  tosca.policies.Placement.Geolocation:properties:region:us-west-2
+
+Furthermore, Domino Server iterates over the targets specified under policy rules to generate a set of labels for each target node:
+
+.. code-block:: bash
+
+  required_labels['VNF1'] = { tosca.policies.Placement.Geolocation:properties:region:us-west-1 }
+  required_labels['VNF2'] = { tosca.policies.Placement.Geolocation:properties:region:us-west-1 , tosca.policies.Placement.Geolocation:properties:region:us-west-2}
+  required_labels['VNF3'] = { tosca.policies.Placement.Geolocation:properties:region:us-west-1 , tosca.policies.Placement.Geolocation:properties:region:us-west-2}
+
+When a Template Consuming site (e.g., VNFM or VIM) registers with the Domino Server using
+Domino Client, it becomes an eligible candidate for template distribution with an initially
+empty set of label subscriptions. Suppose three different Domino Clients register with the
+Domino Server and subscribe for some or none of the policy labels such that the Domino Server
+has the current subscription state as follows:
+
+.. code-block:: bash
+
+  subscribed_labels[site-1] = { } #this is empty set
+  subscribed_labels[site-2] = { tosca.policies.Placement.Geolocation:properties:region:us-west-1 }
+  subscribed_labels[site-3] = { tosca.policies.Placement.Geolocation:properties:region:us-west-1 ,  tosca.policies.Placement.Geolocation:properties:region:us-west-2}
+
+
+Based on the TOSCA example and hypothetical label subscriptions above, Domino Server identifies
+all the VNFs can be hosted by Site-3, while VNF1 can be hosted by both Site-2 and Site-3.
+Note that Site-1 cannot host any of the VNFs listed in the TOSCA file. When a VNF can be hosted
+by multiple sites, Domino Server picks the site that can host the most number of VNFs. When not
+all VNFs can be hosted on the same site, the TOSCA file is partitioned into multiple files, one
+for each site. These files share a common part (e.g, meta-data, policy-types, version,
+description, etc.) and non-common parts (e.g., VNFs not mapped onto a specific domain and their
+dependents are excluded from topology description and policy targets). In the current Domino
+convention, if a VNF (or any node) does not have a policy rule (i.e., it is not specified as a
+target in any of the policy rules), that resource is wild carded by default and treated as part
+of the "common part".  For the example above, no partitioning would occur as all VNFs are
+mapped onto site-3; Domino Server simply delivers the Tosca file to Domino Client hosted on
+site-3. When TOSCA cannot be consumed by a particular site directly, Domino Server can utilize
+existing translators (e.g., heat-translator) to first translate the template before delivery.
+
+Typical Message Flow
+--------------------
+
+Internal Pipeline
+-----------------
