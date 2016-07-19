@@ -189,8 +189,31 @@ mapped onto site-3; Domino Server simply delivers the Tosca file to Domino Clien
 site-3. When TOSCA cannot be consumed by a particular site directly, Domino Server can utilize
 existing translators (e.g., heat-translator) to first translate the template before delivery.
 
+Internal Processing Pipeline at Domino Server
+---------------------------------------------
+
+:numref:`fig-pipe` shows the block diagram for the processing stages of a published TOSCA template.
+Domino Client issues an RPC call publish(tosca file). Domino Server passes the received tosca
+file to Label Extractor that outputs resource labels. Domain Mapper uses the extracted labels
+and tosca file to find mappings from resources to domains as well as the resource dependencies.
+Resource to domain mappings and resource dependencies are utilized to partition the
+orchestration template into individual resource orchestration templates (one for each domain).
+If a translation is required (e.g., TOSCA to HOT), individual resource orchestration templates
+are first translated and then placed on a template distribution workflow based on resource
+dependencies. Message Sender block in the server takes one distribution task at a time from the
+workflow generator and pushes the orchestration template to the corresponding Domino Client.
+
+.. _fig-pipe:
+
+.. figure:: ../etc/domino_server_processing.png
+    :width: 300px
+    :align: center
+    :height: 300px
+    :alt: alternate text
+    :figclass: align-center
+
+    Domino Service Processing Pipeline
+
 Typical Message Flow
 --------------------
 
-Internal Pipeline
------------------

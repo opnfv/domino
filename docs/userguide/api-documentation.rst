@@ -114,10 +114,14 @@ When unspecified, the default is APPEND.
 DELETE deletes existing labels (template types) specified in the current call via key -l/--label (-t/--ttype).
 OVERWRITE removes the current set of labels (template types) and sets it to the new set of values passed in the same RPC call.
 
+By default, no translation service is provided. Currently, only TOSCA to Heat
+Orchestration Template (HOT) translation is supported using OpenStack
+heat-translator library. A domain that requires HOT files must subscribe HOT
+template type using
+
 .. code-block:: bash
 
-  Supported Template Types
-  Supported Labels
+  ./domino-cli.py <cli-portnumber> subscribe -t hot
 
 * Template Publishing Command
 
