@@ -14,7 +14,7 @@ Domino Overview
 
 Domino provides a distribution service for Network Service Descriptors (NSDs) and
 Virtual Network Function Descriptors (VNFDs) that are composed using Tosca Simple
-Profile for 20 Network Functions Virtualization
+Profile for Network Functions Virtualization
 (http://docs.oasis-open.org/tosca/tosca-nfv/v1.0/tosca-nfv-v1.0.html).
 Domino service is targeted towards supporting many SDN controllers, service orchestrators,
 VNF Managers (VNFMs), Virtual Infastructure Managers (VIMs), Operation and Business Support
@@ -92,7 +92,7 @@ through the same chain of VNF instances.
 To utilize Domino's domain mapping services for virtual network resources (e.g., VNF, VDU,
 VNFFG, CP, VL, etc.), a network service or network function request must include
 policy rules that are composed of policy types and property values that match to the
-label announcements of these domains. For instance, a TOSCA template that include a
+label announcements of these domains. For instance, when a TOSCA template includes a
 policy rule with type "tosca.policies.Scaling.VNFFG" and property field
 "session_continuity" set as "true" targeting one or more VNFFGs, this serves as the hint
 for the Domino Server to identify all the Domain Clients that subscribed the label
@@ -180,13 +180,25 @@ Note that Site-1 cannot host any of the VNFs listed in the TOSCA file. When a VN
 by multiple sites, Domino Server picks the site that can host the most number of VNFs. When not
 all VNFs can be hosted on the same site, the TOSCA file is partitioned into multiple files, one
 for each site. These files share a common part (e.g, meta-data, policy-types, version,
-description, etc.) and non-common parts (e.g., VNFs not mapped onto a specific domain and their
-dependents are excluded from topology description and policy targets). In the current Domino
-convention, if a VNF (or any node) does not have a policy rule (i.e., it is not specified as a
-target in any of the policy rules), that resource is wild carded by default and treated as part
-of the "common part".  For the example above, no partitioning would occur as all VNFs are
-mapped onto site-3; Domino Server simply delivers the Tosca file to Domino Client hosted on
-site-3. When TOSCA cannot be consumed by a particular site directly, Domino Server can utilize
+description, virtual resources that are not targeted by any policy rule, etc.). Each site
+specific file has also a non-common part that only appears in that file (i.e., virtual
+resources explicitly assigned to that site and the policy rules that accompany those virtual
+resources.
+
+In the current Domino convention, if a VNF (or any virtual resource) does not have a policy
+rule (i.e., it is not specified as a target in any of the policy rules) and it also is not
+dependent on any VNF (or any virtual resource) that is assigned to another site, that resource
+is wild carded by default and treated as part of the "common part". Also note that currently
+Domino does not support all or nothing semantics: if some of the virtual resources are not
+mappable to any domain because they are targets of policy rules that are not supported by any
+site, these portions will be excluded while the remaining virtual resources will be still be
+part of one or more template files to be distributed to hosting sites. When NSDs and VNFDs are
+prepared, these conventions must be kept in mind. In the future releases, these conventions can
+change based on the new use cases.
+
+For the example above, no partitioning would occur as all VNFs are mapped onto site-3;
+Domino Server simply delivers the Tosca file to Domino Client hosted on site-3. When TOSCA
+cannot be consumed by a particular site directly, Domino Server can utilize
 existing translators (e.g., heat-translator) to first translate the template before delivery.
 
 Internal Processing Pipeline at Domino Server
@@ -206,14 +218,24 @@ workflow generator and pushes the orchestration template to the corresponding Do
 .. _fig-pipe:
 
 .. figure:: ../etc/domino_server_processing.png
-    :width: 300px
+    :width: 400px
     :align: center
-    :height: 300px
+    :height: 350px
     :alt: alternate text
     :figclass: align-center
 
     Domino Service Processing Pipeline
 
-Typical Message Flow
---------------------
+Resource Scheduling
+-------------------
+
+Domino Service currently supports maximum packing strategy when a  virtual resource type can
+be hosted on multiple candidate sites. Initially, Domino Scheduler identifies virtual resources
+that has only one feasible site for hosting. Each such virtual resource is trivially assigned
+to its only feasible site. The remaining virtual resources with multiple candidate locations
+are sequentially allocated to one of their candidate locations that has the most virtual
+resource assignments so far. Note that wildcarded resources are assigned to all sites. To
+prevent wildcarding within the current release, (i) all sites must subscribed to a base policy
+with a dummy key-value pair defined under the properties tab and (ii) all the independent
+resources must be specified as target of that policy in NSD or VNFD file.
 
