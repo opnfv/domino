@@ -242,7 +242,7 @@ class DominoClient:
 
     self.CLIservice = None
 
-    self.serviceport = 9091
+    self.serviceport = DOMINO_CLIENT_PORT
     self.dominoserver_IP = DOMINO_SERVER_IP
     self.CLIport = DOMINO_CLI_PORT 
 
