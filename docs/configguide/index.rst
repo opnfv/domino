@@ -16,6 +16,7 @@ Contents:
    :numbered:
    :maxdepth: 2
 
+   installation.rst
    featureconfig.rst
 
 Indices and tables
