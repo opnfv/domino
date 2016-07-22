@@ -6,7 +6,8 @@
   :width: 200
   :alt: OPNFV
   :align: left
-
+|
+|
 DOMINO Configuration Guide
 ==========================
 
