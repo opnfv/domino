@@ -11,6 +11,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+IS_IPandKEY_CONFIGURED=false
 USERNAME=ubuntu
 #SSH_KEY_PATH=/home/opnfv/repos/domino/tests/testkeys/id_rsa
 #DOMINO_CODE_PATH=/home/opnfv/repos/domino
@@ -124,36 +125,45 @@ echo "domino/tests/run_multinode.sh has been executed."
 
 trap cleanup EXIT
 
-cleanup
-prepare_testenv
-launch_domino
+if [ "$IS_IPandKEY_CONFIGURED" = "true" ]; then
+
+    cleanup
+    prepare_testenv
+    launch_domino
 
 
-echo "Test Heartbeat"
-ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT heartbeat'"
-sleep 1
+    echo "Test Heartbeat"
+    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT heartbeat'"
+    sleep 1
 
-echo "Test Subscribe API"
-ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -t hot -l tosca.policies.Placement:properties:region:nova-1'"  
-sleep 1
-ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top OVERWRITE'"
-sleep 1
-ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top DELETE'"
-sleep 1
-ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -l tosca.policies.Placement:properties:region:nova-2'"
-sleep 1
-ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -l tosca.policies.Placement:properties:region:nova-3 --lop OVERWRITE'"
-sleep 1
-ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -l tosca.policies.Placement:properties:region:nova-3 --lop DELETE'"
-sleep 1
+    echo "Test Subscribe API"
+    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -t hot -l tosca.policies.Placement:properties:region:nova-1'"  
+    sleep 1
+    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top OVERWRITE'"
+    sleep 1
+    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top DELETE'"
+    sleep 1
+    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -l tosca.policies.Placement:properties:region:nova-2'"
+    sleep 1
+    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -l tosca.policies.Placement:properties:region:nova-3 --lop OVERWRITE'"
+    sleep 1
+    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -l tosca.policies.Placement:properties:region:nova-3 --lop DELETE'"
+    sleep 1
 
-echo "Test Publish API"
-ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_3" "sh -c 'cd domino; python domino-cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1"'"
+    echo "Test Publish API"
+    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_3" "sh -c 'cd domino; python domino-cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1"'"
 
-sleep 1
-ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -l tosca.policies.Placement.Geolocation:properties:region:us-west-1'"
-sleep 1
-ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_3" "sh -c 'cd domino; python domino-cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1"'"
+    sleep 1
+    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -l tosca.policies.Placement.Geolocation:properties:region:us-west-1'"
+    sleep 1
+    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_3" "sh -c 'cd domino; python domino-cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1"'"
 
-echo "done"
+    echo "done"
+
+else
+
+    echo "set IS_IPandKEY_CONFIGURED as true to run the test"  
+
+fi
+
 
