@@ -123,9 +123,8 @@ launch_domino() {
 
 echo "domino/tests/run_multinode.sh has been executed."
 
-trap cleanup EXIT
-
 if [ "$IS_IPandKEY_CONFIGURED" = "true" ]; then
+    trap cleanup EXIT
 
     cleanup
     prepare_testenv
