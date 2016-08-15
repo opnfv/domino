@@ -8,10 +8,11 @@
   :align: left
 |
 |
-DOMINO Configuration Guide
-==========================
-
-Contents:
+**********************
+Installation procedure
+**********************
+Colorado 1.0
+------------
 
 .. toctree::
    :numbered:
@@ -19,12 +20,3 @@ Contents:
 
    installation.rst
    featureconfig.rst
-
-Indices and tables
-==================
-
-* :ref:`search`
-
-Revision: _sha1_
-
-Build date: |today|
