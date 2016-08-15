@@ -1,30 +1,23 @@
 .. This work is licensed under a Creative Commons Attribution 4.0 International License.
 .. http://creativecommons.org/licenses/by/4.0
+.. (c) Ulas C. Kozat Huawei R&D USA
 
-.. image:: ../etc/opnfv-logo.png
-  :height: 40
-  :width: 200
-  :alt: OPNFV
-  :align: left
-|
-|
-Domino User Guide
+=================
+Domino user guide
 =================
 
-Contents:
+.. The feature user guide should provide an OPNFV user with enough information to
+.. use the features provided by the feature project in the supported scenarios.
+.. This guide should walk a user through the usage of the features once a scenario
+.. has been deployed and is active according to the installation guide provided
+.. by the installer project.
 
 .. toctree::
-   :numbered:
-   :maxdepth: 4
+   :maxdepth: 3
 
-   overview.rst
-   api-documentation.rst
+.. The feature.userguide.rst file should contain the text for this document
+.. additional documents can be added to this directory and added in the right order
+.. to this file as a list below.
 
-Indices and tables
-==================
+   feature.userguide.rst
 
-* :ref:`search`
-
-Revision: _sha1_
-
-Build date: |today|
