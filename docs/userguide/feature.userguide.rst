@@ -34,7 +34,7 @@ Domino Capabilities and Usage
 Labels in Domino
 ----------------
 
-Domino's pub/sub architecture is based on labels (see :numref:`fig-label` below).
+Domino's pub/sub architecture is based on labels (see Fig. 1 below).
 Each Template Producer and Template Consumer is expected to run a local Domino Client
 to publish templates and subscribe for labels.
 
@@ -209,7 +209,7 @@ existing translators (e.g., heat-translator) to first translate the template bef
 Internal Processing Pipeline at Domino Server
 ---------------------------------------------
 
-:numref:`fig-pipe` shows the block diagram for the processing stages of a published TOSCA template.
+Fig. 2 shows the block diagram for the processing stages of a published TOSCA template.
 Domino Client issues an RPC call publish(tosca file). Domino Server passes the received tosca
 file to Label Extractor that outputs resource labels. Domain Mapper uses the extracted labels
 and tosca file to find mappings from resources to domains as well as the resource dependencies.
