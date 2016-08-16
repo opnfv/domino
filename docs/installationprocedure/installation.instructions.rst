@@ -37,15 +37,15 @@ Installation Steps (Single Node)
 
 .. code-block:: bash
 
-  > $git clone https://gerrit.opnfv.org/gerrit/domino
+  git clone https://gerrit.opnfv.org/gerrit/domino -b stable/colorado
 
 * Step-2: Go to the main domino directory
 
 .. code-block:: bash
 
-  > $cd domino
+  cd domino
 
-You should see DominoClient.py, DominoServer.py, and domino-cli.py as executibles.
+You should see DominoClient.py, DominoServer.py, and domino-cli.py as executables.
 
 Installation Steps (Multiple Node)
 ----------------------------------
