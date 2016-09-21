@@ -1,33 +1,33 @@
-07/21/2016 03:04:52 PM Domino Client Starting...
-07/21/2016 03:04:52 PM 1 Sending Registration
-07/21/2016 03:04:52 PM Registration Response: Response Code: 1
-07/21/2016 03:04:52 PM CLI Service is starting
-07/21/2016 03:04:52 PM RPC service for CLI is starting...
-07/21/2016 03:04:54 PM Received CLI ['heartbeat']
-07/21/2016 03:04:54 PM 12467 Sending heartbeat
-07/21/2016 03:04:54 PM heart beat received from: 0 ,sequence number: 2
-07/21/2016 03:04:55 PM Received CLI ['subscribe', '-t', 'hot', '-l', 'tosca.policies.Placement:properties:region:nova-1']
-07/21/2016 03:04:55 PM subscribing labels ['tosca.policies.Placement:properties:region:nova-1'] and templates ['hot']
-07/21/2016 03:04:55 PM Subscribe Response is received from: 0 ,sequence number: 3
-07/21/2016 03:04:56 PM Received CLI ['subscribe', '-t', 'dummy1,dummy2', '--top', 'OVERWRITE']
-07/21/2016 03:04:56 PM subscribing labels [] and templates ['dummy1', 'dummy2']
-07/21/2016 03:04:56 PM Subscribe Response is received from: 0 ,sequence number: 4
-07/21/2016 03:04:57 PM Received CLI ['subscribe', '-t', 'dummy1,dummy2', '--top', 'DELETE']
-07/21/2016 03:04:57 PM subscribing labels [] and templates ['dummy1', 'dummy2']
-07/21/2016 03:04:57 PM Subscribe Response is received from: 0 ,sequence number: 5
-07/21/2016 03:04:58 PM Received CLI ['subscribe', '-l', 'tosca.policies.Placement:properties:region:nova-2']
-07/21/2016 03:04:58 PM subscribing labels ['tosca.policies.Placement:properties:region:nova-2'] and templates []
-07/21/2016 03:04:58 PM Subscribe Response is received from: 0 ,sequence number: 6
-07/21/2016 03:04:59 PM Received CLI ['subscribe', '-l', 'tosca.policies.Placement:properties:region:nova-3', '--lop', 'OVERWRITE']
-07/21/2016 03:04:59 PM subscribing labels ['tosca.policies.Placement:properties:region:nova-3'] and templates []
-07/21/2016 03:04:59 PM Subscribe Response is received from: 0 ,sequence number: 7
-07/21/2016 03:05:00 PM Received CLI ['subscribe', '-l', 'tosca.policies.Placement:properties:region:nova-3', '--lop', 'DELETE']
-07/21/2016 03:05:00 PM subscribing labels ['tosca.policies.Placement:properties:region:nova-3'] and templates []
-07/21/2016 03:05:00 PM Subscribe Response is received from: 0 ,sequence number: 8
-07/21/2016 03:05:01 PM Received CLI ['publish', '-t', './tosca-templates/tosca_helloworld_nfv.yaml']
-07/21/2016 03:05:01 PM Publishing the template file: ./tosca-templates/tosca_helloworld_nfv.yaml
-07/21/2016 03:05:01 PM Publish Response is received from: 0 ,sequence number: 9 Op. Status: 2
-07/21/2016 03:05:02 PM Received CLI ['subscribe', '-l', 'tosca.policies.Placement.Geolocation:properties:region:us-west-1']
-07/21/2016 03:05:02 PM subscribing labels ['tosca.policies.Placement.Geolocation:properties:region:us-west-1'] and templates []
-07/21/2016 03:05:02 PM Subscribe Response is received from: 0 ,sequence number: 10
-07/21/2016 03:05:03 PM 12467 Received Template File
+09/21/2016 10:08:40 AM Domino Client Starting...
+09/21/2016 10:08:40 AM 1 Sending Registration
+09/21/2016 10:08:40 AM Registration Response: Response Code: 1
+09/21/2016 10:08:40 AM CLI Service is starting
+09/21/2016 10:08:40 AM RPC service for CLI is starting...
+09/21/2016 10:08:42 AM Received CLI ['heartbeat']
+09/21/2016 10:08:42 AM 12467 Sending heartbeat
+09/21/2016 10:08:42 AM heart beat received from: 0 ,sequence number: 2
+09/21/2016 10:08:43 AM Received CLI ['subscribe', '-t', 'hot', '-l', 'tosca.policies.Placement:properties:region:nova-1']
+09/21/2016 10:08:43 AM subscribing labels ['tosca.policies.Placement:properties:region:nova-1'] and templates ['hot']
+09/21/2016 10:08:43 AM Subscribe Response is received from: 0 ,sequence number: 3
+09/21/2016 10:08:44 AM Received CLI ['subscribe', '-t', 'dummy1,dummy2', '--top', 'OVERWRITE']
+09/21/2016 10:08:44 AM subscribing labels [] and templates ['dummy1', 'dummy2']
+09/21/2016 10:08:44 AM Subscribe Response is received from: 0 ,sequence number: 4
+09/21/2016 10:08:45 AM Received CLI ['subscribe', '-t', 'dummy1,dummy2', '--top', 'DELETE']
+09/21/2016 10:08:45 AM subscribing labels [] and templates ['dummy1', 'dummy2']
+09/21/2016 10:08:45 AM Subscribe Response is received from: 0 ,sequence number: 5
+09/21/2016 10:08:46 AM Received CLI ['subscribe', '-l', 'tosca.policies.Placement:properties:region:nova-2']
+09/21/2016 10:08:46 AM subscribing labels ['tosca.policies.Placement:properties:region:nova-2'] and templates []
+09/21/2016 10:08:46 AM Subscribe Response is received from: 0 ,sequence number: 6
+09/21/2016 10:08:47 AM Received CLI ['subscribe', '-l', 'tosca.policies.Placement:properties:region:nova-3', '--lop', 'OVERWRITE']
+09/21/2016 10:08:47 AM subscribing labels ['tosca.policies.Placement:properties:region:nova-3'] and templates []
+09/21/2016 10:08:47 AM Subscribe Response is received from: 0 ,sequence number: 7
+09/21/2016 10:08:48 AM Received CLI ['subscribe', '-l', 'tosca.policies.Placement:properties:region:nova-3', '--lop', 'DELETE']
+09/21/2016 10:08:48 AM subscribing labels ['tosca.policies.Placement:properties:region:nova-3'] and templates []
+09/21/2016 10:08:48 AM Subscribe Response is received from: 0 ,sequence number: 8
+09/21/2016 10:08:49 AM Received CLI ['publish', '-t', './tosca-templates/tosca_helloworld_nfv.yaml']
+09/21/2016 10:08:49 AM Publishing the template file: ./tosca-templates/tosca_helloworld_nfv.yaml
+09/21/2016 10:08:49 AM Publish Response is received from: 0 ,sequence number: 9 Op. Status: 2
+09/21/2016 10:08:50 AM Received CLI ['subscribe', '-l', 'tosca.policies.Placement.Geolocation:properties:region:us-west-1']
+09/21/2016 10:08:50 AM subscribing labels ['tosca.policies.Placement.Geolocation:properties:region:us-west-1'] and templates []
+09/21/2016 10:08:50 AM Subscribe Response is received from: 0 ,sequence number: 10
+09/21/2016 10:08:51 AM 12467 Received Template File

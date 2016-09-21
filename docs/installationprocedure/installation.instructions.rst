@@ -50,7 +50,7 @@ You should see DominoClient.py, DominoServer.py, and domino-cli.py as executable
 Installation Steps (Multiple Node)
 ----------------------------------
 
-Repeat the installation steps for single node on each of the nodes. The script
+Repeat the installation steps for single node on each node. The script
 run_multinode.sh under ./domino/tests directory deploys the Domino Code on three
 hosts from a deployment node and tests RPC calls. The private key location and
 remote host IP addresses must be manually entered and IS_IPandKEY_CONFIGURED=false

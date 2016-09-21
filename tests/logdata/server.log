@@ -1,45 +1,45 @@
-07/21/2016 03:04:51 PM Domino Server Starting...
-07/21/2016 03:04:52 PM Registration Request received for UDID 12467 from IP: 192.168.254.12 port: 9091
-07/21/2016 03:04:53 PM Registration Request received for UDID 12467 from IP: 192.168.254.12 port: 9092
-07/21/2016 03:04:54 PM heartbeat received from 12467
-07/21/2016 03:04:55 PM Subscribe Request received from 12467
-07/21/2016 03:04:55 PM APPENDING Labels...
-07/21/2016 03:04:55 PM Supported Template: set(['hot']) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-1'])
-07/21/2016 03:04:56 PM Subscribe Request received from 12467
-07/21/2016 03:04:56 PM APPENDING Labels...
-07/21/2016 03:04:56 PM Supported Template: set(['dummy2', 'dummy1']) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-1'])
-07/21/2016 03:04:57 PM Subscribe Request received from 12467
-07/21/2016 03:04:57 PM APPENDING Labels...
-07/21/2016 03:04:57 PM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-1'])
-07/21/2016 03:04:58 PM Subscribe Request received from 12467
-07/21/2016 03:04:58 PM APPENDING Labels...
-07/21/2016 03:04:58 PM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-2', 'tosca.policies.Placement:properties:region:nova-1'])
-07/21/2016 03:04:59 PM Subscribe Request received from 12467
-07/21/2016 03:04:59 PM OVERWRITING Labels...
-07/21/2016 03:04:59 PM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-3'])
-07/21/2016 03:05:00 PM Subscribe Request received from 12467
-07/21/2016 03:05:00 PM DELETING Labels...
-07/21/2016 03:05:00 PM Supported Template: set([]) Supported Labels: set([])
-07/21/2016 03:05:01 PM Publish Request received from 12467
-07/21/2016 03:05:01 PM ['tosca_definitions_version: tosca_simple_profile_for_nfv_1_0_0', '', 'description: Template for deploying a single server with predefined properties.', '', 'metadata:', '  template_name: TOSCA NFV Sample Template', '', 'policy_types:', '  tosca.policies.Placement.Geolocation:', '    description: Geolocation policy', '    derived_from: tosca.policies.Placement', '', 'topology_template:', '  node_templates:', '    VNF1:', '      type: tosca.nodes.nfv.VNF', '      properties:', '        id: vnf1', '        vendor: acmetelco', '        version: 1.0', '', '    VNF2:', '      type: tosca.nodes.nfv.VNF', '      properties:', '        id: vnf2', '        vendor: ericsson', '        version: 1.0', '', '    VNF3:', '      type: tosca.nodes.nfv.VNF', '      properties:', '        id: vnf3', '        vendor: huawei', '        version: 1.0', '', '  policies:', '    - rule1:', '        type: tosca.policies.Placement.Geolocation', '        targets: [ VNF1 ]', '        properties:', '          region: [ us-west-1 ]', '    - rule2:', '        type: tosca.policies.Placement.Geolocation', '        targets: [ VNF2, VNF3 ]', '        properties:', '          region: [ us-west-1 , us-west-2 ]']
-07/21/2016 03:05:01 PM nfv
-07/21/2016 03:05:01 PM nfv.py
-07/21/2016 03:05:01 PM The input "./toscafiles/template1.yaml" successfully passed validation.
-07/21/2016 03:05:01 PM Node Labels: {'VNF2': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF3': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF1': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1'])}
-07/21/2016 03:05:01 PM Site Maps: {'VNF2': set([]), 'VNF3': set([]), 'VNF1': set([])}
-07/21/2016 03:05:01 PM Selected Sites: {'VNF2': [], 'VNF3': [], 'VNF1': []}
-07/21/2016 03:05:01 PM Per domain file paths: {}
-07/21/2016 03:05:02 PM Subscribe Request received from 12467
-07/21/2016 03:05:02 PM APPENDING Labels...
-07/21/2016 03:05:02 PM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1'])
-07/21/2016 03:05:03 PM Publish Request received from 4877619612774783847
-07/21/2016 03:05:03 PM ['tosca_definitions_version: tosca_simple_profile_for_nfv_1_0_0', '', 'description: Template for deploying a single server with predefined properties.', '', 'metadata:', '  template_name: TOSCA NFV Sample Template', '', 'policy_types:', '  tosca.policies.Placement.Geolocation:', '    description: Geolocation policy', '    derived_from: tosca.policies.Placement', '', 'topology_template:', '  node_templates:', '    VNF1:', '      type: tosca.nodes.nfv.VNF', '      properties:', '        id: vnf1', '        vendor: acmetelco', '        version: 1.0', '', '    VNF2:', '      type: tosca.nodes.nfv.VNF', '      properties:', '        id: vnf2', '        vendor: ericsson', '        version: 1.0', '', '    VNF3:', '      type: tosca.nodes.nfv.VNF', '      properties:', '        id: vnf3', '        vendor: huawei', '        version: 1.0', '', '  policies:', '    - rule1:', '        type: tosca.policies.Placement.Geolocation', '        targets: [ VNF1 ]', '        properties:', '          region: [ us-west-1 ]', '    - rule2:', '        type: tosca.policies.Placement.Geolocation', '        targets: [ VNF2, VNF3 ]', '        properties:', '          region: [ us-west-1 , us-west-2 ]']
-07/21/2016 03:05:03 PM ERRNO 17; ./toscafiles/ exists. Creating: ./toscafiles/template1.yaml
-07/21/2016 03:05:03 PM nfv
-07/21/2016 03:05:03 PM nfv.py
-07/21/2016 03:05:03 PM The input "./toscafiles/template1.yaml" successfully passed validation.
-07/21/2016 03:05:03 PM Node Labels: {'VNF2': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF3': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF1': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1'])}
-07/21/2016 03:05:03 PM Site Maps: {'VNF2': set([]), 'VNF3': set([]), 'VNF1': set([12467])}
-07/21/2016 03:05:03 PM Selected Sites: {'VNF2': [], 'VNF3': [], 'VNF1': 12467}
-07/21/2016 03:05:03 PM Per domain file paths: {12467: './toscafiles/template_part12467.yaml'}
-07/21/2016 03:05:03 PM Push Response received from 12467
+09/21/2016 10:08:39 AM Domino Server Starting...
+09/21/2016 10:08:40 AM Registration Request received for UDID 12467 from IP: 192.168.252.174 port: 9091
+09/21/2016 10:08:41 AM Registration Request received for UDID 12467 from IP: 192.168.252.174 port: 9092
+09/21/2016 10:08:42 AM heartbeat received from 12467
+09/21/2016 10:08:43 AM Subscribe Request received from 12467
+09/21/2016 10:08:43 AM APPENDING Labels...
+09/21/2016 10:08:43 AM Supported Template: set(['hot']) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-1'])
+09/21/2016 10:08:44 AM Subscribe Request received from 12467
+09/21/2016 10:08:44 AM APPENDING Labels...
+09/21/2016 10:08:44 AM Supported Template: set(['dummy2', 'dummy1']) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-1'])
+09/21/2016 10:08:45 AM Subscribe Request received from 12467
+09/21/2016 10:08:45 AM APPENDING Labels...
+09/21/2016 10:08:45 AM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-1'])
+09/21/2016 10:08:46 AM Subscribe Request received from 12467
+09/21/2016 10:08:46 AM APPENDING Labels...
+09/21/2016 10:08:46 AM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-2', 'tosca.policies.Placement:properties:region:nova-1'])
+09/21/2016 10:08:47 AM Subscribe Request received from 12467
+09/21/2016 10:08:47 AM OVERWRITING Labels...
+09/21/2016 10:08:47 AM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-3'])
+09/21/2016 10:08:48 AM Subscribe Request received from 12467
+09/21/2016 10:08:48 AM DELETING Labels...
+09/21/2016 10:08:48 AM Supported Template: set([]) Supported Labels: set([])
+09/21/2016 10:08:49 AM Publish Request received from 12467
+09/21/2016 10:08:49 AM ['tosca_definitions_version: tosca_simple_profile_for_nfv_1_0_0', '', 'description: Template for deploying a single server with predefined properties.', '', 'metadata:', '  template_name: TOSCA NFV Sample Template', '', 'policy_types:', '  tosca.policies.Placement.Geolocation:', '    description: Geolocation policy', '    derived_from: tosca.policies.Placement', '', 'topology_template:', '  node_templates:', '    VNF1:', '      type: tosca.nodes.nfv.VNF', '      properties:', '        id: vnf1', '        vendor: acmetelco', '        version: 1.0', '', '    VNF2:', '      type: tosca.nodes.nfv.VNF', '      properties:', '        id: vnf2', '        vendor: ericsson', '        version: 1.0', '', '    VNF3:', '      type: tosca.nodes.nfv.VNF', '      properties:', '        id: vnf3', '        vendor: huawei', '        version: 1.0', '', '  policies:', '    - rule1:', '        type: tosca.policies.Placement.Geolocation', '        targets: [ VNF1 ]', '        properties:', '          region: [ us-west-1 ]', '    - rule2:', '        type: tosca.policies.Placement.Geolocation', '        targets: [ VNF2, VNF3 ]', '        properties:', '          region: [ us-west-1 , us-west-2 ]']
+09/21/2016 10:08:49 AM nfv
+09/21/2016 10:08:49 AM nfv.py
+09/21/2016 10:08:49 AM The input "./toscafiles/template1.yaml" successfully passed validation.
+09/21/2016 10:08:49 AM Node Labels: {'VNF2': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF3': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF1': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1'])}
+09/21/2016 10:08:49 AM Site Maps: {'VNF2': set([]), 'VNF3': set([]), 'VNF1': set([])}
+09/21/2016 10:08:49 AM Selected Sites: {'VNF2': [], 'VNF3': [], 'VNF1': []}
+09/21/2016 10:08:49 AM Per domain file paths: {}
+09/21/2016 10:08:50 AM Subscribe Request received from 12467
+09/21/2016 10:08:50 AM APPENDING Labels...
+09/21/2016 10:08:50 AM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1'])
+09/21/2016 10:08:51 AM Publish Request received from 5132942229496730997
+09/21/2016 10:08:51 AM ['tosca_definitions_version: tosca_simple_profile_for_nfv_1_0_0', '', 'description: Template for deploying a single server with predefined properties.', '', 'metadata:', '  template_name: TOSCA NFV Sample Template', '', 'policy_types:', '  tosca.policies.Placement.Geolocation:', '    description: Geolocation policy', '    derived_from: tosca.policies.Placement', '', 'topology_template:', '  node_templates:', '    VNF1:', '      type: tosca.nodes.nfv.VNF', '      properties:', '        id: vnf1', '        vendor: acmetelco', '        version: 1.0', '', '    VNF2:', '      type: tosca.nodes.nfv.VNF', '      properties:', '        id: vnf2', '        vendor: ericsson', '        version: 1.0', '', '    VNF3:', '      type: tosca.nodes.nfv.VNF', '      properties:', '        id: vnf3', '        vendor: huawei', '        version: 1.0', '', '  policies:', '    - rule1:', '        type: tosca.policies.Placement.Geolocation', '        targets: [ VNF1 ]', '        properties:', '          region: [ us-west-1 ]', '    - rule2:', '        type: tosca.policies.Placement.Geolocation', '        targets: [ VNF2, VNF3 ]', '        properties:', '          region: [ us-west-1 , us-west-2 ]']
+09/21/2016 10:08:51 AM ERRNO 17; ./toscafiles/ exists. Creating: ./toscafiles/template1.yaml
+09/21/2016 10:08:51 AM nfv
+09/21/2016 10:08:51 AM nfv.py
+09/21/2016 10:08:51 AM The input "./toscafiles/template1.yaml" successfully passed validation.
+09/21/2016 10:08:51 AM Node Labels: {'VNF2': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF3': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF1': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1'])}
+09/21/2016 10:08:51 AM Site Maps: {'VNF2': set([]), 'VNF3': set([]), 'VNF1': set([12467])}
+09/21/2016 10:08:51 AM Selected Sites: {'VNF2': [], 'VNF3': [], 'VNF1': 12467}
+09/21/2016 10:08:51 AM Per domain file paths: {12467: './toscafiles/template_part12467.yaml'}
+09/21/2016 10:08:51 AM Push Response received from 12467
