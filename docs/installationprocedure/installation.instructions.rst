@@ -52,4 +52,6 @@ Installation Steps (Multiple Node)
 
 Repeat the installation steps for single node on each of the nodes. The script
 run_multinode.sh under ./domino/tests directory deploys the Domino Code on three
-hosts from a deployment node and tests RPC calls.
+hosts from a deployment node and tests RPC calls. The private key location and
+remote host IP addresses must be manually entered and IS_IPandKEY_CONFIGURED=false
+must be changed to IS_IPandKEY_CONFIGURED=true.
