@@ -2,14 +2,7 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. (c) Ulas C. Kozat Huawei R&D USA
 
-.. image:: ../etc/opnfv-logo.png
-  :height: 40
-  :width: 200
-  :alt: OPNFV
-  :align: left
-.. these two pipes are to seperate the logo from the first title
-|
-|
+==================
 Domino Description
 ==================
 
@@ -27,12 +20,12 @@ their resource capabilities to onboard and perform Life Cycle Management (LCM) f
 Services (NSs) and Virtual Network Functions (VNFs). Thus, Domino acts as a broker for
 NSs and VNFs described in a Tosca template.
 
-
+=============================
 Domino Capabilities and Usage
 =============================
 
 Labels in Domino
-----------------
+================
 
 Domino's pub/sub architecture is based on labels (see Fig. 1 below).
 Each Template Producer and Template Consumer is expected to run a local Domino Client
@@ -58,7 +51,7 @@ to the clients are done, new NSDs/VNFDs are created based on the mapping. These 
 NSDs/VNFDs are translated and delivered to the clients.
 
 Label Format and Examples
--------------------------
+=========================
 
 Domino supports policy labels in the following form:
 
@@ -104,7 +97,7 @@ for the Domino Server to identify all the Domain Clients that subscribed the lab
 "tosca.policies.Scaling.VNFFG:properties:session_continuity:true".
 
 Template Example for Label Extraction
--------------------------------------
+=====================================
 
 Consider the following NSD TOSCA template:
 
@@ -207,7 +200,7 @@ cannot be consumed by a particular site directly, Domino Server can utilize
 existing translators (e.g., heat-translator) to first translate the template before delivery.
 
 Internal Processing Pipeline at Domino Server
----------------------------------------------
+=============================================
 
 Fig. 2 shows the block diagram for the processing stages of a published TOSCA template.
 Domino Client issues an RPC call publish(tosca file). Domino Server passes the received tosca
@@ -232,7 +225,7 @@ workflow generator and pushes the orchestration template to the corresponding Do
     Domino Service Processing Pipeline
 
 Resource Scheduling
--------------------
+===================
 
 Domino Service currently supports maximum packing strategy when a  virtual resource type can
 be hosted on multiple candidate sites. Initially, Domino Scheduler identifies virtual resources
@@ -244,11 +237,12 @@ prevent wildcarding within the current release, (i) all sites must subscribed to
 with a dummy key-value pair defined under the properties tab and (ii) all the independent
 resources must be specified as target of that policy in NSD or VNFD file.
 
+============================================
 Domino and API Usage Guidelines and Examples
 ============================================
 
 Using domino-cli Client
------------------------
+=======================
 
 Prerequisites:
 

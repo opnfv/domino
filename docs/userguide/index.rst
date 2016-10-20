@@ -2,13 +2,6 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. (c) Ulas C. Kozat Huawei R&D USA
 
-.. image:: ../etc/opnfv-logo.png
-  :height: 40
-  :width: 200
-  :alt: OPNFV
-  :align: left
-|
-|
 *****************
 Domino User Guide
 *****************
