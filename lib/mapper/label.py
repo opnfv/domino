@@ -10,12 +10,12 @@
 #Parses policy rules, extracts targets, extracts policy properties
 #Returns set of policy properties for each target in a dictionary object
 #e.g., node_labels['VNF1'] = {label1, label2, ..., labeln}
-def extract_labels(tosca):
+def extract_labels(tpl):
   node_labels = dict() #stores labels for each node
   
-  if tosca.tpl.has_key('topology_template'):
-    if tosca.tpl['topology_template'].has_key('policies'):
-      policies = tosca.tpl['topology_template']['policies']
+  if tpl.has_key('topology_template'):
+    if tpl['topology_template'].has_key('policies'):
+      policies = tpl['topology_template']['policies']
     else:
       return node_labels
   else:

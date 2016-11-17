@@ -14,7 +14,7 @@
 import sys, os, glob, random, errno
 import getopt, socket
 import logging, json
-import sqlite3
+import sqlite3, yaml
 #sys.path.append('gen-py')
 #sys.path.insert(0, glob.glob('./lib/py/build/lib.*')[0])
 sys.path.insert(0, glob.glob('./lib')[0])
@@ -257,7 +257,8 @@ class CommunicationHandler:
 
     # Load tosca object from file into memory
     try:
-      tosca = ToscaTemplate( TOSCADIR+TOSCA_DEFAULT_FNAME )
+      #tosca = ToscaTemplate( TOSCADIR+TOSCA_DEFAULT_FNAME )
+      tpl = yaml.load(file(TOSCADIR+TOSCA_DEFAULT_FNAME,'r'))
     except:
       logging.error('Tosca Parser error: %s', sys.exc_info()[0])
       #tosca file could not be read
@@ -269,7 +270,7 @@ class CommunicationHandler:
       return pub_r 
 
     # Extract Labels
-    node_labels = label.extract_labels( tosca )
+    node_labels = label.extract_labels( tpl )
     logging.debug('Node Labels: %s', node_labels)
 
     # Map nodes in the template to resource domains
@@ -281,7 +282,7 @@ class CommunicationHandler:
     logging.debug('Selected Sites: %s', node_site)
 
     # Create per-domain Tosca files
-    file_paths = partitioner.partition_tosca('./toscafiles/template',node_site,tosca.tpl)
+    file_paths = partitioner.partition_tosca('./toscafiles/template',node_site,tpl)
     logging.debug('Per domain file paths: %s', file_paths)
  
     # Create work-flow
