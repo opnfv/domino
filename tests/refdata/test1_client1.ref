@@ -4,7 +4,7 @@ Registration Response: Response Code: 1
 CLI Service is starting
 RPC service for CLI is starting...
 Received CLI ['heartbeat']
-12467 Sending heartbeat
+0 Sending heartbeat
 heart beat received from: 0 ,sequence number: 2
 Received CLI ['subscribe', '-t', 'hot', '-l', 'tosca.policies.Placement:properties:region:nova-1']
 subscribing labels ['tosca.policies.Placement:properties:region:nova-1'] and templates ['hot']
@@ -30,4 +30,4 @@ Publish Response is received from: 0 ,sequence number: 9 Op. Status: 2
 Received CLI ['subscribe', '-l', 'tosca.policies.Placement.Geolocation:properties:region:us-west-1']
 subscribing labels ['tosca.policies.Placement.Geolocation:properties:region:us-west-1'] and templates []
 Subscribe Response is received from: 0 ,sequence number: 10
-12467 Received Template File
+0 Received Template File

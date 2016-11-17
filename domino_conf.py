@@ -11,7 +11,7 @@ CLIENT_SEQNO = 0
 DOMINO_SERVER_IP = 'localhost'
 DOMINO_CLI_PORT = 9100
 
-UDID_DESIRED = 12467
+UDID_DESIRED = 0
 LIST_SUPPORTED_TEMPLATES = ['tosca-nfv-v1.0']
 DEFAULT_TOSCA_PUBFILE = './tosca-templates/tosca_helloworld_nfv.yaml'
 TOSCA_RX_DIR = './toscafiles/'
