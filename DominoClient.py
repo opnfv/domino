@@ -339,7 +339,7 @@ class DominoClient:
       return
     try:
       pub_msg_r = self.sender().d_publish(pub_msg)
-      logging.info('Publish Response is received from: %d ,sequence number: %d Op. Status: %d', pub_msg_r.domino_udid, pub_msg_r.seq_no, pub_msg_r.responseCode)
+      logging.info('Publish Response is received from: %d ,sequence number: %d Status: %d', pub_msg_r.domino_udid, pub_msg_r.seq_no, pub_msg_r.responseCode)
     except (Thrift.TException, TSocket.TTransportException) as tx:
       print '%s' % (tx.message)
     except (socket.timeout) as tx:
