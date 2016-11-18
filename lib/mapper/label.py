@@ -77,9 +77,10 @@ def select_site( site_map ):
           maxval = counter[site]
           maxkey = site
         elif counter.has_key(site) == False:
-          counter[site] = 1
+          counter[site] = 0
           if maxval == 0:
             maxval = 1
             maxkey = site
-      node_site[node] = maxkey        
+      node_site[node] = maxkey
+    counter[node_site[node]] = counter[node_site[node]] + 1     
   return node_site 
