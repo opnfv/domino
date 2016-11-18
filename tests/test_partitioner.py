@@ -24,7 +24,7 @@ def main(argv):
   try:
     tosca = ToscaTemplate(argv[0])
     # Extract Labels
-    node_labels = label.extract_labels( tosca )
+    node_labels = label.extract_labels( tosca.tpl )
     print node_labels
     site_id = 0
     subscribed_labels = {}
@@ -47,3 +47,4 @@ def main(argv):
 
 if __name__ == "__main__":
    main(sys.argv[1:])
+

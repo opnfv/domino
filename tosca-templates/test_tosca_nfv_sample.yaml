@@ -59,6 +59,15 @@ topology_template:
         end_ip: '192.168.0.200'
         gateway_ip: '192.168.0.1'
 
+    VL2:
+      type: tosca.nodes.nfv.VL
+      properties:
+        vendor: ACME
+        cidr: '192.168.0.0/24'
+        start_ip: '192.168.0.50'
+        end_ip: '192.168.0.200'
+        gateway_ip: '192.168.0.1'
+
   policies:
     - rule1:
         type: tosca.policies.Placement

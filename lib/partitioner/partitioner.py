@@ -38,9 +38,10 @@ def partition_tosca(filepath, nodesite, tpl):
              # remove the rule if there is no target left!
              if len(rule[key]['targets']) is 0:
                tpl_local[site]['topology_template']['policies'].remove(rule)
-
+ 
   for site in sitenodes:
     tpl_l = tpl_local[site]
+    rm_orphans(tpl_l)
     print tpl_l , '\n'
     file_paths[site] = filepath + '_part' + str(site) + '.yaml'
     fout = open(file_paths[site],'w')
@@ -125,3 +126,16 @@ def rm_dependents(node_template , node):
   #remove the dependents
   for i in range(len(del_list)):
      del node_template[del_list[i]]
+
+def rm_orphans(tpl):
+  nodes = tpl['topology_template']['node_templates']
+  keep_list = []
+  for node in nodes:
+    if nodes[node].has_key('requirements'):
+      for i in range(len(nodes[node]['requirements'])):
+        if nodes[node]['requirements'][i].has_key('virtualLink'):
+          keep_list.append(nodes[node]['requirements'][i]['virtualLink']['node'])
+
+  for node in nodes:    
+    if nodes[node]['type'] is 'tosca.nodes.nfv.VNF' and node not in keep_list:
+      del nodes[node]
