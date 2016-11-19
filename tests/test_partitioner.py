@@ -11,20 +11,21 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-import sys, os, glob
+import sys, os, glob, yaml
 
 sys.path.insert(0, glob.glob('./lib')[0])
 
-from toscaparser.tosca_template import ToscaTemplate
+#from toscaparser.tosca_template import ToscaTemplate
 
 from mapper import *
 from partitioner import *
 
 def main(argv):
   try:
-    tosca = ToscaTemplate(argv[0])
+    #tosca = ToscaTemplate(argv[0])
+    tpl = yaml.load(file(argv[0],'r'))
     # Extract Labels
-    node_labels = label.extract_labels( tosca )
+    node_labels = label.extract_labels( tpl )
     print node_labels
     site_id = 0
     subscribed_labels = {}
@@ -40,10 +41,11 @@ def main(argv):
     node_site = label.select_site( site_map )
     print node_site
 
-    file_paths = partitioner.partition_tosca("./tests/tmp/tosca",node_site,tosca.tpl)
+    file_paths = partitioner.partition_tosca("./tests/tmp/tosca",node_site,tpl)
     print file_paths
   except:
     print('Unexpected error: %s', sys.exc_info()[0])
 
 if __name__ == "__main__":
    main(sys.argv[1:])
+
