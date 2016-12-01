@@ -5,4 +5,4 @@ CLI Service is starting
 RPC service for CLI is starting...
 Received CLI ['publish', '-t', './tosca-templates/tosca_helloworld_nfv.yaml']
 Publishing the template file: ./tosca-templates/tosca_helloworld_nfv.yaml
-Publish Response is received from: 0 ,sequence number: 11 Status: 1
+Publish Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 11 Status: 1

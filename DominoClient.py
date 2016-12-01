@@ -15,6 +15,7 @@
 import sys, os, glob, threading
 import getopt, socket
 import logging, errno
+import uuid
 
 #sys.path.append('gen-py')
 #sys.path.insert(0, glob.glob('./lib/py/build/lib.*')[0])
@@ -55,7 +56,7 @@ class CommunicationHandler:
   #       - Depending on Controller Domain, call API
   #       - Respond Back with Push Response
   def d_push(self, push_msg):
-    logging.info('%d Received Template File', self.dominoClient.UDID)
+    logging.info('%s Received Template File', self.dominoClient.UDID)
     # Retrieve the template file
     try:
       os.makedirs(TOSCA_RX_DIR+str(self.dominoClient.UDID))
@@ -305,14 +306,14 @@ class DominoClient:
     if self.state == 'UNREGISTERED':
       self.start()
           
-    logging.info('%d Sending heartbeat', self.UDID)
+    logging.info('%s Sending heartbeat', self.UDID)
     hbm = HeartBeatMessage()         
     hbm.domino_udid = self.UDID        
     hbm.seq_no = self.seqno         
 
     try:
       hbm_r = self.sender().d_heartbeat(hbm)
-      logging.info('heart beat received from: %d ,sequence number: %d' , hbm_r.domino_udid, hbm_r.seq_no)
+      logging.info('heart beat received from: %s ,sequence number: %d' , hbm_r.domino_udid, hbm_r.seq_no)
     except (Thrift.TException, TSocket.TTransportException) as tx:
       logging.error('%s' , tx.message)
     except (socket.timeout) as tx:
@@ -339,7 +340,7 @@ class DominoClient:
       return
     try:
       pub_msg_r = self.sender().d_publish(pub_msg)
-      logging.info('Publish Response is received from: %d ,sequence number: %d Status: %d', pub_msg_r.domino_udid, pub_msg_r.seq_no, pub_msg_r.responseCode)
+      logging.info('Publish Response is received from: %s ,sequence number: %d Status: %d', pub_msg_r.domino_udid, pub_msg_r.seq_no, pub_msg_r.responseCode)
     except (Thrift.TException, TSocket.TTransportException) as tx:
       print '%s' % (tx.message)
     except (socket.timeout) as tx:
@@ -362,7 +363,7 @@ class DominoClient:
      sub_msg.labels = labels
      try:
        sub_msg_r = self.sender().d_subscribe(sub_msg)
-       logging.info('Subscribe Response is received from: %d ,sequence number: %d', sub_msg_r.domino_udid,sub_msg_r.seq_no)
+       logging.info('Subscribe Response is received from: %s ,sequence number: %d', sub_msg_r.domino_udid,sub_msg_r.seq_no)
      except (Thrift.TException, TSocket.TTransportException) as tx: 
        logging.error('%s' , tx.message)
      except (socket.timeout) as tx: 

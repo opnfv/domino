@@ -31,7 +31,7 @@ class HeartBeatMessage:
   thrift_spec = (
     None, # 0
     (1, TType.BYTE, 'messageType', None, 1, ), # 1
-    (2, TType.I64, 'domino_udid', None, None, ), # 2
+    (2, TType.STRING, 'domino_udid', None, None, ), # 2
     (3, TType.I64, 'seq_no', None, None, ), # 3
   )
 
@@ -57,8 +57,8 @@ class HeartBeatMessage:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I64:
-          self.domino_udid = iprot.readI64()
+        if ftype == TType.STRING:
+          self.domino_udid = iprot.readString()
         else:
           iprot.skip(ftype)
       elif fid == 3:
@@ -81,8 +81,8 @@ class HeartBeatMessage:
       oprot.writeByte(self.messageType)
       oprot.writeFieldEnd()
     if self.domino_udid is not None:
-      oprot.writeFieldBegin('domino_udid', TType.I64, 2)
-      oprot.writeI64(self.domino_udid)
+      oprot.writeFieldBegin('domino_udid', TType.STRING, 2)
+      oprot.writeString(self.domino_udid)
       oprot.writeFieldEnd()
     if self.seq_no is not None:
       oprot.writeFieldBegin('seq_no', TType.I64, 3)
@@ -131,7 +131,7 @@ class RegisterMessage:
   thrift_spec = (
     None, # 0
     (1, TType.BYTE, 'messageType', None, 2, ), # 1
-    (2, TType.I64, 'domino_udid_desired', None, None, ), # 2
+    (2, TType.STRING, 'domino_udid_desired', None, None, ), # 2
     (3, TType.I64, 'seq_no', None, None, ), # 3
     (4, TType.STRING, 'ipaddr', None, None, ), # 4
     (5, TType.I16, 'tcpport', None, None, ), # 5
@@ -163,8 +163,8 @@ class RegisterMessage:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I64:
-          self.domino_udid_desired = iprot.readI64()
+        if ftype == TType.STRING:
+          self.domino_udid_desired = iprot.readString()
         else:
           iprot.skip(ftype)
       elif fid == 3:
@@ -207,8 +207,8 @@ class RegisterMessage:
       oprot.writeByte(self.messageType)
       oprot.writeFieldEnd()
     if self.domino_udid_desired is not None:
-      oprot.writeFieldBegin('domino_udid_desired', TType.I64, 2)
-      oprot.writeI64(self.domino_udid_desired)
+      oprot.writeFieldBegin('domino_udid_desired', TType.STRING, 2)
+      oprot.writeString(self.domino_udid_desired)
       oprot.writeFieldEnd()
     if self.seq_no is not None:
       oprot.writeFieldBegin('seq_no', TType.I64, 3)
@@ -271,8 +271,8 @@ class RegisterResponseMessage:
   thrift_spec = (
     None, # 0
     (1, TType.BYTE, 'messageType', None, 3, ), # 1
-    (2, TType.I64, 'domino_udid', None, None, ), # 2
-    (3, TType.I64, 'domino_udid_assigned', None, None, ), # 3
+    (2, TType.STRING, 'domino_udid', None, None, ), # 2
+    (3, TType.STRING, 'domino_udid_assigned', None, None, ), # 3
     (4, TType.I64, 'seq_no', None, None, ), # 4
     (5, TType.BYTE, 'responseCode', None, None, ), # 5
     (6, TType.LIST, 'comments', (TType.STRING,None), None, ), # 6
@@ -303,13 +303,13 @@ class RegisterResponseMessage:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I64:
-          self.domino_udid = iprot.readI64()
+        if ftype == TType.STRING:
+          self.domino_udid = iprot.readString()
         else:
           iprot.skip(ftype)
       elif fid == 3:
-        if ftype == TType.I64:
-          self.domino_udid_assigned = iprot.readI64()
+        if ftype == TType.STRING:
+          self.domino_udid_assigned = iprot.readString()
         else:
           iprot.skip(ftype)
       elif fid == 4:
@@ -347,12 +347,12 @@ class RegisterResponseMessage:
       oprot.writeByte(self.messageType)
       oprot.writeFieldEnd()
     if self.domino_udid is not None:
-      oprot.writeFieldBegin('domino_udid', TType.I64, 2)
-      oprot.writeI64(self.domino_udid)
+      oprot.writeFieldBegin('domino_udid', TType.STRING, 2)
+      oprot.writeString(self.domino_udid)
       oprot.writeFieldEnd()
     if self.domino_udid_assigned is not None:
-      oprot.writeFieldBegin('domino_udid_assigned', TType.I64, 3)
-      oprot.writeI64(self.domino_udid_assigned)
+      oprot.writeFieldBegin('domino_udid_assigned', TType.STRING, 3)
+      oprot.writeString(self.domino_udid_assigned)
       oprot.writeFieldEnd()
     if self.seq_no is not None:
       oprot.writeFieldBegin('seq_no', TType.I64, 4)
@@ -412,7 +412,7 @@ class SubscribeMessage:
   thrift_spec = (
     None, # 0
     (1, TType.BYTE, 'messageType', None, 4, ), # 1
-    (2, TType.I64, 'domino_udid', None, None, ), # 2
+    (2, TType.STRING, 'domino_udid', None, None, ), # 2
     (3, TType.I64, 'seq_no', None, None, ), # 3
     (4, TType.BYTE, 'template_op', None, None, ), # 4
     (5, TType.LIST, 'supported_template_types', (TType.STRING,None), None, ), # 5
@@ -446,8 +446,8 @@ class SubscribeMessage:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I64:
-          self.domino_udid = iprot.readI64()
+        if ftype == TType.STRING:
+          self.domino_udid = iprot.readString()
         else:
           iprot.skip(ftype)
       elif fid == 3:
@@ -500,8 +500,8 @@ class SubscribeMessage:
       oprot.writeByte(self.messageType)
       oprot.writeFieldEnd()
     if self.domino_udid is not None:
-      oprot.writeFieldBegin('domino_udid', TType.I64, 2)
-      oprot.writeI64(self.domino_udid)
+      oprot.writeFieldBegin('domino_udid', TType.STRING, 2)
+      oprot.writeString(self.domino_udid)
       oprot.writeFieldEnd()
     if self.seq_no is not None:
       oprot.writeFieldBegin('seq_no', TType.I64, 3)
@@ -571,7 +571,7 @@ class SubscribeResponseMessage:
   thrift_spec = (
     None, # 0
     (1, TType.BYTE, 'messageType', None, 5, ), # 1
-    (2, TType.I64, 'domino_udid', None, None, ), # 2
+    (2, TType.STRING, 'domino_udid', None, None, ), # 2
     (3, TType.I64, 'seq_no', None, None, ), # 3
     (4, TType.BYTE, 'responseCode', None, None, ), # 4
     (5, TType.LIST, 'comments', (TType.STRING,None), None, ), # 5
@@ -601,8 +601,8 @@ class SubscribeResponseMessage:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I64:
-          self.domino_udid = iprot.readI64()
+        if ftype == TType.STRING:
+          self.domino_udid = iprot.readString()
         else:
           iprot.skip(ftype)
       elif fid == 3:
@@ -640,8 +640,8 @@ class SubscribeResponseMessage:
       oprot.writeByte(self.messageType)
       oprot.writeFieldEnd()
     if self.domino_udid is not None:
-      oprot.writeFieldBegin('domino_udid', TType.I64, 2)
-      oprot.writeI64(self.domino_udid)
+      oprot.writeFieldBegin('domino_udid', TType.STRING, 2)
+      oprot.writeString(self.domino_udid)
       oprot.writeFieldEnd()
     if self.seq_no is not None:
       oprot.writeFieldBegin('seq_no', TType.I64, 3)
@@ -698,7 +698,7 @@ class PublishMessage:
   thrift_spec = (
     None, # 0
     (1, TType.BYTE, 'messageType', None, 6, ), # 1
-    (2, TType.I64, 'domino_udid', None, None, ), # 2
+    (2, TType.STRING, 'domino_udid', None, None, ), # 2
     (3, TType.I64, 'seq_no', None, None, ), # 3
     (4, TType.STRING, 'template_type', None, None, ), # 4
     (5, TType.LIST, 'template', (TType.STRING,None), None, ), # 5
@@ -728,8 +728,8 @@ class PublishMessage:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I64:
-          self.domino_udid = iprot.readI64()
+        if ftype == TType.STRING:
+          self.domino_udid = iprot.readString()
         else:
           iprot.skip(ftype)
       elif fid == 3:
@@ -767,8 +767,8 @@ class PublishMessage:
       oprot.writeByte(self.messageType)
       oprot.writeFieldEnd()
     if self.domino_udid is not None:
-      oprot.writeFieldBegin('domino_udid', TType.I64, 2)
-      oprot.writeI64(self.domino_udid)
+      oprot.writeFieldBegin('domino_udid', TType.STRING, 2)
+      oprot.writeString(self.domino_udid)
       oprot.writeFieldEnd()
     if self.seq_no is not None:
       oprot.writeFieldBegin('seq_no', TType.I64, 3)
@@ -825,7 +825,7 @@ class PublishResponseMessage:
   thrift_spec = (
     None, # 0
     (1, TType.BYTE, 'messageType', None, 7, ), # 1
-    (2, TType.I64, 'domino_udid', None, None, ), # 2
+    (2, TType.STRING, 'domino_udid', None, None, ), # 2
     (3, TType.I64, 'seq_no', None, None, ), # 3
     (4, TType.BYTE, 'responseCode', None, None, ), # 4
     (5, TType.LIST, 'comments', (TType.STRING,None), None, ), # 5
@@ -855,8 +855,8 @@ class PublishResponseMessage:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I64:
-          self.domino_udid = iprot.readI64()
+        if ftype == TType.STRING:
+          self.domino_udid = iprot.readString()
         else:
           iprot.skip(ftype)
       elif fid == 3:
@@ -894,8 +894,8 @@ class PublishResponseMessage:
       oprot.writeByte(self.messageType)
       oprot.writeFieldEnd()
     if self.domino_udid is not None:
-      oprot.writeFieldBegin('domino_udid', TType.I64, 2)
-      oprot.writeI64(self.domino_udid)
+      oprot.writeFieldBegin('domino_udid', TType.STRING, 2)
+      oprot.writeString(self.domino_udid)
       oprot.writeFieldEnd()
     if self.seq_no is not None:
       oprot.writeFieldBegin('seq_no', TType.I64, 3)
@@ -952,7 +952,7 @@ class PushMessage:
   thrift_spec = (
     None, # 0
     (1, TType.BYTE, 'messageType', None, 8, ), # 1
-    (2, TType.I64, 'domino_udid', None, None, ), # 2
+    (2, TType.STRING, 'domino_udid', None, None, ), # 2
     (3, TType.I64, 'seq_no', None, None, ), # 3
     (4, TType.STRING, 'template_type', None, None, ), # 4
     (5, TType.LIST, 'template', (TType.STRING,None), None, ), # 5
@@ -982,8 +982,8 @@ class PushMessage:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I64:
-          self.domino_udid = iprot.readI64()
+        if ftype == TType.STRING:
+          self.domino_udid = iprot.readString()
         else:
           iprot.skip(ftype)
       elif fid == 3:
@@ -1021,8 +1021,8 @@ class PushMessage:
       oprot.writeByte(self.messageType)
       oprot.writeFieldEnd()
     if self.domino_udid is not None:
-      oprot.writeFieldBegin('domino_udid', TType.I64, 2)
-      oprot.writeI64(self.domino_udid)
+      oprot.writeFieldBegin('domino_udid', TType.STRING, 2)
+      oprot.writeString(self.domino_udid)
       oprot.writeFieldEnd()
     if self.seq_no is not None:
       oprot.writeFieldBegin('seq_no', TType.I64, 3)
@@ -1079,7 +1079,7 @@ class PushResponseMessage:
   thrift_spec = (
     None, # 0
     (1, TType.BYTE, 'messageType', None, 9, ), # 1
-    (2, TType.I64, 'domino_udid', None, None, ), # 2
+    (2, TType.STRING, 'domino_udid', None, None, ), # 2
     (3, TType.I64, 'seq_no', None, None, ), # 3
     (4, TType.BYTE, 'responseCode', None, None, ), # 4
     (5, TType.LIST, 'comments', (TType.STRING,None), None, ), # 5
@@ -1109,8 +1109,8 @@ class PushResponseMessage:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I64:
-          self.domino_udid = iprot.readI64()
+        if ftype == TType.STRING:
+          self.domino_udid = iprot.readString()
         else:
           iprot.skip(ftype)
       elif fid == 3:
@@ -1148,8 +1148,8 @@ class PushResponseMessage:
       oprot.writeByte(self.messageType)
       oprot.writeFieldEnd()
     if self.domino_udid is not None:
-      oprot.writeFieldBegin('domino_udid', TType.I64, 2)
-      oprot.writeI64(self.domino_udid)
+      oprot.writeFieldBegin('domino_udid', TType.STRING, 2)
+      oprot.writeString(self.domino_udid)
       oprot.writeFieldEnd()
     if self.seq_no is not None:
       oprot.writeFieldBegin('seq_no', TType.I64, 3)
@@ -1205,7 +1205,7 @@ class QueryMessage:
   thrift_spec = (
     None, # 0
     (1, TType.BYTE, 'messageType', None, 10, ), # 1
-    (2, TType.I64, 'domino_udid', None, None, ), # 2
+    (2, TType.STRING, 'domino_udid', None, None, ), # 2
     (3, TType.I64, 'seq_no', None, None, ), # 3
     (4, TType.LIST, 'queryString', (TType.STRING,None), None, ), # 4
   )
@@ -1233,8 +1233,8 @@ class QueryMessage:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I64:
-          self.domino_udid = iprot.readI64()
+        if ftype == TType.STRING:
+          self.domino_udid = iprot.readString()
         else:
           iprot.skip(ftype)
       elif fid == 3:
@@ -1267,8 +1267,8 @@ class QueryMessage:
       oprot.writeByte(self.messageType)
       oprot.writeFieldEnd()
     if self.domino_udid is not None:
-      oprot.writeFieldBegin('domino_udid', TType.I64, 2)
-      oprot.writeI64(self.domino_udid)
+      oprot.writeFieldBegin('domino_udid', TType.STRING, 2)
+      oprot.writeString(self.domino_udid)
       oprot.writeFieldEnd()
     if self.seq_no is not None:
       oprot.writeFieldBegin('seq_no', TType.I64, 3)
@@ -1320,7 +1320,7 @@ class QueryResponseMessage:
   thrift_spec = (
     None, # 0
     (1, TType.BYTE, 'messageType', None, 11, ), # 1
-    (2, TType.I64, 'domino_udid', None, None, ), # 2
+    (2, TType.STRING, 'domino_udid', None, None, ), # 2
     (3, TType.I64, 'seq_no', None, None, ), # 3
     (4, TType.BYTE, 'responseCode', None, None, ), # 4
     (5, TType.LIST, 'queryResponse', (TType.STRING,None), None, ), # 5
@@ -1350,8 +1350,8 @@ class QueryResponseMessage:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I64:
-          self.domino_udid = iprot.readI64()
+        if ftype == TType.STRING:
+          self.domino_udid = iprot.readString()
         else:
           iprot.skip(ftype)
       elif fid == 3:
@@ -1389,8 +1389,8 @@ class QueryResponseMessage:
       oprot.writeByte(self.messageType)
       oprot.writeFieldEnd()
     if self.domino_udid is not None:
-      oprot.writeFieldBegin('domino_udid', TType.I64, 2)
-      oprot.writeI64(self.domino_udid)
+      oprot.writeFieldBegin('domino_udid', TType.STRING, 2)
+      oprot.writeString(self.domino_udid)
       oprot.writeFieldEnd()
     if self.seq_no is not None:
       oprot.writeFieldBegin('seq_no', TType.I64, 3)

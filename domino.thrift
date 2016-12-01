@@ -100,7 +100,7 @@ exception InvalidOperation {
 */
 struct HeartBeatMessage {
  1: MessageType messageType = HEART_BEAT,
- 2: i64 domino_udid,
+ 2: string domino_udid,
  3: i64 seq_no  
 }
 
@@ -112,7 +112,7 @@ struct HeartBeatMessage {
 
 struct RegisterMessage {
  1: MessageType messageType = REGISTER,
- 2: i64 domino_udid_desired,
+ 2: string domino_udid_desired,
  3: i64 seq_no,
  4: string ipaddr,
  5: i16 tcpport,
@@ -121,8 +121,8 @@ struct RegisterMessage {
 
 struct RegisterResponseMessage {
  1: MessageType messageType = REGISTER_RESPONSE,
- 2: i64 domino_udid,
- 3: i64 domino_udid_assigned,
+ 2: string domino_udid,
+ 3: string domino_udid_assigned,
  4: i64 seq_no,
  5: ResponseCode responseCode,
  6: optional list<string> comments
@@ -130,7 +130,7 @@ struct RegisterResponseMessage {
 
 struct SubscribeMessage {
  1: MessageType messageType = SUBSCRIBE,
- 2: i64 domino_udid,
+ 2: string domino_udid,
  3: i64 seq_no,
  4: byte template_op, 
  5: list<string> supported_template_types,
@@ -140,7 +140,7 @@ struct SubscribeMessage {
 
 struct SubscribeResponseMessage {
  1: MessageType messageType = SUBSCRIBE_RESPONSE,
- 2: i64 domino_udid,
+ 2: string domino_udid,
  3: i64 seq_no,
  4: ResponseCode responseCode,
  5: optional list<string> comments
@@ -148,7 +148,7 @@ struct SubscribeResponseMessage {
 
 struct PublishMessage {
  1: MessageType messageType = PUBLISH,
- 2: i64 domino_udid,
+ 2: string domino_udid,
  3: i64 seq_no,
  4: string template_type,
  5: list<string> template
@@ -156,7 +156,7 @@ struct PublishMessage {
 
 struct PublishResponseMessage {
  1: MessageType messageType = PUBLISH_RESPONSE,
- 2: i64 domino_udid,
+ 2: string domino_udid,
  3: i64 seq_no,
  4: ResponseCode responseCode,
  5: optional list<string> comments
@@ -164,7 +164,7 @@ struct PublishResponseMessage {
 
 struct PushMessage {
  1: MessageType messageType = PUSH,
- 2: i64 domino_udid,
+ 2: string domino_udid,
  3: i64 seq_no,
  4: string template_type,
  5: list<string> template
@@ -172,7 +172,7 @@ struct PushMessage {
 
 struct PushResponseMessage {
  1: MessageType messageType = PUSH_RESPONSE,
- 2: i64 domino_udid,
+ 2: string domino_udid,
  3: i64 seq_no,
  4: ResponseCode responseCode,
  5: optional list<string> comments
@@ -180,14 +180,14 @@ struct PushResponseMessage {
 
 struct QueryMessage{
  1: MessageType messageType = QUERY,
- 2: i64 domino_udid,
+ 2: string domino_udid,
  3: i64 seq_no,
  4: list<string> queryString
 }
 
 struct QueryResponseMessage{
  1: MessageType messageType = QUERY_RESPONSE,
- 2: i64 domino_udid,
+ 2: string domino_udid,
  3: i64 seq_no,
  4: ResponseCode responseCode,
  5: optional list<string> queryResponse,

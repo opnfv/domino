@@ -15,6 +15,7 @@ import sys, os, glob, random, errno
 import getopt, socket
 import logging, json
 import sqlite3, yaml
+import uuid
 #sys.path.append('gen-py')
 #sys.path.insert(0, glob.glob('./lib/py/build/lib.*')[0])
 sys.path.insert(0, glob.glob('./lib')[0])
@@ -82,7 +83,7 @@ class CommunicationHandler:
     pushm.template = template
     try:
       push_r = self.sender.d_push(pushm)  
-      logging.info('Push Response received from %d' , push_r.domino_udid)
+      logging.info('Push Response received from %s' , push_r.domino_udid)
     except (Thrift.TException, TSocket.TTransportException) as tx:
       logging.error('%s' , tx.message)
     except (socket.timeout) as tx:
@@ -99,7 +100,7 @@ class CommunicationHandler:
   #	- Respond Back with a heartbeat
 
   def d_heartbeat(self, hb_msg):
-    logging.info('heartbeat received from %d' , hb_msg.domino_udid)
+    logging.info('heartbeat received from %s' , hb_msg.domino_udid)
 
     hb_r = HeartBeatMessage()
     hb_r.domino_udid = SERVER_UDID
@@ -117,7 +118,7 @@ class CommunicationHandler:
 
     #Prepare and send Registration Response
     reg_r = RegisterResponseMessage()
-    logging.info('Registration Request received for UDID %d from IP: %s port: %d', reg_msg.domino_udid_desired, reg_msg.ipaddr, reg_msg.tcpport)
+    logging.info('Registration Request received for UUID %s from IP: %s port: %d', reg_msg.domino_udid_desired, reg_msg.ipaddr, reg_msg.tcpport)
 
    
     reg_r.domino_udid_assigned = self.dominoServer.assign_udid(reg_msg.domino_udid_desired)
@@ -142,9 +143,9 @@ class CommunicationHandler:
       newrow = [(reg_r.domino_udid_assigned, reg_msg.ipaddr, reg_msg.tcpport, ','.join(reg_msg.supported_templates), reg_msg.seq_no),]
       c.executemany('INSERT INTO clients VALUES (?,?,?,?,?)',newrow)
     except sqlite3.OperationalError as ex:
-      logging.error('Could not add the new registration record into %s for Domino Client %d :  %s', SERVER_DBFILE, reg_r.domino_udid_assigned, ex.message)
+      logging.error('Could not add the new registration record into %s for Domino Client %s :  %s', SERVER_DBFILE, reg_r.domino_udid_assigned, ex.message)
     except:
-      logging.error('Could not add the new registration record into %s for Domino Client %d', SERVER_DBFILE, reg_r.domino_udid_assigned)
+      logging.error('Could not add the new registration record into %s for Domino Client %s', SERVER_DBFILE, reg_r.domino_udid_assigned)
       logging.error('Unexpected error: %s', sys.exc_info()[0])
  
     dbconn.commit()
@@ -158,7 +159,7 @@ class CommunicationHandler:
   #       - Save the templates  & labels
   #       - Respond Back with Subscription Response
   def d_subscribe(self, sub_msg):
-    logging.info('Subscribe Request received from %d' , sub_msg.domino_udid)
+    logging.info('Subscribe Request received from %s' , sub_msg.domino_udid)
 
     if sub_msg.template_op == APPEND:
       if self.dominoServer.subscribed_templateformats.has_key(sub_msg.domino_udid):
@@ -194,9 +195,9 @@ class CommunicationHandler:
       c.execute("REPLACE INTO labels (udid, label_list) VALUES ({udid}, '{newvalue}')".\
                format(udid=sub_msg.domino_udid, newvalue=','.join(list(newlabelset)) ))
     except sqlite3.OperationalError as ex1:
-      logging.error('Could not add the new labels to %s for Domino Client %d :  %s', SERVER_DBFILE, sub_msg.domino_udid, ex1.message)
+      logging.error('Could not add the new labels to %s for Domino Client %s :  %s', SERVER_DBFILE, sub_msg.domino_udid, ex1.message)
     except:
-      logging.error('Could not add the new labels to %s for Domino Client %d', SERVER_DBFILE, sub_msg.domino_udid)
+      logging.error('Could not add the new labels to %s for Domino Client %s', SERVER_DBFILE, sub_msg.domino_udid)
       logging.error('Unexpected error: %s', sys.exc_info()[0])
 
     newttypeset = self.dominoServer.subscribed_templateformats[sub_msg.domino_udid]
@@ -204,9 +205,9 @@ class CommunicationHandler:
       c.execute("REPLACE INTO ttypes (udid, ttype_list) VALUES ({udid}, '{newvalue}')".\
                format(udid=sub_msg.domino_udid, newvalue=','.join(list(newttypeset)) ))
     except sqlite3.OperationalError as ex1:
-      logging.error('Could not add the new labels to %s for Domino Client %d :  %s', SERVER_DBFILE, sub_msg.domino_udid, ex1.message)
+      logging.error('Could not add the new labels to %s for Domino Client %s :  %s', SERVER_DBFILE, sub_msg.domino_udid, ex1.message)
     except:
-      logging.error('Could not add the new labels to %s for Domino Client %d', SERVER_DBFILE, sub_msg.domino_udid)
+      logging.error('Could not add the new labels to %s for Domino Client %s', SERVER_DBFILE, sub_msg.domino_udid)
       logging.error('Unexpected error: %s', sys.exc_info()[0])
 
 
@@ -229,7 +230,7 @@ class CommunicationHandler:
   #       - Launch Push service
   #       - Respond Back with Publication Response
   def d_publish(self, pub_msg):
-    logging.info('Publish Request received from %d' , pub_msg.domino_udid)
+    logging.info('Publish Request received from %s' , pub_msg.domino_udid)
     logging.debug(pub_msg.template)
 
     # Save as file
@@ -363,9 +364,9 @@ class DominoServer:
    #If assigned, offer a new random id
    def assign_udid(self, udid_desired):
      if udid_desired in self.assignedUUIDs:
-       new_udid = random.getrandbits(63)
+       new_udid = uuid.uuid4().hex #random.getrandbits(63)
        while new_udid in self.assignedUUIDs:
-         new_udid = random.getrandbits(63)
+         new_udid = uuid.uuid4().hex #random.getrandbits(63)
  
        self.assignedUUIDs.append(new_udid)
        return new_udid
@@ -409,17 +410,17 @@ def main(argv):
   dbconn = sqlite3.connect(SERVER_DBFILE)
   c = dbconn.cursor()
   try:
-    c.execute('''CREATE TABLE labels (udid INTEGER PRIMARY KEY, label_list TEXT)''')
+    c.execute('''CREATE TABLE labels (udid TEXT PRIMARY KEY, label_list TEXT)''')
   except sqlite3.OperationalError as ex:
     logging.debug('In database file %s, no table is created as %s', SERVER_DBFILE, ex.message)
 
   try:
-    c.execute('''CREATE TABLE ttypes (udid INTEGER PRIMARY KEY, ttype_list TEXT)''')
+    c.execute('''CREATE TABLE ttypes (udid TEXT PRIMARY KEY, ttype_list TEXT)''')
   except sqlite3.OperationalError as ex:
     logging.debug('In database file %s, no table is created as %s', SERVER_DBFILE, ex.message)
 
   try:
-    c.execute('''CREATE TABLE clients (udid INTEGER PRIMARY KEY, ipaddr TEXT, tcpport INTEGER, templatetypes TEXT, seqno INTEGER)''')
+    c.execute('''CREATE TABLE clients (udid TEXT PRIMARY KEY, ipaddr TEXT, tcpport INTEGER, templatetypes TEXT, seqno INTEGER)''')
   except sqlite3.OperationalError as ex:
     logging.debug('In database file %s, no table is created as %s', SERVER_DBFILE, ex.message)
 
