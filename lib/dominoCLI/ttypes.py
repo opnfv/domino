@@ -101,7 +101,7 @@ class CLIResponse:
 
   thrift_spec = (
     None, # 0
-    (1, TType.STRING, 'CLI_response', None, None, ), # 1
+    (1, TType.LIST, 'CLI_response', (TType.STRING,None), None, ), # 1
   )
 
   def __init__(self, CLI_response=None,):
@@ -117,8 +117,13 @@ class CLIResponse:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.STRING:
-          self.CLI_response = iprot.readString()
+        if ftype == TType.LIST:
+          self.CLI_response = []
+          (_etype10, _size7) = iprot.readListBegin()
+          for _i11 in xrange(_size7):
+            _elem12 = iprot.readString()
+            self.CLI_response.append(_elem12)
+          iprot.readListEnd()
         else:
           iprot.skip(ftype)
       else:
@@ -132,8 +137,11 @@ class CLIResponse:
       return
     oprot.writeStructBegin('CLIResponse')
     if self.CLI_response is not None:
-      oprot.writeFieldBegin('CLI_response', TType.STRING, 1)
-      oprot.writeString(self.CLI_response)
+      oprot.writeFieldBegin('CLI_response', TType.LIST, 1)
+      oprot.writeListBegin(TType.STRING, len(self.CLI_response))
+      for iter13 in self.CLI_response:
+        oprot.writeString(iter13)
+      oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()

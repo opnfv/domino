@@ -30,7 +30,7 @@ struct CLIMessage {
 }
 
 struct CLIResponse {
- 1: string CLI_response
+ 1: list<string> CLI_response
 }
 
 service DominoClientCLI {

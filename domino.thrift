@@ -151,7 +151,8 @@ struct PublishMessage {
  2: string domino_udid,
  3: i64 seq_no,
  4: string template_type,
- 5: list<string> template
+ 5: list<string> template,
+ 6: optional string template_UUID
 }
 
 struct PublishResponseMessage {
@@ -159,7 +160,8 @@ struct PublishResponseMessage {
  2: string domino_udid,
  3: i64 seq_no,
  4: ResponseCode responseCode,
- 5: optional list<string> comments
+ 5: string template_UUID,
+ 6: optional list<string> comments
 }
 
 struct PushMessage {
@@ -167,7 +169,8 @@ struct PushMessage {
  2: string domino_udid,
  3: i64 seq_no,
  4: string template_type,
- 5: list<string> template
+ 5: list<string> template,
+ 6: string template_UUID
 }
 
 struct PushResponseMessage {
@@ -182,7 +185,8 @@ struct QueryMessage{
  1: MessageType messageType = QUERY,
  2: string domino_udid,
  3: i64 seq_no,
- 4: list<string> queryString
+ 4: list<string> queryString,
+ 5: optional string template_UUID 
 }
 
 struct QueryResponseMessage{
@@ -190,7 +194,7 @@ struct QueryResponseMessage{
  2: string domino_udid,
  3: i64 seq_no,
  4: ResponseCode responseCode,
- 5: optional list<string> queryResponse,
+ 5: optional list<string> queryResponse
 }
 
 service Communication {

@@ -49,7 +49,8 @@ def main(argv, cli_port):
     CLImsg = CLIMessage()
     CLImsg.CLI_input = argv
     CLIrespmsg = client.d_CLI(CLImsg)
-
+    if CLIrespmsg.CLI_response is not None:
+      print CLIrespmsg.CLI_response
   except Thrift.TException, tx:
     print '%s' % (tx.message)
 

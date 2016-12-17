@@ -693,6 +693,7 @@ class PublishMessage:
    - seq_no
    - template_type
    - template
+   - template_UUID
   """
 
   thrift_spec = (
@@ -702,9 +703,10 @@ class PublishMessage:
     (3, TType.I64, 'seq_no', None, None, ), # 3
     (4, TType.STRING, 'template_type', None, None, ), # 4
     (5, TType.LIST, 'template', (TType.STRING,None), None, ), # 5
+    (6, TType.STRING, 'template_UUID', None, None, ), # 6
   )
 
-  def __init__(self, messageType=thrift_spec[1][4], domino_udid=None, seq_no=None, template_type=None, template=None,):
+  def __init__(self, messageType=thrift_spec[1][4], domino_udid=None, seq_no=None, template_type=None, template=None, template_UUID=None,):
     if messageType is self.thrift_spec[1][4]:
       messageType = 6
     self.messageType = messageType
@@ -712,6 +714,7 @@ class PublishMessage:
     self.seq_no = seq_no
     self.template_type = template_type
     self.template = template
+    self.template_UUID = template_UUID
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -752,6 +755,11 @@ class PublishMessage:
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.STRING:
+          self.template_UUID = iprot.readString()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -785,6 +793,10 @@ class PublishMessage:
         oprot.writeString(iter41)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
+    if self.template_UUID is not None:
+      oprot.writeFieldBegin('template_UUID', TType.STRING, 6)
+      oprot.writeString(self.template_UUID)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -799,6 +811,7 @@ class PublishMessage:
     value = (value * 31) ^ hash(self.seq_no)
     value = (value * 31) ^ hash(self.template_type)
     value = (value * 31) ^ hash(self.template)
+    value = (value * 31) ^ hash(self.template_UUID)
     return value
 
   def __repr__(self):
@@ -819,6 +832,7 @@ class PublishResponseMessage:
    - domino_udid
    - seq_no
    - responseCode
+   - template_UUID
    - comments
   """
 
@@ -828,16 +842,18 @@ class PublishResponseMessage:
     (2, TType.STRING, 'domino_udid', None, None, ), # 2
     (3, TType.I64, 'seq_no', None, None, ), # 3
     (4, TType.BYTE, 'responseCode', None, None, ), # 4
-    (5, TType.LIST, 'comments', (TType.STRING,None), None, ), # 5
+    (5, TType.STRING, 'template_UUID', None, None, ), # 5
+    (6, TType.LIST, 'comments', (TType.STRING,None), None, ), # 6
   )
 
-  def __init__(self, messageType=thrift_spec[1][4], domino_udid=None, seq_no=None, responseCode=None, comments=None,):
+  def __init__(self, messageType=thrift_spec[1][4], domino_udid=None, seq_no=None, responseCode=None, template_UUID=None, comments=None,):
     if messageType is self.thrift_spec[1][4]:
       messageType = 7
     self.messageType = messageType
     self.domino_udid = domino_udid
     self.seq_no = seq_no
     self.responseCode = responseCode
+    self.template_UUID = template_UUID
     self.comments = comments
 
   def read(self, iprot):
@@ -870,6 +886,11 @@ class PublishResponseMessage:
         else:
           iprot.skip(ftype)
       elif fid == 5:
+        if ftype == TType.STRING:
+          self.template_UUID = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 6:
         if ftype == TType.LIST:
           self.comments = []
           (_etype45, _size42) = iprot.readListBegin()
@@ -905,8 +926,12 @@ class PublishResponseMessage:
       oprot.writeFieldBegin('responseCode', TType.BYTE, 4)
       oprot.writeByte(self.responseCode)
       oprot.writeFieldEnd()
+    if self.template_UUID is not None:
+      oprot.writeFieldBegin('template_UUID', TType.STRING, 5)
+      oprot.writeString(self.template_UUID)
+      oprot.writeFieldEnd()
     if self.comments is not None:
-      oprot.writeFieldBegin('comments', TType.LIST, 5)
+      oprot.writeFieldBegin('comments', TType.LIST, 6)
       oprot.writeListBegin(TType.STRING, len(self.comments))
       for iter48 in self.comments:
         oprot.writeString(iter48)
@@ -925,6 +950,7 @@ class PublishResponseMessage:
     value = (value * 31) ^ hash(self.domino_udid)
     value = (value * 31) ^ hash(self.seq_no)
     value = (value * 31) ^ hash(self.responseCode)
+    value = (value * 31) ^ hash(self.template_UUID)
     value = (value * 31) ^ hash(self.comments)
     return value
 
@@ -947,6 +973,7 @@ class PushMessage:
    - seq_no
    - template_type
    - template
+   - template_UUID
   """
 
   thrift_spec = (
@@ -956,9 +983,10 @@ class PushMessage:
     (3, TType.I64, 'seq_no', None, None, ), # 3
     (4, TType.STRING, 'template_type', None, None, ), # 4
     (5, TType.LIST, 'template', (TType.STRING,None), None, ), # 5
+    (6, TType.STRING, 'template_UUID', None, None, ), # 6
   )
 
-  def __init__(self, messageType=thrift_spec[1][4], domino_udid=None, seq_no=None, template_type=None, template=None,):
+  def __init__(self, messageType=thrift_spec[1][4], domino_udid=None, seq_no=None, template_type=None, template=None, template_UUID=None,):
     if messageType is self.thrift_spec[1][4]:
       messageType = 8
     self.messageType = messageType
@@ -966,6 +994,7 @@ class PushMessage:
     self.seq_no = seq_no
     self.template_type = template_type
     self.template = template
+    self.template_UUID = template_UUID
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -1006,6 +1035,11 @@ class PushMessage:
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.STRING:
+          self.template_UUID = iprot.readString()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -1039,6 +1073,10 @@ class PushMessage:
         oprot.writeString(iter55)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
+    if self.template_UUID is not None:
+      oprot.writeFieldBegin('template_UUID', TType.STRING, 6)
+      oprot.writeString(self.template_UUID)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -1053,6 +1091,7 @@ class PushMessage:
     value = (value * 31) ^ hash(self.seq_no)
     value = (value * 31) ^ hash(self.template_type)
     value = (value * 31) ^ hash(self.template)
+    value = (value * 31) ^ hash(self.template_UUID)
     return value
 
   def __repr__(self):
@@ -1200,6 +1239,7 @@ class QueryMessage:
    - domino_udid
    - seq_no
    - queryString
+   - template_UUID
   """
 
   thrift_spec = (
@@ -1208,15 +1248,17 @@ class QueryMessage:
     (2, TType.STRING, 'domino_udid', None, None, ), # 2
     (3, TType.I64, 'seq_no', None, None, ), # 3
     (4, TType.LIST, 'queryString', (TType.STRING,None), None, ), # 4
+    (5, TType.STRING, 'template_UUID', None, None, ), # 5
   )
 
-  def __init__(self, messageType=thrift_spec[1][4], domino_udid=None, seq_no=None, queryString=None,):
+  def __init__(self, messageType=thrift_spec[1][4], domino_udid=None, seq_no=None, queryString=None, template_UUID=None,):
     if messageType is self.thrift_spec[1][4]:
       messageType = 10
     self.messageType = messageType
     self.domino_udid = domino_udid
     self.seq_no = seq_no
     self.queryString = queryString
+    self.template_UUID = template_UUID
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -1252,6 +1294,11 @@ class QueryMessage:
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.STRING:
+          self.template_UUID = iprot.readString()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -1281,6 +1328,10 @@ class QueryMessage:
         oprot.writeString(iter69)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
+    if self.template_UUID is not None:
+      oprot.writeFieldBegin('template_UUID', TType.STRING, 5)
+      oprot.writeString(self.template_UUID)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -1294,6 +1345,7 @@ class QueryMessage:
     value = (value * 31) ^ hash(self.domino_udid)
     value = (value * 31) ^ hash(self.seq_no)
     value = (value * 31) ^ hash(self.queryString)
+    value = (value * 31) ^ hash(self.template_UUID)
     return value
 
   def __repr__(self):

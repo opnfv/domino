@@ -67,7 +67,7 @@ class CommunicationHandler:
         logging.error('IGNORING error in creating %s. Err no: %d', exception.errno)
 
     try:  
-      miscutil.write_templatefile(TOSCA_RX_DIR+str(self.dominoClient.UDID)+'/'+str(push_msg.seq_no)+'.yaml' , push_msg.template)
+      miscutil.write_templatefile(TOSCA_RX_DIR+str(self.dominoClient.UDID)+'/'+str(push_msg.template_UUID)+'.yaml' , push_msg.template)
     except:    
       logging.error('FAILED to write the pushed file: %s', sys.exc_info()[0])
       push_r = PushResponseMessage()
@@ -131,10 +131,8 @@ class CLIHandler:
   def d_CLI(self, msg):
     logging.info('Received CLI %s', msg.CLI_input)
 
-    self.CLIservice.process_input(msg.CLI_input)
-    
     CLIrespmsg = CLIResponse()
-    CLIrespmsg.CLI_response = "Testing..."
+    CLIrespmsg.CLI_response = self.CLIservice.process_input(msg.CLI_input)
     return CLIrespmsg
  
 
@@ -147,24 +145,29 @@ class DominoClientCLIService(threading.Thread):
 
   def process_input(self, args):
     if len(args) == 0:
-      print 'Empty API body'
-      return
+      return 'Empty API body'
 
     try:
       if args[0] == 'heartbeat':
         self.dominoclient.heartbeat()
 
       elif args[0] == 'publish':
-        opts, args = getopt.getopt(args[1:],"t:",["tosca-file="])
+        opts, args = getopt.getopt(args[1:],"t:k:",["tosca-file=","tuid"])
         if len(opts) == 0:
-	  print '\nUsage: publish -t <toscafile>'
+	  print '\nUsage: publish -t <toscafile> -k <TUID>'
 	  return
-
+        
+        template_UUID = None
+        toscafile = None
         for opt, arg in opts:
 	  if opt in ('-t', '--tosca-file'):
 	    toscafile = arg
-       
-        self.dominoclient.publish(toscafile)
+          elif opt in ('-k', '--tuid'):
+            template_UUID = arg
+        if toscafile is not None:
+          self.dominoclient.publish(toscafile,template_UUID)
+        else:
+          print '\nUsage: publish -t <toscafile> -k <TUID>'
 
       elif args[0] == 'subscribe':
         labels = []    
@@ -197,6 +200,12 @@ class DominoClientCLIService(threading.Thread):
       elif args[0] == 'register':
         self.dominoclient.start()
 
+      elif args[0] == 'list-tuids':
+        return self.dominoclient.query(['list-tuids'])
+
+      else:
+        return 'Command is misentered or not supported!'
+
     except getopt.GetoptError:
       print 'Command is misentered or not supported!'
 
@@ -218,7 +227,9 @@ class DominoClientCLIService(threading.Thread):
 
          sys.stdout.write('>>')
 	 #process input arguments
-         self.process_input(args)
+         resp_msg = self.process_input(args)
+         if resp_msg is not None:
+           print resp_msg
     else: #domino cli-client is used, listen for the CLI rpc calls
       cliHandler = CLIHandler(self.dominoclient, self)
       processor = DominoClientCLI.Processor(cliHandler)
@@ -323,7 +334,7 @@ class DominoClient:
     
     self.seqno = self.seqno + 1    
 
-  def publish(self, toscafile):
+  def publish(self, toscafile, template_UUID=None):
     if self.state == 'UNREGISTERED':
       self.start()
 
@@ -332,6 +343,8 @@ class DominoClient:
     pub_msg.domino_udid = self.UDID
     pub_msg.seq_no = self.seqno
     pub_msg.template_type = 'tosca-nfv-v1.0'
+    if template_UUID is not None:
+      pub_msg.template_UUID = template_UUID
 
     try:
       pub_msg.template = miscutil.read_templatefile(toscafile)
@@ -370,6 +383,24 @@ class DominoClient:
        self.handle_RPC_timeout(sub_msg)
 
      self.seqno = self.seqno + 1 
+
+  def query(self, queryString, template_UUID=None):
+    logging.info('querying Domino Server: %s', queryString)
+    query_msg = QueryMessage()
+    query_msg.domino_udid = self.UDID
+    query_msg.seq_no = self.seqno
+    query_msg.queryString = queryString
+    query_msg.template_UUID = template_UUID 
+    self.seqno = self.seqno + 1
+    try:
+      query_msg_r = self.sender().d_query(query_msg)
+      logging.info('Query Response is received from: %s ,sequence number: %d', query_msg_r.domino_udid,query_msg_r.seq_no)
+      if (query_msg_r.queryResponse is not None) and (len(query_msg_r.queryResponse)>0):
+        return query_msg_r.queryResponse
+    except (Thrift.TException, TSocket.TTransportException) as tx:
+      logging.error('%s' , tx.message)
+    except (socket.timeout) as tx:
+      self.handle_RPC_timeout(query_msg)
 
   def stop(self):
     try:
@@ -415,7 +446,7 @@ def main(argv):
   interactive = INTERACTIVE
   #process input arguments
   try:
-      opts, args = getopt.getopt(argv,"hc:p:i:l:",["conf=","port=","ipaddr=","log=","iac=","cliport="])
+      opts, args = getopt.getopt(argv,"hc:p:i:l:",["conf=","port=","ipaddr=","log=","iac=","cliport=","uuid=","regmod="])
   except getopt.GetoptError:
       print 'DominoClient.py -c/--conf <configfile> -p/--port <socketport> -i/--ipaddr <IPaddr> -l/--log <loglevel> --iac=true/false --cliport <cliport>'
       sys.exit(2)
@@ -435,7 +466,11 @@ def main(argv):
          interactive = arg.upper()
       elif opt in ("--cliport"):
          client.set_CLIport(int(arg))
-
+      elif opt in ("--uuid"):
+         client.UDID = arg
+      elif opt in ("--regmod"):
+         if arg.upper() == 'REGISTERED': 
+           client.state = 'REGISTERED'
   #Set logging level
   numeric_level = getattr(logging, loglevel.upper(), None)
   try:
