@@ -16,8 +16,7 @@ import getopt, socket
 import logging, json
 import sqlite3, yaml
 import uuid
-#sys.path.append('gen-py')
-#sys.path.insert(0, glob.glob('./lib/py/build/lib.*')[0])
+
 sys.path.insert(0, glob.glob('./lib')[0])
 
 
@@ -287,10 +286,17 @@ class CommunicationHandler:
     node_site = label.select_site( site_map ) 
     logging.debug('Selected Sites: %s', node_site)
 
-    # Create per-domain Tosca files
-    file_paths = partitioner.partition_tosca('./toscafiles/template',node_site,tpl)
+    # Create per-site Tosca files
+    tpl_site = {}
+    file_paths = partitioner.partition_tosca('./toscafiles/template',node_site,tpl,tpl_site)
     logging.debug('Per domain file paths: %s', file_paths)
- 
+    logging.debug('Per domain topologies: %s', tpl_site)
+  
+    # Detect boundary links
+    boundary_VLs, VL_sites = partitioner.return_boundarylinks(tpl_site)
+    logging.debug('Boundary VLs: %s', boundary_VLs)
+    logging.debug('VL sites: %s', VL_sites)
+
     # Create work-flow
 
     # Assign template UUID if no UUID specified

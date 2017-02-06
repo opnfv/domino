@@ -41,11 +41,17 @@ def main(argv):
     node_site = label.select_site( site_map )
     print node_site
 
-    file_paths = partitioner.partition_tosca("./tests/tmp/tosca",node_site,tpl)
+    tpl_site = {}
+    file_paths = partitioner.partition_tosca("./tests/tmp/tosca",node_site,tpl,tpl_site)
     print file_paths
+
+    boundary_VLs, VL_sites = partitioner.return_boundarylinks(tpl_site)
+    print boundary_VLs
+    print VL_sites
+
   except:
     print('Unexpected error: %s', sys.exc_info()[0])
-
+    raise
 if __name__ == "__main__":
    main(sys.argv[1:])
 

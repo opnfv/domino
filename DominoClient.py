@@ -17,8 +17,6 @@ import getopt, socket
 import logging, errno
 import uuid
 
-#sys.path.append('gen-py')
-#sys.path.insert(0, glob.glob('./lib/py/build/lib.*')[0])
 sys.path.insert(0, glob.glob('./lib')[0])
 
 from dominoRPC import Communication

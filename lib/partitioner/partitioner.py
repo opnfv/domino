@@ -7,7 +7,7 @@
 import constants 
 import copy
 
-def partition_tosca(filepath, nodesite, tpl):
+def partition_tosca(filepath, nodesite, tpl, tpl_local={}):
   file_paths = {} #holds the list of partitioned files
   sitenodes = {} #holds nodes in each site
   
@@ -20,7 +20,7 @@ def partition_tosca(filepath, nodesite, tpl):
        sitenodes[nodesite[node]] = [node]
 
   #prepare the nodes
-  tpl_local = {}
+  #tpl_local = {}
   for site in sitenodes:
     tpl_local[site] = copy.deepcopy(tpl)  
   #remove the nodes not assigned to a site
@@ -137,3 +137,19 @@ def rm_orphans(tpl):
   for node in list(nodes):   
     if (nodes[node]['type'] == 'tosca.nodes.nfv.VL') and (node not in keep_list):
       del nodes[node]
+
+def return_boundarylinks(tpl_site):
+  VL = {}
+  sites_of_VL = {}
+  # First find all the VLs copied to each site
+  for site in tpl_site.keys():
+    nodes = tpl_site[site]['topology_template']['node_templates']
+    for node in nodes:
+      if (nodes[node]['type'] == 'tosca.nodes.nfv.VL'):
+        if sites_of_VL.has_key(node): #if true, then this VL maps to more than 1 site
+          sites_of_VL[node].add(site)
+          VL[node] = nodes[node]
+        else:
+          sites_of_VL[node] = set([site])
+
+  return VL, sites_of_VL 
