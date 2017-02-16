@@ -1,19 +1,12 @@
 .. This work is licensed under a Creative Commons Attribution 4.0 International License.
 .. http://creativecommons.org/licenses/by/4.0
 
-.. image:: ../etc/opnfv-logo.png
-  :height: 40
-  :width: 200
-  :alt: OPNFV
-  :align: left
-.. these two pipes are to seperate the logo from the first title
-|
-|
-Domino API and Usage
-====================
+============================================
+Domino and API Usage Guidelines and Examples
+============================================
 
 Using domino-cli Client
------------------------
+=======================
 
 Prerequisites:
 
@@ -143,7 +136,6 @@ This message has the following fields that are automatically filled in.
   Template Type (= TOSCA)
   Template File
 
-
 Interactive CLI mode
 --------------------
 
@@ -163,7 +155,3 @@ The rest of the API calls are the same as in the case of using domino-cli.py exc
   >>publish -t <toscafile>
 
 The interactive CLI mode is mainly supported for manual testing.
-
-Revision: _sha1_
-
-Build date: |today|
