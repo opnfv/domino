@@ -1,19 +1,12 @@
 .. This work is licensed under a Creative Commons Attribution 4.0 International License.
 .. http://creativecommons.org/licenses/by/4.0
 
-.. image:: ../etc/opnfv-logo.png
-  :height: 40
-  :width: 200
-  :alt: OPNFV
-  :align: left
-.. these two pipes are to seperate the logo from the first title
-|
-|
-Domino API and Usage
-====================
+============================================
+Domino and API Usage Guidelines and Examples
+============================================
 
 Using domino-cli Client
------------------------
+=======================
 
 Prerequisites:
 
@@ -129,7 +122,7 @@ template type using
 
   ./domino-cli.py <cli-portnumber> publish -t <toscafile>
 
-Note that -t can be substituted by --tosca-file.
+Note that -t can be substituted with --tosca-file.
 
 If -t or --tosca-file flag is used multiple times, the last tosca file passed as input will be used. This usage is not recommended as undefined/unintended results may emerge as the Domino client will continue to publish.
 
@@ -137,12 +130,27 @@ This message has the following fields that are automatically filled in.
 
 .. code-block:: bash
 
-  Message Type (= SUBSCRIBE)
+  Message Type (= PUBLISH)
   UDID (= Unique Domino ID assigned during registration)
   Sequence Number (=incremented after each RPC call)
   Template Type (= TOSCA)
   Template File
 
+Since Danube release, Domino Server supports stateful updates for template publishing. The following command can be used to update the service template for an existing Template Unique ID (TUID):
+
+.. code-block:: bash
+
+  ./domino-cli.py <cli-portnumber> publish -t <toscafile> -k <TUID>
+
+Note that -k can be substituted with --tuid. When Domino Server receives this command, it verifies whether the client previously published the provided TUID. If such TUID does not exist, then Domino Server returns FAILED response back to the client. If such TUID exists, Domino Server recomputes which resources are mapped onto which domains and updates each domain with the new VNF and NS descriptors. If a previously utilized domain is no longer targeted, it is updated with a null descriptor.
+
+* Template Listing Command
+
+.. code-block:: bash
+
+  ./domino-cli.py <cli-portnumber> list-tuids
+
+Queries all the Template Unique IDs (TUIDs) published by the Domino Client from the Domino Server.
 
 Interactive CLI mode
 --------------------
@@ -163,7 +171,3 @@ The rest of the API calls are the same as in the case of using domino-cli.py exc
   >>publish -t <toscafile>
 
 The interactive CLI mode is mainly supported for manual testing.
-
-Revision: _sha1_
-
-Build date: |today|
