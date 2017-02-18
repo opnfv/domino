@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_7a1197ab",
+        "filename": "docs/development/overview/feature.overview.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 847
+      },
+      "writtenOn": "2017-02-18T03:30:44Z",
+      "side": 1,
+      "message": "Software Defined Network (SDN)",
+      "range": {
+        "startLine": 12,
+        "startChar": 51,
+        "endLine": 12,
+        "endChar": 54
+      },
+      "revId": "363ae19b215b5fdf3b751e51d164eec9d8b32ab7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_3a231f07",
+        "filename": "docs/development/overview/feature.overview.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 847
+      },
+      "writtenOn": "2017-02-18T03:30:44Z",
+      "side": 1,
+      "message": "(SO)",
+      "range": {
+        "startLine": 12,
+        "startChar": 68,
+        "endLine": 12,
+        "endChar": 89
+      },
+      "revId": "363ae19b215b5fdf3b751e51d164eec9d8b32ab7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_1a265b17",
+        "filename": "docs/development/overview/feature.overview.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 847
+      },
+      "writtenOn": "2017-02-18T03:30:44Z",
+      "side": 1,
+      "message": "(SO)",
+      "range": {
+        "startLine": 12,
+        "startChar": 68,
+        "endLine": 12,
+        "endChar": 89
+      },
+      "revId": "363ae19b215b5fdf3b751e51d164eec9d8b32ab7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_5a0cd394",
+        "filename": "docs/development/overview/feature.overview.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 847
+      },
+      "writtenOn": "2017-02-18T03:30:44Z",
+      "side": 1,
+      "message": "through Service access point(SAP)or End points (Ep)",
+      "range": {
+        "startLine": 16,
+        "startChar": 47,
+        "endLine": 16,
+        "endChar": 64
+      },
+      "revId": "363ae19b215b5fdf3b751e51d164eec9d8b32ab7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_da1f63b6",
+        "filename": "docs/development/overview/feature.overview.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 847
+      },
+      "writtenOn": "2017-02-18T03:30:44Z",
+      "side": 1,
+      "message": "through same SAPs/EPs",
+      "range": {
+        "startLine": 17,
+        "startChar": 75,
+        "endLine": 17,
+        "endChar": 78
+      },
+      "revId": "363ae19b215b5fdf3b751e51d164eec9d8b32ab7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_1a6dfb32",
+        "filename": "docs/development/overview/feature.overview.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 847
+      },
+      "writtenOn": "2017-02-18T03:30:44Z",
+      "side": 1,
+      "message": "Service broker",
+      "range": {
+        "startLine": 19,
+        "startChar": 76,
+        "endLine": 19,
+        "endChar": 82
+      },
+      "revId": "363ae19b215b5fdf3b751e51d164eec9d8b32ab7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_3a6a3f1b",
+        "filename": "docs/development/overview/feature.overview.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 847
+      },
+      "writtenOn": "2017-02-18T03:30:44Z",
+      "side": 1,
+      "message": "or modeled",
+      "range": {
+        "startLine": 20,
+        "startChar": 13,
+        "endLine": 20,
+        "endChar": 22
+      },
+      "revId": "363ae19b215b5fdf3b751e51d164eec9d8b32ab7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_da768306",
+        "filename": "docs/development/overview/feature.overview.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 847
+      },
+      "writtenOn": "2017-02-18T03:30:44Z",
+      "side": 1,
+      "message": "made by",
+      "range": {
+        "startLine": 92,
+        "startChar": 20,
+        "endLine": 92,
+        "endChar": 22
+      },
+      "revId": "363ae19b215b5fdf3b751e51d164eec9d8b32ab7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_9ac7ab12",
+        "filename": "docs/release/installation/installation.instructions.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 847
+      },
+      "writtenOn": "2017-02-18T03:30:44Z",
+      "side": 1,
+      "message": "donube/\n\nor relase\nmay need to add $release a default value \"Danube\" for now in sh script and later can add as input param in future",
+      "range": {
+        "startLine": 33,
+        "startChar": 61,
+        "endLine": 33,
+        "endChar": 69
+      },
+      "revId": "363ae19b215b5fdf3b751e51d164eec9d8b32ab7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
