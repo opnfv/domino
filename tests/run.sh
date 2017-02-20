@@ -141,6 +141,11 @@ python domino-cli.py $CLIENT1_CLIPORT subscribe \
         -l tosca.policies.Placement.Geolocation:properties:region:us-west-1
 sleep 1
 python domino-cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1"
+sleep 1
+TUID=$(python domino-cli.py $CLIENT2_CLIPORT list-tuids | cut -c3-34)
+echo $TUID
+sleep 1
+python domino-cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1" -k "$TUID"
 
 #echo "Stopping Domino Client 1..."
 #stop_client1

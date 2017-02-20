@@ -3,31 +3,24 @@ Domino Client Starting...
 Registration Response: Response Code: 1
 CLI Service is starting
 RPC service for CLI is starting...
-Received CLI ['heartbeat']
 12345678123456781234567812345678 Sending heartbeat
 heart beat received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 2
-Received CLI ['subscribe', '-t', 'hot', '-l', 'tosca.policies.Placement:properties:region:nova-1']
 subscribing labels ['tosca.policies.Placement:properties:region:nova-1'] and templates ['hot']
 Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 3
-Received CLI ['subscribe', '-t', 'dummy1,dummy2', '--top', 'OVERWRITE']
 subscribing labels [] and templates ['dummy1', 'dummy2']
 Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 4
-Received CLI ['subscribe', '-t', 'dummy1,dummy2', '--top', 'DELETE']
 subscribing labels [] and templates ['dummy1', 'dummy2']
 Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 5
-Received CLI ['subscribe', '-l', 'tosca.policies.Placement:properties:region:nova-2']
 subscribing labels ['tosca.policies.Placement:properties:region:nova-2'] and templates []
 Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 6
-Received CLI ['subscribe', '-l', 'tosca.policies.Placement:properties:region:nova-3', '--lop', 'OVERWRITE']
 subscribing labels ['tosca.policies.Placement:properties:region:nova-3'] and templates []
 Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 7
-Received CLI ['subscribe', '-l', 'tosca.policies.Placement:properties:region:nova-3', '--lop', 'DELETE']
 subscribing labels ['tosca.policies.Placement:properties:region:nova-3'] and templates []
 Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 8
-Received CLI ['publish', '-t', './tosca-templates/tosca_helloworld_nfv.yaml']
 Publishing the template file: ./tosca-templates/tosca_helloworld_nfv.yaml
 Publish Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 9 Status: 2
-Received CLI ['subscribe', '-l', 'tosca.policies.Placement.Geolocation:properties:region:us-west-1']
 subscribing labels ['tosca.policies.Placement.Geolocation:properties:region:us-west-1'] and templates []
 Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 10
 12345678123456781234567812345678 Received Template File
+12345678123456781234567812345678 Received Template File
+IGNORING error: ERRNO 17; ./toscafiles/12345678123456781234567812345678 exists.

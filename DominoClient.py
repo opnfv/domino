@@ -127,7 +127,7 @@ class CLIHandler:
     self.CLIservice = CLIservice
 
   def d_CLI(self, msg):
-    logging.info('Received CLI %s', msg.CLI_input)
+    #logging.info('Received CLI %s', msg.CLI_input) #breaks testing due to random TUIDs
 
     CLIrespmsg = CLIResponse()
     CLIrespmsg.CLI_response = self.CLIservice.process_input(msg.CLI_input)

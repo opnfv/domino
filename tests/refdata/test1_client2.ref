@@ -3,6 +3,9 @@ Domino Client Starting...
 Registration Response: Response Code: 1
 CLI Service is starting
 RPC service for CLI is starting...
-Received CLI ['publish', '-t', './tosca-templates/tosca_helloworld_nfv.yaml']
 Publishing the template file: ./tosca-templates/tosca_helloworld_nfv.yaml
 Publish Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 11 Status: 1
+querying Domino Server: ['list-tuids']
+Query Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 13
+Publishing the template file: ./tosca-templates/tosca_helloworld_nfv.yaml
+Publish Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 14 Status: 1
