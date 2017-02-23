@@ -1,57 +1,57 @@
-02/17/2017 03:27:55 PM Domino Server Starting...
-02/17/2017 03:27:55 PM Registration Request received for UUID 12345678123456781234567812345678 from IP: 192.168.253.33 port: 9091
-02/17/2017 03:27:56 PM Registration Request received for UUID 12345678123456781234567812345678 from IP: 192.168.253.33 port: 9092
-02/17/2017 03:27:57 PM heartbeat received from 12345678123456781234567812345678
-02/17/2017 03:27:58 PM Subscribe Request received from 12345678123456781234567812345678
-02/17/2017 03:27:58 PM APPENDING Labels...
-02/17/2017 03:27:58 PM Supported Template: set(['hot']) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-1'])
-02/17/2017 03:27:59 PM Subscribe Request received from 12345678123456781234567812345678
-02/17/2017 03:27:59 PM APPENDING Labels...
-02/17/2017 03:27:59 PM Supported Template: set(['dummy2', 'dummy1']) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-1'])
-02/17/2017 03:28:01 PM Subscribe Request received from 12345678123456781234567812345678
-02/17/2017 03:28:01 PM APPENDING Labels...
-02/17/2017 03:28:01 PM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-1'])
-02/17/2017 03:28:02 PM Subscribe Request received from 12345678123456781234567812345678
-02/17/2017 03:28:02 PM APPENDING Labels...
-02/17/2017 03:28:02 PM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-2', 'tosca.policies.Placement:properties:region:nova-1'])
-02/17/2017 03:28:03 PM Subscribe Request received from 12345678123456781234567812345678
-02/17/2017 03:28:03 PM OVERWRITING Labels...
-02/17/2017 03:28:03 PM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-3'])
-02/17/2017 03:28:04 PM Subscribe Request received from 12345678123456781234567812345678
-02/17/2017 03:28:04 PM DELETING Labels...
-02/17/2017 03:28:04 PM Supported Template: set([]) Supported Labels: set([])
-02/17/2017 03:28:05 PM Publish Request received from 12345678123456781234567812345678
-02/17/2017 03:28:05 PM Node Labels: {'VNF2': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF3': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF1': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1'])}
-02/17/2017 03:28:05 PM Site Maps: {'VNF2': set([]), 'VNF3': set([]), 'VNF1': set([])}
-02/17/2017 03:28:05 PM Selected Sites: {'VNF2': [], 'VNF3': [], 'VNF1': []}
-02/17/2017 03:28:05 PM Per domain file paths: {}
-02/17/2017 03:28:05 PM Per domain topologies: {}
-02/17/2017 03:28:05 PM Boundary VLs: {}
-02/17/2017 03:28:05 PM VL sites: {}
-02/17/2017 03:28:05 PM Subscribers: [] for TUID: 8400d1b81f704e08b5eea4065ab1123b
-02/17/2017 03:28:06 PM Subscribe Request received from 12345678123456781234567812345678
-02/17/2017 03:28:06 PM APPENDING Labels...
-02/17/2017 03:28:06 PM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1'])
-02/17/2017 03:28:07 PM Publish Request received from 9d2a14da97cb4d17b25a729266ea5789
-02/17/2017 03:28:07 PM ERRNO 17; ./toscafiles/ exists. Creating: ./toscafiles/template1.yaml
-02/17/2017 03:28:07 PM Node Labels: {'VNF2': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF3': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF1': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1'])}
-02/17/2017 03:28:07 PM Site Maps: {'VNF2': set([]), 'VNF3': set([]), 'VNF1': set(['12345678123456781234567812345678'])}
-02/17/2017 03:28:07 PM Selected Sites: {'VNF2': [], 'VNF3': [], 'VNF1': '12345678123456781234567812345678'}
-02/17/2017 03:28:07 PM Per domain file paths: {'12345678123456781234567812345678': './toscafiles/template_part12345678123456781234567812345678.yaml'}
-02/17/2017 03:28:07 PM Per domain topologies: {'12345678123456781234567812345678': {'policy_types': {'tosca.policies.Placement.Geolocation': {'description': 'Geolocation policy', 'derived_from': 'tosca.policies.Placement'}}, 'tosca_definitions_version': 'tosca_simple_profile_for_nfv_1_0_0', 'description': 'Template for deploying a single server with predefined properties.', 'topology_template': {'node_templates': {'VNF1': {'type': 'tosca.nodes.nfv.VNF', 'properties': {'version': 1.0, 'vendor': 'acmetelco', 'id': 'vnf1'}}}, 'policies': [{'rule1': {'type': 'tosca.policies.Placement.Geolocation', 'targets': ['VNF1'], 'properties': {'region': ['us-west-1']}}}]}, 'metadata': {'template_name': 'TOSCA NFV Sample Template'}}}
-02/17/2017 03:28:07 PM Boundary VLs: {}
-02/17/2017 03:28:07 PM VL sites: {}
-02/17/2017 03:28:07 PM Push Response received from 12345678123456781234567812345678
-02/17/2017 03:28:07 PM Subscribers: ['12345678123456781234567812345678'] for TUID: 64bf4842181e45af8c125c5742a6d53a
-02/17/2017 03:28:09 PM Publish Request received from 9d2a14da97cb4d17b25a729266ea5789
-02/17/2017 03:28:09 PM ERRNO 17; ./toscafiles/ exists. Creating: ./toscafiles/template1.yaml
-02/17/2017 03:28:09 PM Node Labels: {'VNF2': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF3': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF1': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1'])}
-02/17/2017 03:28:09 PM Site Maps: {'VNF2': set([]), 'VNF3': set([]), 'VNF1': set(['12345678123456781234567812345678'])}
-02/17/2017 03:28:09 PM Selected Sites: {'VNF2': [], 'VNF3': [], 'VNF1': '12345678123456781234567812345678'}
-02/17/2017 03:28:09 PM Per domain file paths: {'12345678123456781234567812345678': './toscafiles/template_part12345678123456781234567812345678.yaml'}
-02/17/2017 03:28:09 PM Per domain topologies: {'12345678123456781234567812345678': {'policy_types': {'tosca.policies.Placement.Geolocation': {'description': 'Geolocation policy', 'derived_from': 'tosca.policies.Placement'}}, 'tosca_definitions_version': 'tosca_simple_profile_for_nfv_1_0_0', 'description': 'Template for deploying a single server with predefined properties.', 'topology_template': {'node_templates': {'VNF1': {'type': 'tosca.nodes.nfv.VNF', 'properties': {'version': 1.0, 'vendor': 'acmetelco', 'id': 'vnf1'}}}, 'policies': [{'rule1': {'type': 'tosca.policies.Placement.Geolocation', 'targets': ['VNF1'], 'properties': {'region': ['us-west-1']}}}]}, 'metadata': {'template_name': 'TOSCA NFV Sample Template'}}}
-02/17/2017 03:28:09 PM Boundary VLs: {}
-02/17/2017 03:28:09 PM VL sites: {}
-02/17/2017 03:28:09 PM TEMPLATE UUID 64bf4842181e45af8c125c5742a6d53a exists, verify publisher and update subscribers
-02/17/2017 03:28:09 PM Push Response received from 12345678123456781234567812345678
-02/17/2017 03:28:09 PM Subscribers: ['12345678123456781234567812345678'] for TUID: 64bf4842181e45af8c125c5742a6d53a
+02/23/2017 09:46:48 AM Domino Server Starting...
+02/23/2017 09:46:49 AM Registration Request received for UUID 12345678123456781234567812345678 from IP: 192.168.254.86 port: 9091
+02/23/2017 09:46:50 AM Registration Request received for UUID 12345678123456781234567812345678 from IP: 192.168.254.86 port: 9092
+02/23/2017 09:46:51 AM heartbeat received from 12345678123456781234567812345678
+02/23/2017 09:46:52 AM Subscribe Request received from 12345678123456781234567812345678
+02/23/2017 09:46:52 AM APPENDING Labels...
+02/23/2017 09:46:52 AM Supported Template: set(['hot']) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-1'])
+02/23/2017 09:46:53 AM Subscribe Request received from 12345678123456781234567812345678
+02/23/2017 09:46:53 AM APPENDING Labels...
+02/23/2017 09:46:53 AM Supported Template: set(['dummy2', 'dummy1']) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-1'])
+02/23/2017 09:46:54 AM Subscribe Request received from 12345678123456781234567812345678
+02/23/2017 09:46:54 AM APPENDING Labels...
+02/23/2017 09:46:54 AM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-1'])
+02/23/2017 09:46:55 AM Subscribe Request received from 12345678123456781234567812345678
+02/23/2017 09:46:55 AM APPENDING Labels...
+02/23/2017 09:46:55 AM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-2', 'tosca.policies.Placement:properties:region:nova-1'])
+02/23/2017 09:46:56 AM Subscribe Request received from 12345678123456781234567812345678
+02/23/2017 09:46:56 AM OVERWRITING Labels...
+02/23/2017 09:46:56 AM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement:properties:region:nova-3'])
+02/23/2017 09:46:57 AM Subscribe Request received from 12345678123456781234567812345678
+02/23/2017 09:46:57 AM DELETING Labels...
+02/23/2017 09:46:57 AM Supported Template: set([]) Supported Labels: set([])
+02/23/2017 09:46:58 AM Publish Request received from 12345678123456781234567812345678
+02/23/2017 09:46:58 AM Node Labels: {'VNF2': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF3': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF1': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1'])}
+02/23/2017 09:46:58 AM Site Maps: {'VNF2': set([]), 'VNF3': set([]), 'VNF1': set([])}
+02/23/2017 09:46:58 AM Selected Sites: {'VNF2': [], 'VNF3': [], 'VNF1': []}
+02/23/2017 09:46:58 AM Per domain file paths: {}
+02/23/2017 09:46:58 AM Per domain topologies: {}
+02/23/2017 09:46:58 AM Boundary VLs: {}
+02/23/2017 09:46:58 AM VL sites: {}
+02/23/2017 09:46:58 AM Subscribers: [] for TUID: dbabf18860284240b52f7d31d1e5046a
+02/23/2017 09:46:59 AM Subscribe Request received from 12345678123456781234567812345678
+02/23/2017 09:46:59 AM APPENDING Labels...
+02/23/2017 09:46:59 AM Supported Template: set([]) Supported Labels: set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1'])
+02/23/2017 09:47:00 AM Publish Request received from 1a8af57ef9ab4eff90c10543df205b5b
+02/23/2017 09:47:00 AM ERRNO 17; ./toscafiles/ exists. Creating: ./toscafiles/template1.yaml
+02/23/2017 09:47:00 AM Node Labels: {'VNF2': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF3': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF1': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1'])}
+02/23/2017 09:47:00 AM Site Maps: {'VNF2': set([]), 'VNF3': set([]), 'VNF1': set(['12345678123456781234567812345678'])}
+02/23/2017 09:47:00 AM Selected Sites: {'VNF2': [], 'VNF3': [], 'VNF1': '12345678123456781234567812345678'}
+02/23/2017 09:47:00 AM Per domain file paths: {'12345678123456781234567812345678': './toscafiles/template_part12345678123456781234567812345678.yaml'}
+02/23/2017 09:47:00 AM Per domain topologies: {'12345678123456781234567812345678': {'policy_types': {'tosca.policies.Placement.Geolocation': {'description': 'Geolocation policy', 'derived_from': 'tosca.policies.Placement'}}, 'tosca_definitions_version': 'tosca_simple_profile_for_nfv_1_0_0', 'description': 'Template for deploying a single server with predefined properties.', 'topology_template': {'node_templates': {'VNF1': {'type': 'tosca.nodes.nfv.VNF', 'properties': {'version': 1.0, 'vendor': 'acmetelco', 'id': 'vnf1'}}}, 'policies': [{'rule1': {'type': 'tosca.policies.Placement.Geolocation', 'targets': ['VNF1'], 'properties': {'region': ['us-west-1']}}}]}, 'metadata': {'template_name': 'TOSCA NFV Sample Template'}}}
+02/23/2017 09:47:00 AM Boundary VLs: {}
+02/23/2017 09:47:00 AM VL sites: {}
+02/23/2017 09:47:00 AM Push Response received from 12345678123456781234567812345678
+02/23/2017 09:47:00 AM Subscribers: ['12345678123456781234567812345678'] for TUID: 1671862ef3aa446b8cfae9b0059dccc1
+02/23/2017 09:47:03 AM Publish Request received from 1a8af57ef9ab4eff90c10543df205b5b
+02/23/2017 09:47:03 AM ERRNO 17; ./toscafiles/ exists. Creating: ./toscafiles/template1.yaml
+02/23/2017 09:47:03 AM Node Labels: {'VNF2': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF3': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1', 'tosca.policies.Placement.Geolocation:properties:region:us-west-2']), 'VNF1': set(['tosca.policies.Placement.Geolocation:properties:region:us-west-1'])}
+02/23/2017 09:47:03 AM Site Maps: {'VNF2': set([]), 'VNF3': set([]), 'VNF1': set(['12345678123456781234567812345678'])}
+02/23/2017 09:47:03 AM Selected Sites: {'VNF2': [], 'VNF3': [], 'VNF1': '12345678123456781234567812345678'}
+02/23/2017 09:47:03 AM Per domain file paths: {'12345678123456781234567812345678': './toscafiles/template_part12345678123456781234567812345678.yaml'}
+02/23/2017 09:47:03 AM Per domain topologies: {'12345678123456781234567812345678': {'policy_types': {'tosca.policies.Placement.Geolocation': {'description': 'Geolocation policy', 'derived_from': 'tosca.policies.Placement'}}, 'tosca_definitions_version': 'tosca_simple_profile_for_nfv_1_0_0', 'description': 'Template for deploying a single server with predefined properties.', 'topology_template': {'node_templates': {'VNF1': {'type': 'tosca.nodes.nfv.VNF', 'properties': {'version': 1.0, 'vendor': 'acmetelco', 'id': 'vnf1'}}}, 'policies': [{'rule1': {'type': 'tosca.policies.Placement.Geolocation', 'targets': ['VNF1'], 'properties': {'region': ['us-west-1']}}}]}, 'metadata': {'template_name': 'TOSCA NFV Sample Template'}}}
+02/23/2017 09:47:03 AM Boundary VLs: {}
+02/23/2017 09:47:03 AM VL sites: {}
+02/23/2017 09:47:03 AM TEMPLATE UUID 1671862ef3aa446b8cfae9b0059dccc1 exists, verify publisher and update subscribers
+02/23/2017 09:47:03 AM Push Response received from 12345678123456781234567812345678
+02/23/2017 09:47:03 AM Subscribers: ['12345678123456781234567812345678'] for TUID: 1671862ef3aa446b8cfae9b0059dccc1
