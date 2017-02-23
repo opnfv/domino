@@ -11,16 +11,6 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-IS_IPandKEY_CONFIGURED=false
-USERNAME=ubuntu
-#SSH_KEY_PATH=/home/opnfv/repos/domino/tests/testkeys/id_rsa
-#DOMINO_CODE_PATH=/home/opnfv/repos/domino
-SSH_KEY_PATH=./tests/testkeys/id_rsa
-DOMINO_CODE_PATH=../domino
-CONTROLLER_NODE_1=192.168.2.165
-CONTROLLER_NODE_2=192.168.2.180
-CONTROLLER_NODE_3=192.168.2.181
-
 CLIENT1_PORT=9091
 CLIENT2_PORT=9092
 CLIENT1_CLIPORT=9100
@@ -33,136 +23,168 @@ test1_reffile2=./tests/refdata/test1_client2.ref
 client1_log=./tests/logdata/client1.log
 client2_log=./tests/logdata/client2.log
 server_log=./tests/logdata/server.log
-ssh_opts="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
 install_dependency() {
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_1" 'sudo pip install tosca-parser'
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_1" 'sudo pip install heat-translator'
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" 'sudo pip install tosca-parser'
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" 'sudo pip install heat-translator'
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_3" 'sudo pip install tosca-parser'
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_3" 'sudo pip install heat-translator'
+  sudo pip install tosca-parser
+  sudo pip install heat-translator
 }
 
-remove_codes(){
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_1" 'rm -rf domino'
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" 'rm -rf domino'
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_3" 'rm -rf domino'
-}
-
-deploy_codes(){
-  scp $ssh_opts -i "$SSH_KEY_PATH" -r "$DOMINO_CODE_PATH" "$USERNAME"@"$CONTROLLER_NODE_1":.
-  scp $ssh_opts -i "$SSH_KEY_PATH" -r "$DOMINO_CODE_PATH" "$USERNAME"@"$CONTROLLER_NODE_2":.
-  scp $ssh_opts -i "$SSH_KEY_PATH" -r "$DOMINO_CODE_PATH" "$USERNAME"@"$CONTROLLER_NODE_3":.
-}
 
 start_server() {
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_1" 'pgrep -f "python DominoServer.py"' && return 0
-  ssh $ssh_opts -f -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_1" "sh -c 'cd ./domino; nohup python DominoServer.py --log "$LOGLEVEL" > "$server_log" > /dev/null 2>&1 &'"
-}
-
-start_client1() {
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" 'pgrep -f "python DominoClient.py"' && return 0
-  ssh $ssh_opts -f -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd ./domino; nohup python DominoClient.py -p $CLIENT1_PORT --cliport $CLIENT1_CLIPORT --ipaddr $CONTROLLER_NODE_1 --log "$LOGLEVEL" > "$client1_log" > /dev/null 2>&1 &'"
-}
-
-start_client2() {
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_3" 'pgrep -f "python DominoClient.py"' && return 0
-  ssh $ssh_opts -f -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_3" "sh -c 'cd ./domino; nohup python DominoClient.py -p $CLIENT2_PORT --cliport $CLIENT2_CLIPORT --ipaddr $CONTROLLER_NODE_1 --log "$LOGLEVEL" > "$client2_log" > /dev/null 2>&1 &'"
+  pgrep -f "python DominoServer.py" && return 0  
+  python DominoServer.py --log "$LOGLEVEL" > "$server_log" 2>&1 &
 }
 
 stop_server() {
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_1" 'pgrep -f "python DominoServer.py"' || return 0
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_1" 'kill $(pgrep -f "python DominoServer.py")'
+  pgrep -f "python DominoServer.py" || return 0  
+  kill $(pgrep -f "python DominoServer.py")
+  #cat server.log
 }
 
-stop_client1() {
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" 'pgrep -f "python DominoClient.py"' || return 0
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" 'kill $(pgrep -f "python DominoClient.py")'
+start_client1() {
+  #pgrep -f "python DominoClient.py -p $CLIENT1_PORT" && return 0
+  python DominoClient.py -p $CLIENT1_PORT --cliport $CLIENT1_CLIPORT \
+	--log "$LOGLEVEL" > "$client1_log" 2>&1 &
 }
 
-stop_client2() {
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_3" 'pgrep -f "python DominoClient.py"' || return 0
-  ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_3" 'kill $(pgrep -f "python DominoClient.py")'
+start_client2() {
+  #pgrep -f "python DominoClient.py -p $CLIENT2_PORT" && return 0
+  python DominoClient.py -p $CLIENT2_PORT --cliport $CLIENT2_CLIPORT \
+        --log "$LOGLEVEL" > "$client2_log" 2>&1 &
+}
+
+stop_clients() {
+  pgrep -f "python DominoClient.py" || return 0
+  kill $(pgrep -f "python DominoClient.py")
+  #cat client1.log
+}
+
+clean_directories() {
+  if [ -f dominoserver.db ]; then
+    rm dominoserver.db
+  fi
+
+  if [ -d toscafiles ]; then
+    rm -rf toscafiles
+  fi
 }
 
 cleanup() {
-  chmod 600 "$SSH_KEY_PATH"
   set +e
   echo "cleanup..."
   
   echo "Stopping Domino Clients..."
-  stop_client1
-  sleep 1
-  stop_client2
-  sleep 1
- 
+  stop_clients
+
   echo "Stopping Domino Server..."
   stop_server
-  sleep 1
+
+  if [ -f file1 ]; then
+    rm file1
+  fi
+
+  if [ -f file2 ]; then
+    rm file2
+  fi
 }
 
-prepare_testenv() {
-  chmod 600 "$SSH_KEY_PATH"
-  install_dependency
-  remove_codes
-  deploy_codes
-}
+echo "domino/tests/run.sh has been executed."
 
-launch_domino() {
-  echo "Launching Domino Server..."
-  start_server
-  sleep 1
-  echo "Launching Domino Client 1..."
-  start_client1
-  sleep 1
-  echo "Launching Domino Client 2..."
-  start_client2
-  sleep 1
-}
+trap cleanup EXIT
 
-echo "domino/tests/run_multinode.sh has been executed."
+echo "Terminating any running Domino Clients..."
+stop_clients
 
-if [ "$IS_IPandKEY_CONFIGURED" = "true" ]; then
-    trap cleanup EXIT
+echo "Terminating any running Domino Servers..."
+stop_server
+sleep 1
 
-    cleanup
-    prepare_testenv
-    launch_domino
+echo "Cleaning residue files and folders from previous runs..."
+clean_directories
+sleep 1
 
+echo "Installing dependencies..."
+install_dependency
+sleep 1
 
-    echo "Test Heartbeat"
-    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT heartbeat'"
-    sleep 1
+echo "Launching Domino Server..."
+start_server
+sleep 1
 
-    echo "Test Subscribe API"
-    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -t hot -l tosca.policies.Placement:properties:region:nova-1'"  
-    sleep 1
-    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top OVERWRITE'"
-    sleep 1
-    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top DELETE'"
-    sleep 1
-    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -l tosca.policies.Placement:properties:region:nova-2'"
-    sleep 1
-    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -l tosca.policies.Placement:properties:region:nova-3 --lop OVERWRITE'"
-    sleep 1
-    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -l tosca.policies.Placement:properties:region:nova-3 --lop DELETE'"
-    sleep 1
+echo "Launching Domino Client 1..."
+start_client1
+sleep 1
 
-    echo "Test Publish API"
-    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_3" "sh -c 'cd domino; python domino-cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1"'"
+echo "Launching Domino Client 2..."
+start_client2
+sleep 1
 
-    sleep 1
-    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_2" "sh -c 'cd domino; python domino-cli.py $CLIENT1_CLIPORT subscribe -l tosca.policies.Placement.Geolocation:properties:region:us-west-1'"
-    sleep 1
-    ssh $ssh_opts -i "$SSH_KEY_PATH" "$USERNAME"@"$CONTROLLER_NODE_3" "sh -c 'cd domino; python domino-cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1"'"
+echo "Test Heartbeat"
+python domino-cli.py $CLIENT1_CLIPORT heartbeat
+sleep 1
 
-    echo "done"
+echo "Test Subscribe API"
+python domino-cli.py $CLIENT1_CLIPORT subscribe -t hot \
+	-l tosca.policies.Placement:properties:region:nova-1  
+sleep 1
+python domino-cli.py $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top OVERWRITE
+sleep 1
+python domino-cli.py $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top DELETE
+sleep 1
+python domino-cli.py $CLIENT1_CLIPORT subscribe \
+        -l tosca.policies.Placement:properties:region:nova-2
+sleep 1
+python domino-cli.py $CLIENT1_CLIPORT subscribe \
+	-l tosca.policies.Placement:properties:region:nova-3 \
+	--lop OVERWRITE
+sleep 1
+python domino-cli.py $CLIENT1_CLIPORT subscribe \
+        -l tosca.policies.Placement:properties:region:nova-3 \
+	--lop DELETE
+sleep 1
 
+echo "Test Publish API"
+python domino-cli.py $CLIENT1_CLIPORT publish -t "$toscafile_test1" 
+
+sleep 1
+python domino-cli.py $CLIENT1_CLIPORT subscribe \
+        -l tosca.policies.Placement.Geolocation:properties:region:us-west-1
+sleep 1
+python domino-cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1"
+sleep 1
+TUID=$(python domino-cli.py $CLIENT2_CLIPORT list-tuids | cut -c3-34)
+echo $TUID
+sleep 1
+python domino-cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1" -k "$TUID"
+
+#echo "Stopping Domino Client 1..."
+#stop_client1
+
+#echo "Stopping Domino Server..."
+#stop_server
+
+cut -d " " -f 4- "$client1_log" > file1
+cut -d " " -f 4- "$client2_log" > file2
+#will use the form below to declare success or failure
+set +e
+
+diff -q file1 "$test1_reffile1" 1>/dev/null
+if [[ $? == "0" ]]
+then
+  echo "Log1 PASS"
 else
-
-    echo "set IS_IPandKEY_CONFIGURED as true to run the test"  
-
+  echo "Log1 FAIL"
 fi
 
+diff -q file2 "$test1_reffile2" 1>/dev/null
+if [[ $? == "0" ]]
+then
+  echo "Log2 PASS"
+else
+  echo "Log2 FAIL"
+fi
+
+set -e
+
+echo "done"
 
