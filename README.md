@@ -24,6 +24,7 @@ Clean the server side database:
     rm -r dominoserver.db
 
 Make sure that all the existing domino server and client processes are killed.
+
     kill $(pgrep -f "DominoServer.py")
     kill $(pgrep -f "DominoClient.py") 
 
@@ -66,6 +67,7 @@ Now, inspect the files generated under ./toscafiles, where the original file as 
 
 Example:
 Run the following command for the second Domino Client:
+
     python domino-cli.py 9200 list-tuids
 
 ###Change the published template for a specific Template Unique ID (TUID)
@@ -73,6 +75,7 @@ Run the following command for the second Domino Client:
 
 Example:
 Run the following command for the second Domino Client:
+
     TUID=$(python domino-cli.py 9200 list-tuids | cut -c3-34)
     python domino-cli.py 9200 publish -t ./tosca-templates/tosca_helloworld_nfv.yaml -k "$TUID"
 
