@@ -29,8 +29,7 @@ Domino Server
 
 Domino Client
 -------------
-* The default mode of CLI is non-interactive (i.e., Domino CLI Utility is used). This can be changed when the DominoClient is launched by passing the flags --log or -l followed by the
-log level choice from the set {ERROR, WARNING, INFO, DEBUG} (not case sensitive). This overwrites the log level default specified in the configuration file.
+* The default mode of CLI is non-interactive (i.e., Domino CLI Utility is used). This can be changed when the DominoClient is launched by passing the flags --log or -l followed by the log level choice from the set {ERROR, WARNING, INFO, DEBUG} (not case sensitive). This overwrites the log level default specified in the configuration file.
 
 * The default Domino Server IP is set as "localhost". This can be overwritten at the time of launching DominoClient via the option flags -i or --ipaddr followed by the IP address of the actual server hosting the Domino Server.
 
