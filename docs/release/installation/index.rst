@@ -13,7 +13,7 @@
 **********************
 Installation procedure
 **********************
-Colorado 1.0
+Danube 1.0
 ------------
 
 .. toctree::
