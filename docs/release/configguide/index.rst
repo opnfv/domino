@@ -1,14 +1,15 @@
 .. This work is licensed under a Creative Commons Attribution 4.0 International License.
 .. http://creativecommons.org/licenses/by/4.0
 
-.. _domino-installation:
+.. _domino-configguide:
 
 **********************
 Installation procedure
 **********************
+Danube 1.0
+------------
 
 .. toctree::
    :maxdepth: 2
-   :numbered:
 
-   installation.instructions.rst
+   featureconfig.rst
