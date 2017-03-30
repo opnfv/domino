@@ -9,7 +9,6 @@ Domino
 
 .. toctree::
    :maxdepth: 2
-   :numbered:
 
    ./installation/index.rst
    ./configguide/index.rst
