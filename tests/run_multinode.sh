@@ -187,4 +187,4 @@ fi
 set -e
 
 echo "done"
-exit 0
+

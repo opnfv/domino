@@ -1,26 +1,26 @@
-03/29/2017 09:45:27 AM Domino Client Starting...
-03/29/2017 09:45:27 AM 1 Sending Registration
-03/29/2017 09:45:27 AM Registration Response: Response Code: 1
-03/29/2017 09:45:27 AM CLI Service is starting
-03/29/2017 09:45:27 AM RPC service for CLI is starting...
-03/29/2017 09:45:29 AM 12345678123456781234567812345678 Sending heartbeat
-03/29/2017 09:45:29 AM heart beat received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 2
-03/29/2017 09:45:30 AM subscribing labels ['tosca.policies.Placement:properties:region:nova-1'] and templates ['hot']
-03/29/2017 09:45:30 AM Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 3
-03/29/2017 09:45:31 AM subscribing labels [] and templates ['dummy1', 'dummy2']
-03/29/2017 09:45:31 AM Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 4
-03/29/2017 09:45:32 AM subscribing labels [] and templates ['dummy1', 'dummy2']
-03/29/2017 09:45:32 AM Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 5
-03/29/2017 09:45:33 AM subscribing labels ['tosca.policies.Placement:properties:region:nova-2'] and templates []
-03/29/2017 09:45:33 AM Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 6
-03/29/2017 09:45:34 AM subscribing labels ['tosca.policies.Placement:properties:region:nova-3'] and templates []
-03/29/2017 09:45:34 AM Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 7
-03/29/2017 09:45:35 AM subscribing labels ['tosca.policies.Placement:properties:region:nova-3'] and templates []
-03/29/2017 09:45:35 AM Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 8
-03/29/2017 09:45:36 AM Publishing the template file: ./tosca-templates/tosca_helloworld_nfv.yaml
-03/29/2017 09:45:36 AM Publish Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 9 Status: 2
-03/29/2017 09:45:37 AM subscribing labels ['tosca.policies.Placement.Geolocation:properties:region:us-west-1'] and templates []
-03/29/2017 09:45:37 AM Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 10
-03/29/2017 09:45:38 AM 12345678123456781234567812345678 Received Template File
-03/29/2017 09:45:40 AM 12345678123456781234567812345678 Received Template File
-03/29/2017 09:45:40 AM IGNORING error: ERRNO 17; ./toscafiles/12345678123456781234567812345678 exists.
+03/06/2017 09:31:47 AM Domino Client Starting...
+03/06/2017 09:31:47 AM 1 Sending Registration
+03/06/2017 09:31:47 AM Registration Response: Response Code: 1
+03/06/2017 09:31:47 AM CLI Service is starting
+03/06/2017 09:31:47 AM RPC service for CLI is starting...
+03/06/2017 09:31:49 AM 12345678123456781234567812345678 Sending heartbeat
+03/06/2017 09:31:49 AM heart beat received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 2
+03/06/2017 09:31:50 AM subscribing labels ['tosca.policies.Placement:properties:region:nova-1'] and templates ['hot']
+03/06/2017 09:31:50 AM Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 3
+03/06/2017 09:31:51 AM subscribing labels [] and templates ['dummy1', 'dummy2']
+03/06/2017 09:31:51 AM Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 4
+03/06/2017 09:31:52 AM subscribing labels [] and templates ['dummy1', 'dummy2']
+03/06/2017 09:31:52 AM Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 5
+03/06/2017 09:31:53 AM subscribing labels ['tosca.policies.Placement:properties:region:nova-2'] and templates []
+03/06/2017 09:31:53 AM Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 6
+03/06/2017 09:31:54 AM subscribing labels ['tosca.policies.Placement:properties:region:nova-3'] and templates []
+03/06/2017 09:31:54 AM Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 7
+03/06/2017 09:31:56 AM subscribing labels ['tosca.policies.Placement:properties:region:nova-3'] and templates []
+03/06/2017 09:31:56 AM Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 8
+03/06/2017 09:31:57 AM Publishing the template file: ./tosca-templates/tosca_helloworld_nfv.yaml
+03/06/2017 09:31:57 AM Publish Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 9 Status: 2
+03/06/2017 09:31:58 AM subscribing labels ['tosca.policies.Placement.Geolocation:properties:region:us-west-1'] and templates []
+03/06/2017 09:31:58 AM Subscribe Response is received from: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ,sequence number: 10
+03/06/2017 09:31:59 AM 12345678123456781234567812345678 Received Template File
+03/06/2017 09:32:01 AM 12345678123456781234567812345678 Received Template File
+03/06/2017 09:32:01 AM IGNORING error: ERRNO 17; ./toscafiles/12345678123456781234567812345678 exists.
