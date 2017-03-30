@@ -27,13 +27,9 @@ Domino Server
 
 * The default folder for keeping published TOSCA files and pushed parts is set as "toscafiles" in the configuration file via variable TOSCADIR.
 
-* The default log level (WARNING) can be changed by passing the flags --log or -l followed by a log level, e.g., ERROR, WARNING, INFO, or DEBUG.
-
 Domino Client
 -------------
-* The default mode of CLI is non-interactive (i.e., Domino CLI Utility is used). Passing --iac=TRUE would begin the client in interactive mode.
-
-* The default log level (WARNING) can be changed by passing the flags --log or -l followed by a log level, e.g., ERROR, WARNING, INFO, or DEBUG.
+* The default mode of CLI is non-interactive (i.e., Domino CLI Utility is used). This can be changed when the DominoClient is launched by passing the flags --log or -l followed by the log level choice from the set {ERROR, WARNING, INFO, DEBUG}
 
 * The default Domino Server IP is set as "localhost". This can be overwritten at the time of launching DominoClient via the option flags -i or --ipaddr followed by the IP address of the actual server hosting the Domino Server.
 
