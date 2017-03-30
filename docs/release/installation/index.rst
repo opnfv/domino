@@ -4,9 +4,9 @@
 
 .. _domino-installation:
 
-**********************
-Installation procedure
-**********************
+*******************************
+Domino Installation Instruction
+*******************************
 
 .. toctree::
    :maxdepth: 2

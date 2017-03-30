@@ -4,9 +4,9 @@
 
 .. _domino-configguide:
 
-*************
-Configuration
-*************
+**************************
+Domino Configuration Guide
+**************************
 
 .. toctree::
    :maxdepth: 2
