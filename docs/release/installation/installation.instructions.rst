@@ -1,5 +1,6 @@
 .. This work is licensed under a Creative Commons Attribution 4.0 International License.
 .. http://creativecommons.org/licenses/by/4.0
+.. (c) 2017 OPNFV
 
 ===================
 Domino Installation
@@ -44,7 +45,7 @@ Installation Steps (Multiple Node)
 ----------------------------------
 
 Repeat the installation steps for single node on each node. The script
-run_multinode.sh under ./domino/tests directory deploys the Domino Code on three
+run_on_remotenodes.sh under ./domino/tests directory deploys the Domino Code on three
 hosts from a deployment node and tests RPC calls. The private key location and
 remote host IP addresses must be manually entered and IS_IPandKEY_CONFIGURED=false
 must be changed to IS_IPandKEY_CONFIGURED=true.

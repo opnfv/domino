@@ -2,22 +2,16 @@
 
 .. This work is licensed under a Creative Commons Attribution 4.0 International License.
 .. http://creativecommons.org/licenses/by/4.0
+.. (c) 2017 OPNFV
 
-.. image:: ../etc/opnfv-logo.png
-  :height: 40
-  :width: 200
-  :alt: OPNFV
-  :align: left
-|
-|
-**********************
-Installation procedure
-**********************
-Colorado 1.0
-------------
+.. _domino-installation:
+
+*******************************
+Domino Installation Instruction
+*******************************
 
 .. toctree::
    :maxdepth: 2
+   :numbered:
 
    installation.instructions.rst
-   featureconfig.rst
