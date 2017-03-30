@@ -10,6 +10,5 @@ Domino Installation Instruction
 
 .. toctree::
    :maxdepth: 2
-   :numbered:
 
    installation.instructions.rst
