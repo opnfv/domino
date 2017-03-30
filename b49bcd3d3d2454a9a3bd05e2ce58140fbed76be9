@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_4405b60f",
+        "filename": "docs/release/configguide/index.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 2409
+      },
+      "writtenOn": "2017-03-30T09:22:30Z",
+      "side": 1,
+      "message": "Domino Configuration Guide",
+      "revId": "b49bcd3d3d2454a9a3bd05e2ce58140fbed76be9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_040fbe31",
+        "filename": "docs/release/installation/index.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 2409
+      },
+      "writtenOn": "2017-03-30T09:22:30Z",
+      "side": 1,
+      "message": "Domino Installation Instruction",
+      "revId": "b49bcd3d3d2454a9a3bd05e2ce58140fbed76be9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
