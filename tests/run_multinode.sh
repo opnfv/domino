@@ -24,11 +24,6 @@ client1_log=./tests/logdata/client1.log
 client2_log=./tests/logdata/client2.log
 server_log=./tests/logdata/server.log
 
-install_dependency() {
-  sudo pip install tosca-parser
-  sudo pip install heat-translator
-}
-
 
 start_server() {
   pgrep -f "python DominoServer.py" && return 0  
@@ -101,10 +96,6 @@ sleep 1
 
 echo "Cleaning residue files and folders from previous runs..."
 clean_directories
-sleep 1
-
-echo "Installing dependencies..."
-install_dependency
 sleep 1
 
 echo "Launching Domino Server..."
