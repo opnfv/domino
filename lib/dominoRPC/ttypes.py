@@ -825,6 +825,84 @@ class PublishMessage:
   def __ne__(self, other):
     return not (self == other)
 
+class DomainInfo:
+  """
+  Attributes:
+   - ipaddr
+   - tcpport
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'ipaddr', None, None, ), # 1
+    (2, TType.I16, 'tcpport', None, None, ), # 2
+  )
+
+  def __init__(self, ipaddr=None, tcpport=None,):
+    self.ipaddr = ipaddr
+    self.tcpport = tcpport
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.ipaddr = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I16:
+          self.tcpport = iprot.readI16()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('DomainInfo')
+    if self.ipaddr is not None:
+      oprot.writeFieldBegin('ipaddr', TType.STRING, 1)
+      oprot.writeString(self.ipaddr)
+      oprot.writeFieldEnd()
+    if self.tcpport is not None:
+      oprot.writeFieldBegin('tcpport', TType.I16, 2)
+      oprot.writeI16(self.tcpport)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __hash__(self):
+    value = 17
+    value = (value * 31) ^ hash(self.ipaddr)
+    value = (value * 31) ^ hash(self.tcpport)
+    return value
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
 class PublishResponseMessage:
   """
   Attributes:
@@ -833,6 +911,7 @@ class PublishResponseMessage:
    - seq_no
    - responseCode
    - template_UUID
+   - domainInfo
    - comments
   """
 
@@ -843,10 +922,11 @@ class PublishResponseMessage:
     (3, TType.I64, 'seq_no', None, None, ), # 3
     (4, TType.BYTE, 'responseCode', None, None, ), # 4
     (5, TType.STRING, 'template_UUID', None, None, ), # 5
-    (6, TType.LIST, 'comments', (TType.STRING,None), None, ), # 6
+    (6, TType.LIST, 'domainInfo', (TType.STRUCT,(DomainInfo, DomainInfo.thrift_spec)), None, ), # 6
+    (7, TType.LIST, 'comments', (TType.STRING,None), None, ), # 7
   )
 
-  def __init__(self, messageType=thrift_spec[1][4], domino_udid=None, seq_no=None, responseCode=None, template_UUID=None, comments=None,):
+  def __init__(self, messageType=thrift_spec[1][4], domino_udid=None, seq_no=None, responseCode=None, template_UUID=None, domainInfo=None, comments=None,):
     if messageType is self.thrift_spec[1][4]:
       messageType = 7
     self.messageType = messageType
@@ -854,6 +934,7 @@ class PublishResponseMessage:
     self.seq_no = seq_no
     self.responseCode = responseCode
     self.template_UUID = template_UUID
+    self.domainInfo = domainInfo
     self.comments = comments
 
   def read(self, iprot):
@@ -892,11 +973,22 @@ class PublishResponseMessage:
           iprot.skip(ftype)
       elif fid == 6:
         if ftype == TType.LIST:
-          self.comments = []
+          self.domainInfo = []
           (_etype45, _size42) = iprot.readListBegin()
           for _i46 in xrange(_size42):
-            _elem47 = iprot.readString()
-            self.comments.append(_elem47)
+            _elem47 = DomainInfo()
+            _elem47.read(iprot)
+            self.domainInfo.append(_elem47)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 7:
+        if ftype == TType.LIST:
+          self.comments = []
+          (_etype51, _size48) = iprot.readListBegin()
+          for _i52 in xrange(_size48):
+            _elem53 = iprot.readString()
+            self.comments.append(_elem53)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -930,11 +1022,18 @@ class PublishResponseMessage:
       oprot.writeFieldBegin('template_UUID', TType.STRING, 5)
       oprot.writeString(self.template_UUID)
       oprot.writeFieldEnd()
+    if self.domainInfo is not None:
+      oprot.writeFieldBegin('domainInfo', TType.LIST, 6)
+      oprot.writeListBegin(TType.STRUCT, len(self.domainInfo))
+      for iter54 in self.domainInfo:
+        iter54.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
     if self.comments is not None:
-      oprot.writeFieldBegin('comments', TType.LIST, 6)
+      oprot.writeFieldBegin('comments', TType.LIST, 7)
       oprot.writeListBegin(TType.STRING, len(self.comments))
-      for iter48 in self.comments:
-        oprot.writeString(iter48)
+      for iter55 in self.comments:
+        oprot.writeString(iter55)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -951,6 +1050,7 @@ class PublishResponseMessage:
     value = (value * 31) ^ hash(self.seq_no)
     value = (value * 31) ^ hash(self.responseCode)
     value = (value * 31) ^ hash(self.template_UUID)
+    value = (value * 31) ^ hash(self.domainInfo)
     value = (value * 31) ^ hash(self.comments)
     return value
 
@@ -1028,10 +1128,10 @@ class PushMessage:
       elif fid == 5:
         if ftype == TType.LIST:
           self.template = []
-          (_etype52, _size49) = iprot.readListBegin()
-          for _i53 in xrange(_size49):
-            _elem54 = iprot.readString()
-            self.template.append(_elem54)
+          (_etype59, _size56) = iprot.readListBegin()
+          for _i60 in xrange(_size56):
+            _elem61 = iprot.readString()
+            self.template.append(_elem61)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1069,8 +1169,8 @@ class PushMessage:
     if self.template is not None:
       oprot.writeFieldBegin('template', TType.LIST, 5)
       oprot.writeListBegin(TType.STRING, len(self.template))
-      for iter55 in self.template:
-        oprot.writeString(iter55)
+      for iter62 in self.template:
+        oprot.writeString(iter62)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.template_UUID is not None:
@@ -1165,10 +1265,10 @@ class PushResponseMessage:
       elif fid == 5:
         if ftype == TType.LIST:
           self.comments = []
-          (_etype59, _size56) = iprot.readListBegin()
-          for _i60 in xrange(_size56):
-            _elem61 = iprot.readString()
-            self.comments.append(_elem61)
+          (_etype66, _size63) = iprot.readListBegin()
+          for _i67 in xrange(_size63):
+            _elem68 = iprot.readString()
+            self.comments.append(_elem68)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1201,8 +1301,8 @@ class PushResponseMessage:
     if self.comments is not None:
       oprot.writeFieldBegin('comments', TType.LIST, 5)
       oprot.writeListBegin(TType.STRING, len(self.comments))
-      for iter62 in self.comments:
-        oprot.writeString(iter62)
+      for iter69 in self.comments:
+        oprot.writeString(iter69)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1287,10 +1387,10 @@ class QueryMessage:
       elif fid == 4:
         if ftype == TType.LIST:
           self.queryString = []
-          (_etype66, _size63) = iprot.readListBegin()
-          for _i67 in xrange(_size63):
-            _elem68 = iprot.readString()
-            self.queryString.append(_elem68)
+          (_etype73, _size70) = iprot.readListBegin()
+          for _i74 in xrange(_size70):
+            _elem75 = iprot.readString()
+            self.queryString.append(_elem75)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1324,8 +1424,8 @@ class QueryMessage:
     if self.queryString is not None:
       oprot.writeFieldBegin('queryString', TType.LIST, 4)
       oprot.writeListBegin(TType.STRING, len(self.queryString))
-      for iter69 in self.queryString:
-        oprot.writeString(iter69)
+      for iter76 in self.queryString:
+        oprot.writeString(iter76)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.template_UUID is not None:
@@ -1419,10 +1519,10 @@ class QueryResponseMessage:
       elif fid == 5:
         if ftype == TType.LIST:
           self.queryResponse = []
-          (_etype73, _size70) = iprot.readListBegin()
-          for _i74 in xrange(_size70):
-            _elem75 = iprot.readString()
-            self.queryResponse.append(_elem75)
+          (_etype80, _size77) = iprot.readListBegin()
+          for _i81 in xrange(_size77):
+            _elem82 = iprot.readString()
+            self.queryResponse.append(_elem82)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1455,8 +1555,8 @@ class QueryResponseMessage:
     if self.queryResponse is not None:
       oprot.writeFieldBegin('queryResponse', TType.LIST, 5)
       oprot.writeListBegin(TType.STRING, len(self.queryResponse))
-      for iter76 in self.queryResponse:
-        oprot.writeString(iter76)
+      for iter83 in self.queryResponse:
+        oprot.writeString(iter83)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()

@@ -155,13 +155,19 @@ struct PublishMessage {
  6: optional string template_UUID
 }
 
+struct DomainInfo {
+ 1: string ipaddr,
+ 2: i16 tcpport
+}
+
 struct PublishResponseMessage {
  1: MessageType messageType = PUBLISH_RESPONSE,
  2: string domino_udid,
  3: i64 seq_no,
  4: ResponseCode responseCode,
  5: string template_UUID,
- 6: optional list<string> comments
+ 6: optional list<DomainInfo> domainInfo,
+ 7: optional list<string> comments
 }
 
 struct PushMessage {

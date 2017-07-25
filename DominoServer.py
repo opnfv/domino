@@ -237,7 +237,7 @@ class CommunicationHandler:
     pub_r.domino_udid = SERVER_UDID
     pub_r.seq_no = self.seqno
     pub_r.responseCode = SUCCESS
-    pub_r.template_UDID = pub_msg.template_UUID
+    pub_r.template_UUID = pub_msg.template_UUID
     self.seqno = self.seqno + 1
 
     if (pub_msg.template_UUID is not None) and (self.dominoServer.TUID2Publisher.has_key(pub_msg.template_UUID) == False):
@@ -303,7 +303,7 @@ class CommunicationHandler:
     # Otherwise update the existing domains subscribed to TUID
     unsuccessful_updates = []
     if pub_msg.template_UUID is None:
-      pub_r.template_UDID = self.dominoServer.assign_tuid() #update response message with the newly assigned template UUID
+      pub_r.template_UUID = self.dominoServer.assign_tuid() #update response message with the newly assigned template UUID
     else:
       logging.debug('TEMPLATE UUID %s exists, verify publisher and update subscribers', pub_msg.template_UUID)
       if self.dominoServer.TUID2Publisher[pub_msg.template_UUID] != pub_msg.domino_udid: #publisher is not the owner, reject
@@ -311,16 +311,16 @@ class CommunicationHandler:
         pub_r.responseCode = FAILED
         return pub_r  
       else: #Template exists, we need to find clients that are no longer in the subscription list list
-        TUID_unsubscribed_list = list(set(self.dominoServer.TUID2Subscribers[pub_r.template_UDID]) - set(file_paths.keys()))
+        TUID_unsubscribed_list = list(set(self.dominoServer.TUID2Subscribers[pub_r.template_UUID]) - set(file_paths.keys()))
         if len(TUID_unsubscribed_list) > 0:
-          logging.debug('%s no longer host any nodes for TUID %s', TUID_unsubscribed_list, pub_r.template_UDID)
+          logging.debug('%s no longer host any nodes for TUID %s', TUID_unsubscribed_list, pub_r.template_UUID)
         # Send empty bodied templates to domains which no longer has any assigned resource
         template_lines = []
         for i in range(len(TUID_unsubscribed_list)):
           domino_client_ip = self.dominoServer.registration_record[TUID_unsubscribed_list[i]].ipaddr
           domino_client_port = self.dominoServer.registration_record[TUID_unsubscribed_list[i]].tcpport  
           try:
-            self.push_template(template_lines, domino_client_ip, domino_client_port, pub_r.template_UDID)        
+            self.push_template(template_lines, domino_client_ip, domino_client_port, pub_r.template_UUID)        
           except:       
             logging.error('Error in pushing template: %s', sys.exc_info()[0]) 
             unsuccessful_updates.append(TUID_unsubscribed_list[i])
@@ -333,9 +333,11 @@ class CommunicationHandler:
     # Send domain templates to each domain agent/client 
     # FOR NOW: send untranslated but partitioned tosca files to scheduled sites
     # TBD: read from work-flow
+    domainInfo = []
     for site in file_paths:
       domino_client_ip = self.dominoServer.registration_record[site].ipaddr
       domino_client_port = self.dominoServer.registration_record[site].tcpport
+      domainInfo.append(DomainInfo(ipaddr=domino_client_ip,tcpport=domino_client_port))
       try:
         if 'hot' in self.dominoServer.subscribed_templateformats[site]:
           tosca = ToscaTemplate(file_paths[site])
@@ -345,7 +347,7 @@ class CommunicationHandler:
           template_lines = [ output ]
         else: 
           template_lines = miscutil.read_templatefile(file_paths[site]) 
-        self.push_template(template_lines, domino_client_ip, domino_client_port, pub_r.template_UDID)
+        self.push_template(template_lines, domino_client_ip, domino_client_port, pub_r.template_UUID)
       except IOError as e:
         logging.error('I/O error(%d): %s' , e.errno, e.strerror)
         pub_r.responseCode = FAILED
@@ -364,30 +366,32 @@ class CommunicationHandler:
     c = dbconn.cursor()
 
     if pub_r.responseCode == SUCCESS:
+      # send domain information only if all domains have received the domain templates
+      pub_r.domainInfo = domainInfo
       # update in memory database
-      self.dominoServer.TUID2Publisher[pub_r.template_UDID] = pub_msg.domino_udid
+      self.dominoServer.TUID2Publisher[pub_r.template_UUID] = pub_msg.domino_udid
       try:
-        c.execute( "REPLACE INTO templates VALUES (?,?)", (pub_r.template_UDID,pub_msg.domino_udid) )
+        c.execute( "REPLACE INTO templates VALUES (?,?)", (pub_r.template_UUID,pub_msg.domino_udid) )
         dbconn.commit()
       except sqlite3.OperationalError as ex1:
-        logging.error('Could not add new TUID %s  DB for Domino Client %s :  %s', pub_r.template_UDID, pub_msg.domino_udid, ex1.message)
+        logging.error('Could not add new TUID %s  DB for Domino Client %s :  %s', pub_r.template_UUID, pub_msg.domino_udid, ex1.message)
       except:
-        logging.error('Could not add new TUID %s to DB for Domino Client %s', pub_r.template_UDID, pub_msg.domino_udid)
+        logging.error('Could not add new TUID %s to DB for Domino Client %s', pub_r.template_UUID, pub_msg.domino_udid)
         logging.error('Unexpected error: %s', sys.exc_info()[0])
       else:
-        self.dominoServer.TUID2Publisher[pub_r.template_UDID] = pub_msg.domino_udid
+        self.dominoServer.TUID2Publisher[pub_r.template_UUID] = pub_msg.domino_udid
 
     # update in memory database
-    self.dominoServer.TUID2Subscribers[pub_r.template_UDID] = list(set(unsuccessful_updates).union(set(file_paths.keys()))) #file_paths.keys()
-    logging.debug('Subscribers: %s for TUID: %s', self.dominoServer.TUID2Subscribers[pub_r.template_UDID], pub_r.template_UDID)
+    self.dominoServer.TUID2Subscribers[pub_r.template_UUID] = list(set(unsuccessful_updates).union(set(file_paths.keys()))) #file_paths.keys()
+    logging.debug('Subscribers: %s for TUID: %s', self.dominoServer.TUID2Subscribers[pub_r.template_UUID], pub_r.template_UUID)
     try:
-      newvalue = ','.join(self.dominoServer.TUID2Subscribers[pub_r.template_UDID])
-      c.execute( "REPLACE INTO subscribers VALUES (?,?)", (pub_r.template_UDID,newvalue) )
+      newvalue = ','.join(self.dominoServer.TUID2Subscribers[pub_r.template_UUID])
+      c.execute( "REPLACE INTO subscribers VALUES (?,?)", (pub_r.template_UUID,newvalue) )
       dbconn.commit()
     except sqlite3.OperationalError as ex1:
-      logging.error('Could not add new subscribers for TUID %s for Domino Client %s:  %s', pub_r.template_UDID, pub_msg.domino_udid, ex1.message)
+      logging.error('Could not add new subscribers for TUID %s for Domino Client %s:  %s', pub_r.template_UUID, pub_msg.domino_udid, ex1.message)
     except:
-      logging.error('Could not add new TUID %s to DB for Domino Client %s', pub_r.template_UDID, pub_msg.domino_udid)
+      logging.error('Could not add new TUID %s to DB for Domino Client %s', pub_r.template_UUID, pub_msg.domino_udid)
       logging.error('Unexpected error: %s', sys.exc_info()[0])
 
     dbconn.close()
