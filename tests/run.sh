@@ -111,42 +111,42 @@ start_client2
 sleep 1
 
 echo "Test Heartbeat"
-python domino-cli.py $CLIENT1_CLIPORT heartbeat
+python domino_cli.py $CLIENT1_CLIPORT heartbeat
 sleep 1
 
 echo "Test Subscribe API"
-python domino-cli.py $CLIENT1_CLIPORT subscribe -t hot \
+python domino_cli.py $CLIENT1_CLIPORT subscribe -t hot \
 	-l tosca.policies.Placement:properties:region:nova-1  
 sleep 1
-python domino-cli.py $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top OVERWRITE
+python domino_cli.py $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top OVERWRITE
 sleep 1
-python domino-cli.py $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top DELETE
+python domino_cli.py $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top DELETE
 sleep 1
-python domino-cli.py $CLIENT1_CLIPORT subscribe \
+python domino_cli.py $CLIENT1_CLIPORT subscribe \
         -l tosca.policies.Placement:properties:region:nova-2
 sleep 1
-python domino-cli.py $CLIENT1_CLIPORT subscribe \
+python domino_cli.py $CLIENT1_CLIPORT subscribe \
 	-l tosca.policies.Placement:properties:region:nova-3 \
 	--lop OVERWRITE
 sleep 1
-python domino-cli.py $CLIENT1_CLIPORT subscribe \
+python domino_cli.py $CLIENT1_CLIPORT subscribe \
         -l tosca.policies.Placement:properties:region:nova-3 \
 	--lop DELETE
 sleep 1
 
 echo "Test Publish API"
-python domino-cli.py $CLIENT1_CLIPORT publish -t "$toscafile_test1" 
+python domino_cli.py $CLIENT1_CLIPORT publish -t "$toscafile_test1" 
 
 sleep 1
-python domino-cli.py $CLIENT1_CLIPORT subscribe \
+python domino_cli.py $CLIENT1_CLIPORT subscribe \
         -l tosca.policies.Placement.Geolocation:properties:region:us-west-1
 sleep 1
-python domino-cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1"
+python domino_cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1"
 sleep 1
-TUID=$(python domino-cli.py $CLIENT2_CLIPORT list-tuids | cut -c3-34)
+TUID=$(python domino_cli.py $CLIENT2_CLIPORT list-tuids | cut -c3-34)
 echo $TUID
 sleep 1
-python domino-cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1" -k "$TUID"
+python domino_cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1" -k "$TUID"
 
 #echo "Stopping Domino Client 1..."
 #stop_client1

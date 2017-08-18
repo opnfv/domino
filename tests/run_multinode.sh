@@ -26,31 +26,31 @@ server_log=./tests/logdata/server.log
 
 
 start_server() {
-  pgrep -f "python DominoServer.py" && return 0
-  python DominoServer.py --log "$LOGLEVEL" > "$server_log" 2>&1 &
+  pgrep -f "DominoServer" && return 0
+  DominoServer --log "$LOGLEVEL" > "$server_log" 2>&1 &
 }
 
 stop_server() {
-  pgrep -f "python DominoServer.py" || return 0
-  kill $(pgrep -f "python DominoServer.py")
+  pgrep -f "DominoServer" || return 0
+  kill $(pgrep -f "DominoServer")
   #cat server.log
 }
 
 start_client1() {
-  #pgrep -f "python DominoClient.py -p $CLIENT1_PORT" && return 0
-  python DominoClient.py -p $CLIENT1_PORT --cliport $CLIENT1_CLIPORT \
+  #pgrep -f "DominoClient -p $CLIENT1_PORT" && return 0
+  DominoClient -p $CLIENT1_PORT --cliport $CLIENT1_CLIPORT \
 	--log "$LOGLEVEL" > "$client1_log" 2>&1 &
 }
 
 start_client2() {
-  #pgrep -f "python DominoClient.py -p $CLIENT2_PORT" && return 0
-  python DominoClient.py -p $CLIENT2_PORT --cliport $CLIENT2_CLIPORT \
+  #pgrep -f "DominoClient -p $CLIENT2_PORT" && return 0
+  DominoClient -p $CLIENT2_PORT --cliport $CLIENT2_CLIPORT \
         --log "$LOGLEVEL" > "$client2_log" 2>&1 &
 }
 
 stop_clients() {
-  pgrep -f "python DominoClient.py" || return 0
-  kill $(pgrep -f "python DominoClient.py")
+  pgrep -f "DominoClient" || return 0
+  kill $(pgrep -f "DominoClient")
   #cat client1.log
 }
 
@@ -111,42 +111,42 @@ start_client2
 sleep 1
 
 echo "Test Heartbeat"
-python domino-cli.py $CLIENT1_CLIPORT heartbeat
+domino_cli $CLIENT1_CLIPORT heartbeat
 sleep 1
 
 echo "Test Subscribe API"
-python domino-cli.py $CLIENT1_CLIPORT subscribe -t hot \
+domino_cli $CLIENT1_CLIPORT subscribe -t hot \
 	-l tosca.policies.Placement:properties:region:nova-1  
 sleep 1
-python domino-cli.py $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top OVERWRITE
+domino_cli $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top OVERWRITE
 sleep 1
-python domino-cli.py $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top DELETE
+domino_cli $CLIENT1_CLIPORT subscribe -t dummy1,dummy2 --top DELETE
 sleep 1
-python domino-cli.py $CLIENT1_CLIPORT subscribe \
+domino_cli $CLIENT1_CLIPORT subscribe \
         -l tosca.policies.Placement:properties:region:nova-2
 sleep 1
-python domino-cli.py $CLIENT1_CLIPORT subscribe \
+domino_cli $CLIENT1_CLIPORT subscribe \
 	-l tosca.policies.Placement:properties:region:nova-3 \
 	--lop OVERWRITE
 sleep 1
-python domino-cli.py $CLIENT1_CLIPORT subscribe \
+domino_cli $CLIENT1_CLIPORT subscribe \
         -l tosca.policies.Placement:properties:region:nova-3 \
 	--lop DELETE
 sleep 1
 
 echo "Test Publish API"
-python domino-cli.py $CLIENT1_CLIPORT publish -t "$toscafile_test1" 
+domino_cli $CLIENT1_CLIPORT publish -t "$toscafile_test1" 
 
 sleep 1
-python domino-cli.py $CLIENT1_CLIPORT subscribe \
+domino_cli $CLIENT1_CLIPORT subscribe \
         -l tosca.policies.Placement.Geolocation:properties:region:us-west-1
 sleep 1
-python domino-cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1"
+domino_cli $CLIENT2_CLIPORT publish -t "$toscafile_test1"
 sleep 1
-TUID=$(python domino-cli.py $CLIENT2_CLIPORT list-tuids | cut -c3-34)
+TUID=$(domino_cli $CLIENT2_CLIPORT list-tuids | cut -c3-34)
 echo $TUID
 sleep 1
-python domino-cli.py $CLIENT2_CLIPORT publish -t "$toscafile_test1" -k "$TUID"
+domino_cli $CLIENT2_CLIPORT publish -t "$toscafile_test1" -k "$TUID"
 
 #echo "Stopping Domino Client 1..."
 #stop_client1

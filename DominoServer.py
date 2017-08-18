@@ -464,15 +464,15 @@ class DominoServer:
       logging.debug('RPC Timeout for message type: PUSH')
       # TBD: handle each RPC timeout separately
 
-def main(argv):
+def main():
   server = DominoServer()
   loglevel = LOGLEVEL
   #process input arguments
   try:
-      opts, args = getopt.getopt(argv,"hc:l:",["conf=","log="])
+    opts, args = getopt.getopt(sys.argv[1:],"hc:l:",["conf=","log="])
   except getopt.GetoptError:
-      print 'DominoServer.py -c/--conf <configfile> -l/--log <loglevel>'
-      sys.exit(2)
+    print 'DominoServer.py -c/--conf <configfile> -l/--log <loglevel>'
+    sys.exit(2)
   for opt, arg in opts:
       if opt == '-h':
          print 'DominoServer.py -c/--conf <configfile> -l/--log <loglevel>'
@@ -527,4 +527,4 @@ def main(argv):
   print 'done.'
 
 if __name__ == "__main__":
-   main(sys.argv[1:])
+  sys.exit(main())
