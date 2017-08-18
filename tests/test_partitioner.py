@@ -20,7 +20,8 @@ sys.path.insert(0, glob.glob('./lib')[0])
 from mapper import *
 from partitioner import *
 
-def main(argv):
+def main():
+  argv = sys.argv[1:]
   try:
     #tosca = ToscaTemplate(argv[0])
     tpl = yaml.load(file(argv[0],'r'))
@@ -52,6 +53,6 @@ def main(argv):
   except:
     print('Unexpected error: %s', sys.exc_info()[0])
     raise
-if __name__ == "__main__":
-   main(sys.argv[1:])
 
+if __name__ == "__main__":
+  sys.exit(main())

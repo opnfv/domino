@@ -438,13 +438,13 @@ class DominoClient:
     elif RPCmessage.messageType == QUERY:
       logging.debug('RPC Timeout for message type: QUERY') 
 
-def main(argv):
+def main():
   client = DominoClient()
   loglevel = LOGLEVEL
   interactive = INTERACTIVE
   #process input arguments
   try:
-      opts, args = getopt.getopt(argv,"hc:p:i:l:",["conf=","port=","ipaddr=","log=","iac=","cliport=","uuid=","regmod="])
+      opts, args = getopt.getopt(sys.argv[1:],"hc:p:i:l:",["conf=","port=","ipaddr=","log=","iac=","cliport=","uuid=","regmod="])
   except getopt.GetoptError:
       print 'DominoClient.py -c/--conf <configfile> -p/--port <socketport> -i/--ipaddr <IPaddr> -l/--log <loglevel> --iac=true/false --cliport <cliport>'
       sys.exit(2)
@@ -486,5 +486,4 @@ def main(argv):
   client.start_communicationService()
 
 if __name__ == "__main__":
-   main(sys.argv[1:])
-
+  sys.exit(main())

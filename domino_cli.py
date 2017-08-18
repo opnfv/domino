@@ -28,9 +28,13 @@ from thrift.protocol import TBinaryProtocol
 #Load configuration parameters
 from domino_conf import *
 
-def main(argv, cli_port):
+def main():
   #cli_port = DOMINO_CLI_PORT
-
+  if len(sys.argv) >= 2:
+    cli_port = sys.argv[1]
+  else:
+    print 'domino-cli.py <cliport> ...'
+    return 2
   try:
     # Make socket
     # NOTE that domino-cli.py and DominoClient.py are assumed to be run in the same machine
@@ -47,7 +51,7 @@ def main(argv, cli_port):
     transport.open()
 
     CLImsg = CLIMessage()
-    CLImsg.CLI_input = argv
+    CLImsg.CLI_input = sys.argv[2:]
     CLIrespmsg = client.d_CLI(CLImsg)
     if CLIrespmsg.CLI_response is not None:
       print CLIrespmsg.CLI_response
@@ -55,8 +59,4 @@ def main(argv, cli_port):
     print '%s' % (tx.message)
 
 if __name__ == "__main__":
-   if len(sys.argv) >= 2:
-     main(sys.argv[2:], sys.argv[1])
-   else:
-     print 'domino-cli.py <cliport> ...'
-     sys.exit(2)
+  sys.exit(main())
