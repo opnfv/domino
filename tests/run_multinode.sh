@@ -17,12 +17,13 @@ CLIENT1_CLIPORT=9100
 CLIENT2_CLIPORT=9200
 LOGLEVEL=DEBUG
 
-toscafile_test1=./tosca-templates/tosca_helloworld_nfv.yaml
-test1_reffile1=./tests/refdata/test1_client1.ref
-test1_reffile2=./tests/refdata/test1_client2.ref
-client1_log=./tests/logdata/client1.log
-client2_log=./tests/logdata/client2.log
-server_log=./tests/logdata/server.log
+dir=$(python -c "import sysconfig; print sysconfig.get_path('platlib')")
+toscafile_test1=${dir}/tosca-templates/tosca_helloworld_nfv.yaml
+test1_reffile1=${dir}/tests/refdata/test1_client1.ref
+test1_reffile2=${dir}/tests/refdata/test1_client2.ref
+client1_log=${dir}/tests/logdata/client1.log
+client2_log=${dir}/tests/logdata/client2.log
+server_log=${dir}/tests/logdata/server.log
 
 
 start_server() {
