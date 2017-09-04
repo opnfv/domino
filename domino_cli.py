@@ -13,8 +13,13 @@
 
 import sys, glob, getopt
 import getopt
+import pkg_resources
 
-sys.path.insert(0, glob.glob('./lib')[0])
+try:
+    dir = pkg_resources.resource_filename('lib','.')
+except ImportError:
+    dir = './lib'
+sys.path.insert(0, glob.glob(dir)[0])
 
 from dominoCLI import DominoClientCLI
 from dominoCLI.ttypes import *
