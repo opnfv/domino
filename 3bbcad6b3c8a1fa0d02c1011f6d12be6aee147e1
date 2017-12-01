@@ -1,0 +1,8 @@
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+1: valentin boucher <valentin.boucher@kontron.com>
+Code-Review+2: Ulas Kozat <ulas.kozat@huawei.com>
+Submitted-by: Ulas Kozat <ulas.kozat@huawei.com>
+Submitted-at: Fri, 01 Dec 2017 16:38:09 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/48177
+Project: domino
+Branch: refs/heads/stable/euphrates
