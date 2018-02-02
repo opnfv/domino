@@ -1,0 +1,43 @@
+---
+project: 'Template Distribution Service (Domino)'
+project_creation_date: 'March 22, 2016'
+project_category: 'Requirements'
+lifecycle_state: 'Incubation'
+project_lead: &opnfv_domino_ptl
+primary_contact: *opnfv_domino_ptl
+issue_tracking:
+    type: 'jira'
+    url: 'https://jira.opnfv.org/projects/DOMINO'
+    key: 'DOMINO'
+mailing_list:
+    type: 'mailman2'
+    url: 'opnfv-tech-discuss@lists.opnfv.org'
+    tag: '[domino]'
+realtime_discussion:
+    type: irc
+    server: 'freenode.net'
+    channel: '#opnfv-domino'
+meetings:
+    - type: 'gotomeeting+irc'
+      agenda:  # eg: 'https://wiki.opnfv.org/display/'
+      url:  # eg: 'https://global.gotomeeting.com/join/819733085'
+      server: 'freenode.net'
+      channel: '#opnfv-meeting'
+      repeats: 'weekly'
+      time:  # eg: '16:00 UTC'
+repositories:
+    - 'domino'
+committers:
+    - <<: *opnfv_domino_ptl
+    - name: 'Prakash Ramchandran'
+      email: 'prakash.ramchandran@huawei.com'
+      company: 'huawei.com'
+      id: 'rprakash'
+    - name: 'Ulas Kozat'
+      email: 'ulas.kozat@huawei.com'
+      company: 'huawei.com'
+      id: 'kozat'
+# yamllint disable rule:line-length
+tsc:
+    approval: 'http//ircbot.wl.linuxfoundation.org/meetings/opnfv-meeting/2016/opnfv-meeting.2016-03-22-14.00.html'
+# yamllint enable rule:line-length
